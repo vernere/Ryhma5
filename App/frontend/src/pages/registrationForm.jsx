@@ -2,29 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Footer } from "@/components/ui/footer"
 import { Header } from "@/components/ui/header"
-import { useState } from 'react'
-import {supabase } from "../supabase-client";
+import { AuthForm } from "../hooks/authForm";
 
 
 const RegistrationForm = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState("");
-
-
-    const handleRegister = async () => {
-        const {  error } = await supabase.auth.signUp({
-            email,
-            password,
-        });
-
-        if(error) {
-            setError(error.message);
-        } else {
-            alert("Registration successful!")
-        }
-
-    }
+    const { email, setEmail, password, setPassword, message, handleSubmit } = AuthForm("register");
 
 
     return (
@@ -36,8 +18,8 @@ const RegistrationForm = () => {
                     <div className="flex flex-col">
                         <Input className="mb-2 w-60" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         <Input className="mb-2 w-60" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}  />
-                        <Button className="bg-secondary text-black shadow-md hover:text-white" onClick={handleRegister}> Register </Button>
-                        {error && <p className="text-red-500 mt-2">{error}</p>}
+                        <Button className="bg-secondary text-black shadow-md hover:text-white" onClick={handleSubmit}> Register </Button>
+                        {message && <p className="text-black mt-2">{message}</p>}
                     </div>
                 </div>
             </div>
