@@ -1,50 +1,30 @@
-import {useEffect, useState} from 'react'
-import './App.css'
-import {Route, Routes} from 'react-router-dom'
-import RegistrationForm from './pages/registrationForm'
-import LoginForm from './pages/loginForm'
-import LandingPage from './pages/LandingPage'
-import NotesPage from "./pages/notesPage";
-import {supabase} from './supabase-client'
+import './App.css';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import RegistrationForm from './pages/RegistrationForm';
+import LoginForm from './pages/LoginForm';
+import LandingPage from './pages/LandingPage';
+import NotesPage from './pages/NotesPage';
+import { useAuth } from './hooks/useAuth';
 
 function App() {
-    const [session, setSession] = useState(null)
+  const { user, loading } = useAuth();
 
-    useEffect(() => {
-        const fetchSession = async () => {
-            const {data} = await supabase.auth.getSession()
-            setSession(data.session);
-        };
+  if (loading) return <p>Loading...</p>;
 
-        fetchSession();
-
-        const {data: listener} = supabase.auth.onAuthStateChange(
-            (_event, session) => {
-                setSession(session);
-            });
-
-        return () => {
-            listener.subscription.unsubscribe();
-        };
-    }, []);
-
-
-    return (
-
-        <div>
-            <Routes>
-                {session ? (
-                    <Route path={"*"} element={<NotesPage/>}/>
-                ) : (
-                    <>
-                        <Route path="/" element={<LandingPage/>}/>
-                        <Route path="/register" element={<RegistrationForm/>}/>
-                        <Route path="/login" element={<LoginForm/>}/>
-                    </>
-                )}
-            </Routes>
-        </div>
-    );
+  return (
+    <Routes>
+      {user ? (
+        <Route path="*" element={<NotesPage />} />
+      ) : (
+        <>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/register" element={<RegistrationForm />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </>
+      )}
+    </Routes>
+  );
 }
 
 export default App;
