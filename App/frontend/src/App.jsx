@@ -5,7 +5,7 @@ import RegistrationForm from './pages/registrationForm'
 import LoginForm from './pages/loginForm'
 import LandingPage from './pages/LandingPage'
 import NotesPage from "./pages/notesPage";
-import {supabase} from './supabase-client'
+import {supabase} from './lib/supabaseClient'
 
 function App() {
     const [session, setSession] = useState(null)

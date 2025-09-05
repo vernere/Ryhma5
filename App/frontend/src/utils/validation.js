@@ -3,7 +3,6 @@ export const validPassword = (password) => {
     return pass.test(password);
 }
 
-
 export const validEmail = (email) => {
     const pass = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return pass.test(email);
