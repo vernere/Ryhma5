@@ -1,25 +1,30 @@
-import { useState } from 'react'
-import './App.css'
+import './App.css';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import RegistrationForm from './pages/RegistrationForm';
+import LoginForm from './pages/LoginForm';
+import LandingPage from './pages/LandingPage';
+import NotesPage from './pages/NotesPage';
+import { useAuth } from './hooks/useAuth';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { user, loading } = useAuth();
+
+  if (loading) return <p>Loading...</p>;
 
   return (
-    <>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Routes>
+      {user ? (
+        <Route path="*" element={<NotesPage />} />
+      ) : (
+        <>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/register" element={<RegistrationForm />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="*" element={<Navigate to="/" />} />
+        </>
+      )}
+    </Routes>
+  );
 }
 
-export default App
+export default App;
