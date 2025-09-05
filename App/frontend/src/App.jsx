@@ -1,9 +1,9 @@
 import './App.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import RegistrationForm from './pages/registrationForm';
-import LoginForm from './pages/loginForm';
+import RegistrationForm from './pages/RegistrationForm';
+import LoginForm from './pages/LoginForm';
 import LandingPage from './pages/LandingPage';
-import NotesPage from './pages/notesPage';
+import NotesPage from './pages/NotesPage';
 import { useAuth } from './hooks/useAuth';
 
 function App() {
