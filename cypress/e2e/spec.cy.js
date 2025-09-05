@@ -15,14 +15,7 @@ describe('Login Tests', () => {
 
     cy.get('button').contains('Login').click()
 
-
-    // Needs to be changed when notesPage is implemented
-
-    cy.contains('Notes').should('exist')
-    cy.contains('Logout').should('exist')
-
-    // Session checking not working
-
+    cy.url().should('include', '/notes')
 
     // Add non accessible login page
   })
@@ -32,7 +25,7 @@ describe('Login Tests', () => {
 
     cy.contains('Login').click()
     cy.url().should('include', '/login')
-
+    // Testing for wrong email
     cy.get('input[type="email"]').type('fakeEmail@fake.com')
     cy.get('input[type="email"]').should('have.value', 'fakeEmail@fake.com')
 
@@ -41,10 +34,23 @@ describe('Login Tests', () => {
 
     cy.get('button').contains('Login').click()
 
-    cy.get('p.text-black.mt-2').should('exist')
+    cy.get('p').contains('Invalid password or email').should('exist')
+    cy.url().should('include', '/login')
+    // Testing for wrong password
+    cy.get('input[type="email"]').clear()
+    cy.get('input[type="password"]').clear()
+
+    cy.get('input[type="email"]').type('verner.etola@gmail.com')
+    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
+
+    cy.get('input[type="password"]').type('Hello1234')
+    cy.get('input[type="password"]').should('have.value', 'Hello1234')
+
+    cy.get('button').contains('Login').click()
+
+    cy.get('p').contains('Invalid password or email').should('exist')
     cy.url().should('include', '/login')
 
-    // check that no session started
   });
 
   it('Test form validation errors', () => {
@@ -55,7 +61,7 @@ describe('Login Tests', () => {
     // Testing for empty inputs
     cy.get('button').contains('Login').click()
 
-    cy.get('p.text-black.mt-2').should('exist')
+    cy.get('p').contains('Invalid password or email').should('exist')
     cy.url().should('include', '/login')
     // Testing for no password
     cy.get('input[type="email"]').type('fakeEmail@fake.com')
@@ -63,7 +69,7 @@ describe('Login Tests', () => {
 
     cy.get('button').contains('Login').click()
 
-    cy.get('p.text-black.mt-2').should('exist')
+    cy.get('p').contains('Invalid password or email').should('exist')
     cy.url().should('include', '/login')
     // Testing for no email
 
@@ -75,10 +81,9 @@ describe('Login Tests', () => {
 
     cy.get('button').contains('Login').click()
 
-    cy.get('p.text-black.mt-2').should('exist')
+    cy.get('p').contains('Invalid password or email').should('exist')
     cy.url().should('include', '/login')
 
-    // Minimum password requirements ?
   });
 
   it('UI state tests', () => {
@@ -98,6 +103,8 @@ describe('Registration tests', () => {
     cy.contains('Sign up').click()
     cy.url().should('include', '/register')
 
+    // to do
+
   });
 
   it('Email validation', () => {
@@ -106,6 +113,26 @@ describe('Registration tests', () => {
     cy.contains('Sign up').click()
     cy.url().should('include', '/register')
 
+    // Testing for empty field
+    cy.get('input[type="password"]').should('have.value', '')
+    cy.get('input[type="email"]').should('have.value', '')
+
+    cy.get('button').contains('Register').click()
+
+    cy.get('p').contains('Please enter a valid email address.').should('exist')
+    cy.url().should('include', '/register')
+
+    // Testing for password only
+    cy.get('input[type="password"]').type('Hello123')
+    cy.get('input[type="password"]').should('have.value', 'Hello123')
+
+    cy.get('button').contains('Register').click()
+
+    cy.get('p').contains('Please enter a valid email address.').should('exist')
+    cy.url().should('include', '/register')
+
+    cy.get('input[type="password"]').clear()
+    cy.get('input[type="password"]').should('have.value', '')
     // Testing for duplicate email
 
     /*
@@ -115,7 +142,7 @@ describe('Registration tests', () => {
     cy.get('input[type="password"]').type('Hello123')
     cy.get('input[type="password"]').should('have.value', 'Hello123')
 
-    cy.get('p.text-black.mt-2').should('exists')l
+    cy.get('p').contains('This email is already registered. Please use a different email.').should('exist')
     cy.url().should('include', '/register')
     */
 
@@ -128,10 +155,74 @@ describe('Registration tests', () => {
 
     cy.get('button').contains('Register').click()
 
-    cy.get('p.text-black.mt-2').should('exist')
+    cy.get('p').contains('Please enter a valid email address.').should('exist')
     cy.url().should('include', '/register')
 
+    // Misc form validation testing
 
   });
 
+  it('Password validation', () => {
+    cy.visit('http://localhost:5173/');
+
+    cy.contains('Sign up').click()
+    cy.url().should('include', '/register')
+    // Testing for empty field
+    cy.get('input[type="email"]').type('verner.etola@gmail.com')
+    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
+
+    cy.get('button').contains('Register').click()
+
+    cy.get('p').contains('Password must be at least 7 characters, contain an uppercase letter and a number.').should('exist')
+    cy.url().should('include', '/register')
+    
+    cy.get('input[type="email"]').clear()
+    cy.get('input[type="email"]').should('have.value', '')
+
+    // Testing for password combinations
+    cy.get('input[type="email"]').type('verner.etola@gmail.com')
+    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
+
+    cy.get('input[type="password"]').type('hello')
+    cy.get('input[type="password"]').should('have.value', 'hello')
+
+    cy.get('button').contains('Register').click()
+
+    cy.get('p').contains('Password must be at least 7 characters, contain an uppercase letter and a number.').should('exist')
+    cy.url().should('include', '/register')
+
+    cy.get('input[type="password"]').clear()
+    cy.get('input[type="password"]').should('have.value', '')
+
+    cy.get('input[type="password"]').type('Hello')
+    cy.get('input[type="password"]').should('have.value', 'Hello')
+
+    cy.get('button').contains('Register').click()
+
+    cy.get('p').contains('Password must be at least 7 characters, contain an uppercase letter and a number.').should('exist')
+    cy.url().should('include', '/register')
+
+    cy.get('input[type="password"]').clear()
+    cy.get('input[type="password"]').should('have.value', '')
+
+    cy.get('input[type="password"]').type('Hello7')
+    cy.get('input[type="password"]').should('have.value', 'Hello7')
+
+    cy.get('button').contains('Register').click()
+
+    cy.get('p').contains('Password must be at least 7 characters, contain an uppercase letter and a number.').should('exist')
+    cy.url().should('include', '/register')
+  });
+
+  // Logout tests
+
+  // Autentication tests
+
+  // Navigation tests
+
+  // Password reset tests
+
+  // End to end user journey
+
+  
 })
