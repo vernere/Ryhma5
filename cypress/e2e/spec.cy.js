@@ -224,5 +224,30 @@ describe('Registration tests', () => {
 
   // End to end user journey
 
-  
+
 })
+
+describe('Logout Tests', () => {
+  it('Logout button test', () => {
+    cy.visit('http://localhost:5173/');
+
+    cy.contains('Login').click()
+    cy.url().should('include', '/login')
+
+    cy.get('input[type="email"]').type('verner.etola@gmail.com')
+    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
+
+    cy.get('input[type="password"]').type('Hello123')
+    cy.get('input[type="password"]').should('have.value', 'Hello123')
+
+    cy.get('button').contains('Login').click()
+
+    cy.url().should('include', '/notes')
+
+    cy.contains('Logout').click()
+
+    cy.url().should('include', '/')
+
+  });
+})
+
