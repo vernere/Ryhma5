@@ -214,9 +214,7 @@ describe('Registration tests', () => {
     cy.url().should('include', '/register')
   });
 
-  // Logout tests
-
-  // Autentication tests
+  // Autenticated routes tests
 
   // Navigation tests
 
