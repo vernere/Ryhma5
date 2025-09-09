@@ -2,7 +2,7 @@
 
 describe('Login Tests', () => {
   it('Navigate to login page and fill in credentials and log in successfully', () => {
-    cy.visit('http://localhost:5173/');
+    cy.visit('/');
 
     cy.contains('Login').click()
     cy.url().should('include', '/login')
@@ -21,11 +21,11 @@ describe('Login Tests', () => {
   })
 
   it('Attempt login with invalid credentials', () => {
-    cy.visit('http://localhost:5173/');
+    cy.visit('/');
 
     cy.contains('Login').click()
     cy.url().should('include', '/login')
-    // Testing for wrong email
+
     cy.get('input[type="email"]').type('fakeEmail@fake.com')
     cy.get('input[type="email"]').should('have.value', 'fakeEmail@fake.com')
 
@@ -36,7 +36,7 @@ describe('Login Tests', () => {
 
     cy.get('p').contains('Invalid password or email').should('exist')
     cy.url().should('include', '/login')
-    // Testing for wrong password
+
     cy.get('input[type="email"]').clear()
     cy.get('input[type="password"]').clear()
 
@@ -54,16 +54,16 @@ describe('Login Tests', () => {
   });
 
   it('Test form validation errors', () => {
-    cy.visit('http://localhost:5173/');
+    cy.visit('/');
 
     cy.contains('Login').click()
     cy.url().should('include', '/login')
-    // Testing for empty inputs
+
     cy.get('button').contains('Login').click()
 
     cy.get('p').contains('Invalid password or email').should('exist')
     cy.url().should('include', '/login')
-    // Testing for no password
+
     cy.get('input[type="email"]').type('fakeEmail@fake.com')
     cy.get('input[type="email"]').should('have.value', 'fakeEmail@fake.com')
 
@@ -71,7 +71,6 @@ describe('Login Tests', () => {
 
     cy.get('p').contains('Invalid password or email').should('exist')
     cy.url().should('include', '/login')
-    // Testing for no email
 
     cy.get('input[type="email"]').clear()
     cy.get('input[type="email"]').should('have.value', '')
@@ -98,7 +97,7 @@ describe('Login Tests', () => {
 
 describe('Registration tests', () => {
   it('Succesfull registration', () => {
-    cy.visit('http://localhost:5173/');
+    cy.visit('/');
 
     cy.contains('Sign up').click()
     cy.url().should('include', '/register')
@@ -108,12 +107,11 @@ describe('Registration tests', () => {
   });
 
   it('Email validation', () => {
-    cy.visit('http://localhost:5173/');
+    cy.visit('/');
 
     cy.contains('Sign up').click()
     cy.url().should('include', '/register')
 
-    // Testing for empty field
     cy.get('input[type="password"]').should('have.value', '')
     cy.get('input[type="email"]').should('have.value', '')
 
@@ -122,7 +120,6 @@ describe('Registration tests', () => {
     cy.get('p').contains('Please enter a valid email address.').should('exist')
     cy.url().should('include', '/register')
 
-    // Testing for password only
     cy.get('input[type="password"]').type('Hello123')
     cy.get('input[type="password"]').should('have.value', 'Hello123')
 
@@ -133,7 +130,6 @@ describe('Registration tests', () => {
 
     cy.get('input[type="password"]').clear()
     cy.get('input[type="password"]').should('have.value', '')
-    // Testing for duplicate email
 
     /*
     cy.get('input[type="email"]').type('verner.etola@gmail.com')
@@ -163,7 +159,7 @@ describe('Registration tests', () => {
   });
 
   it('Password validation', () => {
-    cy.visit('http://localhost:5173/');
+    cy.visit('/');
 
     cy.contains('Sign up').click()
     cy.url().should('include', '/register')
@@ -179,7 +175,6 @@ describe('Registration tests', () => {
     cy.get('input[type="email"]').clear()
     cy.get('input[type="email"]').should('have.value', '')
 
-    // Testing for password combinations
     cy.get('input[type="email"]').type('verner.etola@gmail.com')
     cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
 
@@ -227,7 +222,7 @@ describe('Registration tests', () => {
 
 describe('Logout Tests', () => {
   it('Logout button test', () => {
-    cy.visit('http://localhost:5173/');
+    cy.visit('/');
 
     cy.contains('Login').click()
     cy.url().should('include', '/login')
