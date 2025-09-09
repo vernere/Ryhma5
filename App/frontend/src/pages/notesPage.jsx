@@ -1,18 +1,17 @@
-import { supabase } from "../lib/supabaseClient";
-import { Button } from "@/components/ui/button";
+
 import { useAuth } from "../hooks/useAuth";
 import { Navigate, useNavigate } from "react-router";
-import { CgAddR, CgClose, CgHeart, CgFormatBold, CgFormatItalic, CgFormatUnderline, CgList, CgAttachment, CgImage, CgMoreAlt, CgNotes } from "react-icons/cg";
+import { useSearchParams } from "react-router-dom";
+import { CgAddR, CgClose, CgHeart, CgNotes } from "react-icons/cg";
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Toolbar } from "@/components/ui/toolbar"
+import { Navigation } from "@/components/ui/navigation"
+
 
 const NotesPage = () => {
     const { signOut } = useAuth()
     const navigate = useNavigate();
-
-    // Use state for search or auth provider? Search through backend API or through frontend authprovider. 
-    // Alternatively searchProvider?. This search intended for searching all notes. Or search through notes stored locally in a notes array.
-    const [searchQuery, setSearchQuery] = useState('');
 
     // Secondary search for searching in specific notes
     // Categories for tagging notes
@@ -49,6 +48,24 @@ const NotesPage = () => {
         }
     ];
 
+    let [searchParams, setSearchParams] = useSearchParams();
+    let [searchQuery, setSearchQuery] = useState('');
+
+
+    const handleSearchChange = (e) => {
+        const value = e.target.value;
+        setSearchQuery(value);
+        setSearchParams({ search: value })
+    }
+
+    useEffect(() => {
+        const param = searchParams.get('search') || '';
+        setSearchQuery(param);
+    }, [searchParams]);
+
+    const filteredNotes = notes.filter(note =>
+        note.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     // Selecting elements in notes
     const selectedNoteObj = notes.find(note => note.note_id === selectedNote);
@@ -65,13 +82,6 @@ const NotesPage = () => {
             default:
                 break;
         }
-    }
-
-
-
-    const handleLogout = async () => {
-        await signOut();
-        navigate("/");
     }
 
     return (
@@ -91,9 +101,37 @@ const NotesPage = () => {
                         type="text"
                         placeholder="Search"
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={handleSearchChange}
                         className="w-full pl-10 pr-10 py-2 border border-gray-200 rounder-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     />
+
+                    {searchQuery && (
+                        <button
+                            onClick={() => setSearchQuery('')}
+                            className="absolute right-3 top-1/2 transfrom -translate-y-1/2 hover:text-gray-600"
+                        >
+                            <CgClose />
+                        </button>
+                    )}
+                    {/* Dropdown list for search*/}
+                    {searchQuery && filteredNotes.length > 0 && (
+                        <div className="absolute z-10 left-0 right-0 mt-1 bg-white border border-gray-200 rounded shadow-lg max-h-60 overflow-y-auto">
+                            {filteredNotes.map(note => (
+                                <div
+                                    key={note.note_id}
+                                    onClick={() => {
+                                        setSelectedNote(note.note_id);
+                                        setSearchQuery('');
+                                        setSearchParams({ search: '' });
+                                    }}
+                                    className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                                >
+                                    {note.title}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
                     {/* Remove search */}
                     {searchQuery && (
                         <button
@@ -104,21 +142,7 @@ const NotesPage = () => {
                         </button>
                     )}
                 </div>
-                {/* Navigation */}
-                <div className=" px-4 py-3 border-b border-gray-200">
-                    <div className="space-y-2">
-                        <button className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded">
-                            Search
-                        </button>
-                        <button className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded">
-                            Tags
-                        </button>
-                        <button className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded">
-                            Favorites
-                        </button>
-                        <Button className={"w-20"} onClick={handleLogout}>Logout</Button>
-                    </div>
-                </div>
+                <Navigation />
                 {/* Notes list */}
                 <div className="flex-1 overflow-y-auto">
                     {notes.map((note) => (
@@ -147,9 +171,7 @@ const NotesPage = () => {
                                 </div>
                             </div>
                         </div>
-
                     ))}
-
                 </div>
             </div>
             {/* Main content */}
@@ -166,30 +188,7 @@ const NotesPage = () => {
                                     </span>
                                 </div>
                             </div>
-                            {/* Toolbar */}
-                            <div className="flex items-center space-x-4 mt-4">
-                                <button className="p-2 hover:bg-gray-100 rounded">
-                                    <CgFormatBold className="w-4 h-4" />
-                                </button>
-                                <button className="p-2 hover:bg-gray-100 rounded">
-                                    <CgFormatItalic className="w-4 h-4" />
-                                </button>
-                                <button className="p-2 hover:bg-gray-100 rounded">
-                                    <CgFormatUnderline className="w-4 h-4" />
-                                </button>
-                                <button className="p-2 hover:bg-gray-100 rounded">
-                                    <CgList className="w-4 h-4" />
-                                </button>
-                                <button className="p-2 hover:bg-gray-100 rounded">
-                                    <CgAttachment className="w-4 h-4" />
-                                </button>
-                                <button className="p-2 hover:bg-gray-100 rounded">
-                                    <CgImage className="w-4 h-4" />
-                                </button>
-                                <button className="p-2 hover:bg-gray-100 rounded">
-                                    <CgMoreAlt className="w-4 h-4" />
-                                </button>
-                            </div>
+                            <Toolbar />
                         </>
                     ) : null}
                 </div>
@@ -205,7 +204,7 @@ const NotesPage = () => {
                     )}
                 </div>
             </div>
-        </div>
+        </div >
 
 
     );

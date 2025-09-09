@@ -5,9 +5,9 @@ const LandingPage = () => {
 
     return (
         <div className="flex min-h-screen w-full flex-col font-roboto bg-no-repeat bg-cover bg-center bg-[url('/src/assets/IMG_9931.jpg')]">
-            <Header></Header>
+            <Header/>
             <div className="min-h-screen"></div>
-            <Footer></Footer>
+            <Footer/>
         </div>
     );
 };
