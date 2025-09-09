@@ -51,18 +51,20 @@ const NotesPage = () => {
 
     const selectedNoteObj = notes.find(note => note.note_id === selectedNote);
 
-    const tagName = "No note selected";
-    if (selectedNoteObj) {
+    const getTagName = () => {
+        if (!selectedNoteObj) return "No note selected";
+        
         switch (selectedNoteObj.note_tags.tag_id) {
             case "1":
-                tagName = "C++"
-                break;
+                return "C++";
             case "2":
-                tagName = "Java"
+                return "Java";
             default:
-                break;
+                return "No tag";
         }
-    }
+    };
+
+    const tagName = getTagName();
 
     const handleLogout = async () => {
         await signOut();
