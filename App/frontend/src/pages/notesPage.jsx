@@ -9,15 +9,15 @@ import { Toolbar } from "@/components/ui/Toolbar"
 import { Navigation } from "@/components/ui/Navigation"
 
 const NotesPage = () => {
-    const { signOut } = useAuth()
-    const navigate = useNavigate();
-
     // Secondary search for searching in specific notes
     // Categories for tagging notes
     // Favorites for flagging notes
 
     // Notes to be implemented, through a dedicated backend API? dedicated noteProvider or something else.
     const [selectedNote, setSelectedNote] = useState('');
+    let [searchParams, setSearchParams] = useSearchParams();
+    let [searchQuery, setSearchQuery] = useState('');
+
     const notes = [
         {
             note_id: '1',
@@ -46,10 +46,7 @@ const NotesPage = () => {
             }
         }
     ];
-
-    let [searchParams, setSearchParams] = useSearchParams();
-    let [searchQuery, setSearchQuery] = useState('');
-
+    
     const handleSearchChange = (e) => {
         const value = e.target.value;
         setSearchQuery(value);
@@ -82,11 +79,6 @@ const NotesPage = () => {
     };
 
     const tagName = getTagName();
-
-    const handleLogout = async () => {
-        await signOut();
-        navigate("/");
-    }
 
     return (
         <div className="flex h-screen bg-secondary">
