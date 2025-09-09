@@ -49,12 +49,9 @@ const NotesPage = () => {
         }
     ];
 
-
-    // Selecting elements in notes
     const selectedNoteObj = notes.find(note => note.note_id === selectedNote);
 
-    // Selecting tags through tag_id. There is a better solution for this
-    let tagName = "No note selected";
+    const tagName = "No note selected";
     if (selectedNoteObj) {
         switch (selectedNoteObj.note_tags.tag_id) {
             case "1":
@@ -66,8 +63,6 @@ const NotesPage = () => {
                 break;
         }
     }
-
-
 
     const handleLogout = async () => {
         await signOut();
@@ -206,8 +201,6 @@ const NotesPage = () => {
                 </div>
             </div>
         </div>
-
-
     );
 };
 
