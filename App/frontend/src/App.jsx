@@ -14,13 +14,17 @@ function App() {
   return (
     <Routes>
       {user ? (
-        <Route path="*" element={<NotesPage />} />
+        <>
+          <Route path="/notes" element={<NotesPage />} />
+          <Route path="*" element={<Navigate to="/notes" replace />} />
+        </>
       ) : (
         <>
           <Route path="/" element={<LandingPage />} />
           <Route path="/register" element={<RegistrationForm />} />
           <Route path="/login" element={<LoginForm />} />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="/notes" element={<NotesPage />} />
+          <Route path="*" element={<Navigate to="/notes" />} />
         </>
       )}
     </Routes>
