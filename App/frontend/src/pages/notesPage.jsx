@@ -70,18 +70,24 @@ const NotesPage = () => {
     // Selecting elements in notes
     const selectedNoteObj = notes.find(note => note.note_id === selectedNote);
 
-    // Selecting tags through tag_id. There is a better solution for this
-    let tagName = "No note selected";
-    if (selectedNoteObj) {
+    const getTagName = () => {
+        if (!selectedNoteObj) return "No note selected";
+        
         switch (selectedNoteObj.note_tags.tag_id) {
             case "1":
-                tagName = "C++"
-                break;
+                return "C++";
             case "2":
-                tagName = "Java"
+                return "Java";
             default:
-                break;
+                return "No tag";
         }
+    };
+
+
+
+    const handleLogout = async () => {
+        await signOut();
+        navigate("/");
     }
 
     return (
@@ -204,7 +210,7 @@ const NotesPage = () => {
                     )}
                 </div>
             </div>
-        </div >
+        </div>
 
 
     );
