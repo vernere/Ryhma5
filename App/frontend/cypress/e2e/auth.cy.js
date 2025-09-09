@@ -7,8 +7,8 @@ describe('Login Tests', () => {
     cy.contains('Login').click()
     cy.url().should('include', '/login')
 
-    cy.get('input[type="email"]').type('verner.etola@gmail.com')
-    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
+    cy.get('input[type="email"]').type('test.test@user.com')
+    cy.get('input[type="email"]').should('have.value', 'test.test@user.com')
 
     cy.get('input[type="password"]').type('Hello123')
     cy.get('input[type="password"]').should('have.value', 'Hello123')
@@ -40,8 +40,8 @@ describe('Login Tests', () => {
     cy.get('input[type="email"]').clear()
     cy.get('input[type="password"]').clear()
 
-    cy.get('input[type="email"]').type('verner.etola@gmail.com')
-    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
+    cy.get('input[type="email"]').type('test.test@user.com')
+    cy.get('input[type="email"]').should('have.value', 'test.test@user.com')
 
     cy.get('input[type="password"]').type('Hello1234')
     cy.get('input[type="password"]').should('have.value', 'Hello1234')
@@ -132,8 +132,8 @@ describe('Registration tests', () => {
     cy.get('input[type="password"]').should('have.value', '')
 
     /*
-    cy.get('input[type="email"]').type('verner.etola@gmail.com')
-    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
+    cy.get('input[type="email"]').type('test.test@user.com')
+    cy.get('input[type="email"]').should('have.value', 'test.test@user.com')
 
     cy.get('input[type="password"]').type('Hello123')
     cy.get('input[type="password"]').should('have.value', 'Hello123')
@@ -143,8 +143,8 @@ describe('Registration tests', () => {
     */
 
     // Testing for invalid email formats
-    cy.get('input[type="email"]').type('verner.etolagmail.com')
-    cy.get('input[type="email"]').should('have.value', 'verner.etolagmail.com')
+    cy.get('input[type="email"]').type('test.testuser.com')
+    cy.get('input[type="email"]').should('have.value', 'test.testuser.com')
 
     cy.get('input[type="password"]').type('Hello123')
     cy.get('input[type="password"]').should('have.value', 'Hello123')
@@ -164,8 +164,8 @@ describe('Registration tests', () => {
     cy.contains('Sign up').click()
     cy.url().should('include', '/register')
     // Testing for empty field
-    cy.get('input[type="email"]').type('verner.etola@gmail.com')
-    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
+    cy.get('input[type="email"]').type('test.test@user.com')
+    cy.get('input[type="email"]').should('have.value', 'test.test@user.com')
 
     cy.get('button').contains('Register').click()
 
@@ -175,8 +175,8 @@ describe('Registration tests', () => {
     cy.get('input[type="email"]').clear()
     cy.get('input[type="email"]').should('have.value', '')
 
-    cy.get('input[type="email"]').type('verner.etola@gmail.com')
-    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
+    cy.get('input[type="email"]').type('test.test@user.com')
+    cy.get('input[type="email"]').should('have.value', 'test.test@user.com')
 
     cy.get('input[type="password"]').type('hello')
     cy.get('input[type="password"]').should('have.value', 'hello')
@@ -227,8 +227,8 @@ describe('Logout Tests', () => {
     cy.contains('Login').click()
     cy.url().should('include', '/login')
 
-    cy.get('input[type="email"]').type('verner.etola@gmail.com')
-    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
+    cy.get('input[type="email"]').type('test.test@user.com')
+    cy.get('input[type="email"]').should('have.value', 'test.test@user.com')
 
     cy.get('input[type="password"]').type('Hello123')
     cy.get('input[type="password"]').should('have.value', 'Hello123')
