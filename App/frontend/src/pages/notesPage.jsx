@@ -1,15 +1,20 @@
+
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import { CgAddR, CgClose, CgHeart, CgNotes } from "react-icons/cg";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Toolbar } from "@/components/ui/toolbar"
-import { Navigation } from "@/components/ui/navigation"
-
+import { Toolbar } from "@/components/ui/Toolbar"
+import { Navigation } from "@/components/ui/Navigation"
 
 const NotesPage = () => {
+    const { signOut } = useAuth()
+    const navigate = useNavigate();
+
     // Secondary search for searching in specific notes
     // Categories for tagging notes
-    // Favorites for flagging notes 
+    // Favorites for flagging notes
 
     // Notes to be implemented, through a dedicated backend API? dedicated noteProvider or something else.
     const [selectedNote, setSelectedNote] = useState('');
@@ -77,9 +82,6 @@ const NotesPage = () => {
     };
 
     const tagName = getTagName();
-
-
-
 
     const handleLogout = async () => {
         await signOut();
