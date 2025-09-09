@@ -1,6 +1,6 @@
 
 import { useAuth } from "../hooks/useAuth";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import { CgAddR, CgClose, CgHeart, CgNotes } from "react-icons/cg";
 import { Search } from "lucide-react";
@@ -51,7 +51,6 @@ const NotesPage = () => {
     let [searchParams, setSearchParams] = useSearchParams();
     let [searchQuery, setSearchQuery] = useState('');
 
-
     const handleSearchChange = (e) => {
         const value = e.target.value;
         setSearchQuery(value);
@@ -84,9 +83,6 @@ const NotesPage = () => {
     };
 
     const tagName = getTagName();
-
-
-
 
     const handleLogout = async () => {
         await signOut();
@@ -214,8 +210,6 @@ const NotesPage = () => {
                 </div>
             </div>
         </div>
-
-
     );
 };
 
