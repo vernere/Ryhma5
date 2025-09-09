@@ -45,7 +45,6 @@ const NotesPage = () => {
     let [searchParams, setSearchParams] = useSearchParams();
     let [searchQuery, setSearchQuery] = useState('');
 
-
     const handleSearchChange = (e) => {
         const value = e.target.value;
         setSearchQuery(value);
@@ -79,6 +78,13 @@ const NotesPage = () => {
 
     const tagName = getTagName();
 
+
+
+
+    const handleLogout = async () => {
+        await signOut();
+        navigate("/");
+    }
 
     return (
         <div className="flex h-screen bg-secondary">
@@ -201,8 +207,6 @@ const NotesPage = () => {
                 </div>
             </div>
         </div>
-
-
     );
 };
 
