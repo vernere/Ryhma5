@@ -83,6 +83,9 @@ const NotesPage = () => {
         }
     };
 
+    const tagName = getTagName();
+
+
 
 
     const handleLogout = async () => {
