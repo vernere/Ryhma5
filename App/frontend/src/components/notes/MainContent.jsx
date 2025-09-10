@@ -2,6 +2,7 @@ import { Toolbar } from "@/components/ui/Toolbar";
 import { CgNotes } from "react-icons/cg";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useEffect } from "react";
+import CollaborativeEditor from "@/components/notes/CollaborativeEditor";
 
 const MainContent = () => {
     const { selectedNote, fetchNotes } = useNotesStore();
@@ -75,22 +76,14 @@ const MainContent = () => {
                 {selectedNote ? (
                     <div className="max-w-4xl mx-auto w-full">
                         <div
-                            className="bg-white rounded-lg shadow-sm p-6 border border-gray-100"
+                            className="bg-white rounded-lg shadow-sm p-6"
                             aria-live="polite"
                         >
-                            <div className="mb-4 text-sm text-gray-500">
-                                Editor
-                            </div>
-
                             <div
                                 className="prose max-w-none text-gray-800"
-                                style={{ minHeight: "60vh" }}
+                                style={{ minHeight: "90vh" }}
                             >
-                                {selectedNote.content || (
-                                    <span className="text-gray-400">
-                                        (Empty note)
-                                    </span>
-                                )}
+                                <CollaborativeEditor />
                             </div>
                         </div>
                     </div>
