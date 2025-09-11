@@ -4,6 +4,8 @@ import RegistrationForm from './pages/RegistrationForm';
 import LoginForm from './pages/LoginForm';
 import LandingPage from './pages/LandingPage';
 import NotesPage from './pages/NotesPage';
+import ResetPassword from './pages/resetPassword.jsx';
+import ChangePassword from './pages/changePassword.jsx';
 import { useAuth } from './hooks/useAuth';
 
 function App() {
@@ -16,6 +18,7 @@ function App() {
       {user ? (
         <>
           <Route path="/notes" element={<NotesPage />} />
+          <Route path="/changePassword" element={<ChangePassword />} />
           <Route path="*" element={<Navigate to="/notes" replace />} />
         </>
       ) : (
@@ -23,8 +26,8 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/register" element={<RegistrationForm />} />
           <Route path="/login" element={<LoginForm />} />
-          <Route path="/notes" element={<NotesPage />} />
-          <Route path="*" element={<Navigate to="/notes" />} />
+          <Route path="/resetPassword" element={<ResetPassword />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </>
       )}
     </Routes>

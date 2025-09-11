@@ -43,8 +43,24 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const resetPassword = async (email) => {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: import.meta.env.VITE_CHANGE_PASSWORD_URL
+    });
+    if (error) throw error;
+    return data;
+  };
+
+
+  const changePassword = async (password) => {
+    const { data, error } = await supabase.auth.updateUser({ password });
+    if (error) throw error;
+    return data;
+  };
+
+
   return (
-    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut, resetPassword, changePassword }}>
       {children}
     </AuthContext.Provider>
   );
