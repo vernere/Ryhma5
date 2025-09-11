@@ -149,7 +149,6 @@ export const useNotesStore = create((set, get) => ({
           if (selectedNoteId === updatedNote.note_id &&
             updatedNote.updated_by !== currentUser?.id) {
 
-            // Show a notification for merge conflicts
             console.log('Note updated by another user');
 
             set({ selectedNote: updatedNote });

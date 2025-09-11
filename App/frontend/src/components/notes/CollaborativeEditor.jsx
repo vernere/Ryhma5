@@ -20,7 +20,7 @@ export default function CollaborativeEditor() {
     } = useNotesStore();
 
     const { user } = useAuth();
-    const [saveStatus, setSaveStatus] = useState('saved');
+    const [_, setSaveStatus] = useState('saved');
 
     const editor = useEditor(
         {
