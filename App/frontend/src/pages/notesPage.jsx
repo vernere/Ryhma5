@@ -7,6 +7,11 @@ import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Toolbar } from "@/components/ui/Toolbar"
 import { Navigation } from "@/components/ui/Navigation"
+// [FAVORITES] UUSI
+import { supabase } from "@/lib/supabaseClient";
+// [FAVORITES] UUSI
+import { getFavoritesSet, toggleFavorite } from "@/lib/notesApi";
+
 
 const NotesPage = () => {
     // Secondary search for searching in specific notes
@@ -17,6 +22,13 @@ const NotesPage = () => {
     const [selectedNote, setSelectedNote] = useState('');
     let [searchParams, setSearchParams] = useSearchParams();
     let [searchQuery, setSearchQuery] = useState('');
+
+
+    // [FAVORITES] UUSI
+    const [uid, setUid] = useState(null);
+    // [FAVORITES] UUSI
+    const [favs, setFavs] = useState(new Set()); // Set(note_id)
+
 
     const notes = [
         {
@@ -46,7 +58,7 @@ const NotesPage = () => {
             }
         }
     ];
-    
+
     const handleSearchChange = (e) => {
         const value = e.target.value;
         setSearchQuery(value);
@@ -58,6 +70,20 @@ const NotesPage = () => {
         setSearchQuery(param);
     }, [searchParams]);
 
+    // [FAVORITES] UUSI
+    useEffect(() => {
+        (async () => {
+            const { data } = await supabase.auth.getUser();
+            const user = data?.user;
+            if (user) {
+                setUid(user.id);
+                const favSet = await getFavoritesSet(user.id);
+                setFavs(favSet);
+            }
+        })();
+    }, []);
+
+
     const filteredNotes = notes.filter(note =>
         note.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -67,7 +93,7 @@ const NotesPage = () => {
 
     const getTagName = () => {
         if (!selectedNoteObj) return "No note selected";
-        
+
         switch (selectedNoteObj.note_tags.tag_id) {
             case "1":
                 return "C++";
@@ -149,8 +175,45 @@ const NotesPage = () => {
                                 }`}
                         >
                             <div className="flex imtesms-start space-x-3">
-                                {/* Favorite button */}
-                                <button className="p-1 mt-1 hover:bg-gray-300 hover:rounded-lg"><CgHeart className="w-4 h-4 mt-1 flex-shrink-0" /></button>
+                                {/* Favorite button — TOIMINNALLINEN */}
+                                <button
+                                    className="p-1 mt-1 hover:bg-gray-300 hover:rounded-lg"
+                                    onClick={async (e) => {
+                                        e.stopPropagation();         // ei valitse korttia
+                                        if (!uid) return;
+
+                                        const isFav = favs.has(note.note_id);
+                                        const next = !isFav;
+
+                                        // Optimistinen UI
+                                        setFavs(prev => {
+                                            const copy = new Set(prev);
+                                            if (next) copy.add(note.note_id);
+                                            else copy.delete(note.note_id);
+                                            return copy;
+                                        });
+
+                                        // Kirjoitus kantaan
+                                        try {
+                                            await toggleFavorite(uid, note.note_id, next);
+                                        } catch (err) {
+                                            console.error(err);
+                                            // Peru UI jos virhe
+                                            setFavs(prev => {
+                                                const copy = new Set(prev);
+                                                if (next) copy.delete(note.note_id);
+                                                else copy.add(note.note_id);
+                                                return copy;
+                                            });
+                                        }
+                                    }}
+                                >
+                                    <CgHeart
+                                        className={`w-4 h-4 mt-1 flex-shrink-0 ${favs.has(note.note_id) ? "text-red-500" : "text-gray-400"
+                                            }`}
+                                    />
+                                </button>
+
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center justify-between">
                                         <h3 className="text-sm font-medium">
