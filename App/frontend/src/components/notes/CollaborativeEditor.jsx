@@ -1,21 +1,27 @@
-import { useEffect, useMemo } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { useNotesStore } from "@/hooks/useNotesStore";
-import { useEditor, EditorContent } from "@tiptap/react";
+import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { ySyncPlugin, yUndoPlugin } from "y-prosemirror";
-import { supabase } from "@/lib/supabaseClient";
+import { useEffect } from "react";
 
 export default function CollaborativeEditor() {
-    const { ydoc, provider, selectedNoteId, selectedNote } = useNotesStore();
+    const {
+        selectedNote,
+        selectedNoteId,
+        setupPresence,
+        cleanupPresence,
+        setCurrentUser,
+        isLocalChange,
+        setIsLocalChange,
+        handleContentChange,
+    } = useNotesStore();
 
-    const yXmlFragment = ydoc?.getXmlFragment("prosemirror");
+    const { user } = useAuth();
 
     const editor = useEditor(
         {
             extensions: [
-                StarterKit.configure({
-                    history: false,
-                }),
+                StarterKit.configure({ history: false }),
             ],
             editorProps: {
                 attributes: {
@@ -27,80 +33,46 @@ export default function CollaborativeEditor() {
     );
 
     useEffect(() => {
-        if (!editor || !yXmlFragment || !provider) return;
-
-        const hasYSyncPlugin = editor.state.plugins.some(
-            (plugin) => plugin.key && plugin.key.startsWith("y-sync")
-        );
-
-        if (hasYSyncPlugin) {
-            console.log("Y.js plugins already registered");
-            return;
-        }
-
-        try {
-            editor.registerPlugin(ySyncPlugin(yXmlFragment));
-            editor.registerPlugin(yUndoPlugin());
-
-            console.log("Y.js plugins registered successfully");
-        } catch (error) {
-            console.error("Error setting up collaborative plugins:", error);
-        }
-    }, [editor, yXmlFragment, provider]);
-
-    useEffect(() => {
         if (editor && selectedNote?.content) {
             editor.commands.setContent(selectedNote.content);
         }
     }, [editor, selectedNoteId, selectedNote?.content]);
 
     useEffect(() => {
-        if (!editor || !selectedNoteId) return;
+        if (user) setCurrentUser(user);
+    }, [user, setCurrentUser]);
 
-        const saveContent = async () => {
-            try {
-                const content = editor.getHTML();
-                await supabase
-                    .from("notes")
-                    .update({
-                        content,
-                        updated_at: new Date().toISOString(),
-                    })
-                    .eq("note_id", selectedNoteId);
-                console.log("Content saved to database");
-            } catch (error) {
-                console.error("Error saving content:", error);
+    useEffect(() => {
+        if (selectedNoteId && user) {
+            setupPresence(selectedNoteId, user, (content) => {
+                if (editor) {
+                    setIsLocalChange(true);
+                    editor.commands.setContent(content);
+                }
+            });
+        }
+        return () => cleanupPresence();
+    }, [selectedNoteId, user, setupPresence, cleanupPresence, editor, setIsLocalChange]);
+
+    useEffect(() => {
+        if (!editor) return;
+
+        const onUpdate = () => {
+            if (isLocalChange) {
+                setIsLocalChange(false);
+                return;
             }
+            handleContentChange(editor.getHTML());
         };
 
-        let saveTimeout;
-        const handleUpdate = () => {
-            clearTimeout(saveTimeout);
-            saveTimeout = setTimeout(saveContent, 2000);
-        };
+        editor.on("update", onUpdate);
+        return () => editor.off("update", onUpdate);
+    }, [editor, isLocalChange, handleContentChange, setIsLocalChange]);
 
-        editor.on("update", handleUpdate);
-
-        return () => {
-            editor.off("update", handleUpdate);
-            clearTimeout(saveTimeout);
-        };
-    }, [editor, selectedNoteId]);
-
-    if (!selectedNote) {
+    if (!selectedNoteId) {
         return (
             <div className="border rounded-2xl shadow-sm p-4 text-center text-gray-500">
                 No note selected
-            </div>
-        );
-    }
-
-    if (!ydoc || !provider) {
-        return (
-            <div className="border rounded-2xl shadow-sm p-4 text-center text-gray-500">
-                <div className="animate-pulse">
-                    Connecting to collaborative session...
-                </div>
             </div>
         );
     }
@@ -115,7 +87,12 @@ export default function CollaborativeEditor() {
 
     return (
         <div className="rounded-2xl min-h-[400px]">
-            <EditorContent editor={editor} />
+            <div
+                className="prose max-w-none text-gray-800 bg-white rounded-lg shadow-sm p-6"
+                style={{ minHeight: "90vh" }}
+            >
+                <EditorContent editor={editor} />
+            </div>
         </div>
     );
 }

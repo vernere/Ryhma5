@@ -5,7 +5,9 @@ import { useEffect } from "react";
 import CollaborativeEditor from "@/components/notes/CollaborativeEditor";
 
 const MainContent = () => {
-    const { selectedNote, fetchNotes } = useNotesStore();
+    const { selectedNote, fetchNotes, activeUsers } = useNotesStore();
+
+    console.log({ selectedNote });
 
     useEffect(() => {
         fetchNotes();
@@ -36,9 +38,19 @@ const MainContent = () => {
                 {selectedNote ? (
                     <div className="flex items-center space-x-4">
                         <div className="flex flex-col">
-                            <h1 className="text-xl font-semibold text-gray-900 truncate max-w-2xl">
-                                {selectedNote.title}
-                            </h1>
+                            <div className="flex items-center gap-4">
+                                <h1 className="text-xl font-semibold text-gray-900 truncate max-w-2xl">
+                                    {selectedNote.title}
+                                </h1>
+                                {activeUsers.map((user) => (
+                                    <span
+                                        key={user.user_id}
+                                        className="text-xs px-2 py-0.5 bg-gray-200 rounded-full"
+                                    >
+                                        {user.email}
+                                    </span>
+                                ))}
+                            </div>
                             <div className="mt-1 flex items-center space-x-2">
                                 <span className="inline-block bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded">
                                     {tagName}
@@ -67,25 +79,13 @@ const MainContent = () => {
                     </div>
                 )}
 
-                <div>
-                    <Toolbar />
-                </div>
+                <Toolbar />
             </div>
 
             <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
                 {selectedNote ? (
                     <div className="max-w-4xl mx-auto w-full">
-                        <div
-                            className="bg-white rounded-lg shadow-sm p-6"
-                            aria-live="polite"
-                        >
-                            <div
-                                className="prose max-w-none text-gray-800"
-                                style={{ minHeight: "90vh" }}
-                            >
-                                <CollaborativeEditor />
-                            </div>
-                        </div>
+                        <CollaborativeEditor />
                     </div>
                 ) : (
                     <div className="flex items-center justify-center h-full w-full pr-10">

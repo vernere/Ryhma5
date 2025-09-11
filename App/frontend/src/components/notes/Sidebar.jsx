@@ -1,6 +1,7 @@
 import { Search } from "lucide-react";
 import { Navigation } from "@/components/ui/Navigation";
 import { useNotesStore } from "@/hooks/useNotesStore";
+import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
 
 const Sidebar = () => {
@@ -13,6 +14,8 @@ const Sidebar = () => {
         selectedNoteId,
     } = useNotesStore();
 
+    const { user } = useAuth();
+
     useEffect(() => {
         fetchNotes();
     }, [fetchNotes]);
@@ -24,7 +27,7 @@ const Sidebar = () => {
     return (
         <div className="w-60 bg-white border-r border-gray-200 flex flex-col">
             <div className="p-2 border-b border-gray-200 flex items-center justify-between">
-                <h1 className="text-lg font-semibold">Notely</h1>
+                <h1 className="text-lg font-semibold">{user.email}</h1>
             </div>
 
             <div className="p-2">
@@ -44,8 +47,8 @@ const Sidebar = () => {
                         {filteredNotes.map((note) => (
                             <div
                                 key={note.note_id}
-                                onClick={() => {
-                                    setSelectedNote(note.note_id);
+                                onClick={async () => {
+                                    await setSelectedNote(note.note_id);
                                     setSearchQuery("");
                                 }}
                                 className={`px-3 py-2 cursor-pointer hover:bg-gray-50 flex flex-col space-y-1 ${
@@ -77,8 +80,8 @@ const Sidebar = () => {
                     return (
                         <div
                             key={note.note_id}
-                            onClick={() => {
-                                setSelectedNote(note.note_id);
+                            onClick={async () => {
+                                await setSelectedNote(note.note_id);
                                 setSearchQuery("");
                             }}
                             className={`px-4 py-3 cursor-pointer hover:bg-gray-50 flex flex-col space-y-1 border-b border-transparent ${
