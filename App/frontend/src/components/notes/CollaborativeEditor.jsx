@@ -16,7 +16,6 @@ export default function CollaborativeEditor() {
         isLocalChange,
         setIsLocalChange,
         handleContentChange,
-        activeUsers,
     } = useNotesStore();
 
     const { user } = useAuth();

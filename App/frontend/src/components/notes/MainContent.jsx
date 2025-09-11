@@ -7,8 +7,6 @@ import CollaborativeEditor from "@/components/notes/CollaborativeEditor";
 const MainContent = () => {
     const { selectedNote, fetchNotes, activeUsers } = useNotesStore();
 
-    console.log({ selectedNote });
-
     useEffect(() => {
         fetchNotes();
     }, [fetchNotes]);
