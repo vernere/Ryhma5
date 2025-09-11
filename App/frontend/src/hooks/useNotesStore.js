@@ -126,7 +126,85 @@ export const useNotesStore = create((set, get) => ({
     });
   }, 100),
 
+  setupRealtimeSubscription: () => {
+    const subscription = supabase
+      .channel('notes-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'notes'
+        },
+        (payload) => {
+          const updatedNote = payload.new;
+          const { selectedNoteId, currentUser } = get();
+
+          set((state) => ({
+            notes: state.notes.map(note =>
+              note.note_id === updatedNote.note_id ? updatedNote : note
+            )
+          }));
+
+          if (selectedNoteId === updatedNote.note_id &&
+            updatedNote.updated_by !== currentUser?.id) {
+
+            // Show a notification for merge conflicts
+            console.log('Note updated by another user');
+
+            set({ selectedNote: updatedNote });
+          }
+        }
+      )
+      .subscribe();
+
+    set({ realtimeSubscription: subscription });
+  },
+
+  cleanupRealtimeSubscription: () => {
+    const { realtimeSubscription } = get();
+    if (realtimeSubscription) {
+      realtimeSubscription.unsubscribe();
+      set({ realtimeSubscription: null });
+    }
+  },
+
+  saveNoteToDatabase: debounce(async (noteId, content) => {
+    try {
+      const { error } = await supabase
+        .from("notes")
+        .update({
+          content,
+          updated_at: new Date().toISOString()
+        })
+        .eq("note_id", noteId);
+
+      if (error) throw error;
+
+      set((state) => ({
+        notes: state.notes.map(note =>
+          note.note_id === noteId
+            ? { ...note, content, updated_at: new Date().toISOString() }
+            : note
+        ),
+        selectedNote: state.selectedNote?.note_id === noteId
+          ? { ...state.selectedNote, content, updated_at: new Date().toISOString() }
+          : state.selectedNote
+      }));
+
+    } catch (err) {
+      console.error('Failed to save note:', err);
+      set({ error: err.message });
+    }
+  }, 1000),
+
   handleContentChange: (newContent) => {
-    get().broadcastContentChange(newContent);
+    const { selectedNoteId, broadcastContentChange, saveNoteToDatabase } = get();
+
+    if (!selectedNoteId) return;
+
+    broadcastContentChange(newContent);
+
+    saveNoteToDatabase(selectedNoteId, newContent);
   },
 }));

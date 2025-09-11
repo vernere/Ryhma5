@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function CollaborativeEditor() {
     const {
@@ -10,13 +10,17 @@ export default function CollaborativeEditor() {
         selectedNoteId,
         setupPresence,
         cleanupPresence,
+        setupRealtimeSubscription,
+        cleanupRealtimeSubscription,
         setCurrentUser,
         isLocalChange,
         setIsLocalChange,
         handleContentChange,
+        activeUsers,
     } = useNotesStore();
 
     const { user } = useAuth();
+    const [saveStatus, setSaveStatus] = useState('saved');
 
     const editor = useEditor(
         {
@@ -31,6 +35,11 @@ export default function CollaborativeEditor() {
         },
         [selectedNoteId]
     );
+
+    useEffect(() => {
+        setupRealtimeSubscription();
+        return () => cleanupRealtimeSubscription();
+    }, [setupRealtimeSubscription, cleanupRealtimeSubscription]);
 
     useEffect(() => {
         if (editor && selectedNote?.content) {
@@ -62,7 +71,10 @@ export default function CollaborativeEditor() {
                 setIsLocalChange(false);
                 return;
             }
+            
+            setSaveStatus('saving');
             handleContentChange(editor.getHTML());
+            setTimeout(() => setSaveStatus('saved'), 2500);
         };
 
         editor.on("update", onUpdate);
@@ -88,7 +100,7 @@ export default function CollaborativeEditor() {
     return (
         <div className="rounded-2xl min-h-[400px]">
             <div
-                className="prose max-w-none text-gray-800 bg-white rounded-lg shadow-sm p-6"
+                className="prose max-w-none text-gray-800 bg-white rounded-b-lg shadow-sm p-6"
                 style={{ minHeight: "90vh" }}
             >
                 <EditorContent editor={editor} />
