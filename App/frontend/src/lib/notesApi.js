@@ -34,3 +34,4 @@ export async function toggleFavorite(uid, noteId, nextIsFav) {
   if (nextIsFav) return addFavorite(uid, noteId);
   return removeFavorite(uid, noteId);
 }
+ 
