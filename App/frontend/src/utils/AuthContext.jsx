@@ -51,13 +51,11 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-
   const changePassword = async (password) => {
     const { data, error } = await supabase.auth.updateUser({ password });
     if (error) throw error;
     return data;
   };
-
 
   return (
     <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut, resetPassword, changePassword }}>
