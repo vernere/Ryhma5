@@ -1,0 +1,52 @@
+name: E2E
+on:
+  push:
+    branches:
+      - '**'
+      - '!main'
+    paths:
+      - '/App/frontend/**'
+      - '/App/backend/**'
+name: Cypress E2E Tests
+
+jobs:
+  e2e:
+    env:
+      VITE_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_GRAPHQL_ENDPOINT }}
+      VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.GRAPHQL_ENDPOINT }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.client_payload.git.sha }}
+
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+          cache-dependency-path: |
+            /App/frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./App/frontend
+        run: bun install --frozen-lockfile
+
+      - name: Cypress - E2E
+        uses: cypress-io/github-action@v6
+        working-directory: ./Ryhmä5/App/frontend
+        with:
+          install: false
+          build: bun run build
+          start: bun start
+          browser: chrome
+          summary-title: 'E2E'
+
+      - name: Upload screenshots on failure
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+          if-no-files-found: ignore
