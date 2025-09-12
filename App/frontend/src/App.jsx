@@ -7,6 +7,8 @@ import NotesPage from './pages/NotesPage';
 import ResetPassword from './pages/resetPassword.jsx';
 import ChangePassword from './pages/changePassword.jsx';
 import { useAuth } from './hooks/useAuth';
+import PasswordChanged from "@/pages/passwordChanged.jsx";
+import RegistrationSuccess from './pages/registrationSuccess.jsx';
 
 function App() {
   const { user, loading } = useAuth();
@@ -19,6 +21,7 @@ function App() {
         <>
           <Route path="/notes" element={<NotesPage />} />
           <Route path="/changePassword" element={<ChangePassword />} />
+          <Route path="/passwordChanged" element={<PasswordChanged />} />
           <Route path="*" element={<Navigate to="/notes" replace />} />
         </>
       ) : (
@@ -27,6 +30,8 @@ function App() {
           <Route path="/register" element={<RegistrationForm />} />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
+          <Route path="/passwordChanged" element={<PasswordChanged />} />
+          <Route path="/registrationSuccess" element={<RegistrationSuccess />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </>
       )}
