@@ -29,6 +29,10 @@ const NotesPage = () => {
     // [FAVORITES] UUSI
     const [favs, setFavs] = useState(new Set()); // Set(note_id)
 
+    // helpers: tarkista onko merkkijono uuid
+    const isUuid = (s) =>
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(s);
+
 
     const notes = [
         {
@@ -174,35 +178,44 @@ const NotesPage = () => {
                             className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 ${selectedNote === note.note_id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
                                 }`}
                         >
-                            <div className="flex imtesms-start space-x-3">
+                            <div className="flex items-start space-x-3">
                                 {/* Favorite button — TOIMINNALLINEN */}
                                 <button
                                     className="p-1 mt-1 hover:bg-gray-300 hover:rounded-lg"
                                     onClick={async (e) => {
-                                        e.stopPropagation();         // ei valitse korttia
+                                        e.stopPropagation();
                                         if (!uid) return;
+
+                                        // >>> ESTÄ kantakirjoitus mockeille
+                                        if (!isUuid(note.note_id)) {
+                                            console.warn('Mock note – ei oikea UUID, ei lähetetä kantaan:', note.note_id);
+                                            // halutessasi voit silti vaihtaa vain UI-väriä:
+                                            setFavs(prev => {
+                                                const copy = new Set(prev);
+                                                copy.has(note.note_id) ? copy.delete(note.note_id) : copy.add(note.note_id);
+                                                return copy;
+                                            });
+                                            return;
+                                        }
 
                                         const isFav = favs.has(note.note_id);
                                         const next = !isFav;
 
-                                        // Optimistinen UI
+                                        // optimistinen UI
                                         setFavs(prev => {
                                             const copy = new Set(prev);
-                                            if (next) copy.add(note.note_id);
-                                            else copy.delete(note.note_id);
+                                            next ? copy.add(note.note_id) : copy.delete(note.note_id);
                                             return copy;
                                         });
 
-                                        // Kirjoitus kantaan
                                         try {
                                             await toggleFavorite(uid, note.note_id, next);
                                         } catch (err) {
                                             console.error(err);
-                                            // Peru UI jos virhe
+                                            // peru UI jos virhe
                                             setFavs(prev => {
                                                 const copy = new Set(prev);
-                                                if (next) copy.delete(note.note_id);
-                                                else copy.add(note.note_id);
+                                                next ? copy.delete(note.note_id) : copy.add(note.note_id);
                                                 return copy;
                                             });
                                         }
@@ -213,6 +226,8 @@ const NotesPage = () => {
                                             }`}
                                     />
                                 </button>
+
+
 
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center justify-between">
