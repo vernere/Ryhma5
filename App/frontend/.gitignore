@@ -23,3 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 *.env
+
+# Cypress directories
+*screenshots
+*.nyc_output
