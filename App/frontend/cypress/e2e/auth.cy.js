@@ -1,100 +1,5 @@
 /// <reference types="Cypress" />
 
-describe('Login Tests', () => {
-  it('Navigate to login page and fill in credentials and log in successfully', () => {
-    cy.visit('/');
-
-    cy.contains('Login').click()
-    cy.url().should('include', '/login')
-
-    cy.get('input[type="email"]').type('verner.etola@gmail.com')
-    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
-
-    cy.get('input[type="password"]').type('Hello123')
-    cy.get('input[type="password"]').should('have.value', 'Hello123')
-
-    cy.get('button').contains('Login').click()
-
-    cy.url().should('include', '/notes')
-
-    // Add non accessible login page
-  })
-
-  it('Attempt login with invalid credentials', () => {
-    cy.visit('/');
-
-    cy.contains('Login').click()
-    cy.url().should('include', '/login')
-
-    cy.get('input[type="email"]').type('fakeEmail@fake.com')
-    cy.get('input[type="email"]').should('have.value', 'fakeEmail@fake.com')
-
-    cy.get('input[type="password"]').type('Hello123')
-    cy.get('input[type="password"]').should('have.value', 'Hello123')
-
-    cy.get('button').contains('Login').click()
-
-    cy.get('p').contains('Invalid password or email').should('exist')
-    cy.url().should('include', '/login')
-
-    cy.get('input[type="email"]').clear()
-    cy.get('input[type="password"]').clear()
-
-    cy.get('input[type="email"]').type('verner.etola@gmail.com')
-    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
-
-    cy.get('input[type="password"]').type('Hello1234')
-    cy.get('input[type="password"]').should('have.value', 'Hello1234')
-
-    cy.get('button').contains('Login').click()
-
-    cy.get('p').contains('Invalid password or email').should('exist')
-    cy.url().should('include', '/login')
-
-  });
-
-  it('Test form validation errors', () => {
-    cy.visit('/');
-
-    cy.contains('Login').click()
-    cy.url().should('include', '/login')
-
-    cy.get('button').contains('Login').click()
-
-    cy.get('p').contains('Invalid password or email').should('exist')
-    cy.url().should('include', '/login')
-
-    cy.get('input[type="email"]').type('fakeEmail@fake.com')
-    cy.get('input[type="email"]').should('have.value', 'fakeEmail@fake.com')
-
-    cy.get('button').contains('Login').click()
-
-    cy.get('p').contains('Invalid password or email').should('exist')
-    cy.url().should('include', '/login')
-
-    cy.get('input[type="email"]').clear()
-    cy.get('input[type="email"]').should('have.value', '')
-
-    cy.get('input[type="password"]').type('Hello123')
-    cy.get('input[type="password"]').should('have.value', 'Hello123')
-
-    cy.get('button').contains('Login').click()
-
-    cy.get('p').contains('Invalid password or email').should('exist')
-    cy.url().should('include', '/login')
-
-  });
-
-  it('UI state tests', () => {
-
-    // Verify loading state during login attempt
-    // Test empty password field shows validation error
-    // Check password visibility toggle functionality
-    // Test form reset after failed attemptsl
-  });
-
-})
-
 describe('Registration tests', () => {
   it('Succesfull registration', () => {
     cy.visit('/');
@@ -102,7 +7,16 @@ describe('Registration tests', () => {
     cy.contains('Sign up').click()
     cy.url().should('include', '/register')
 
-    // to do
+    cy.get('input[type="email"]').type('test.test@user.com')
+    cy.get('input[type="email"]').should('have.value', 'test.test@user.com')
+
+    cy.get('input[type="password"]').type('Hello123')
+    cy.get('input[type="password"]').should('have.value', 'Hello123')
+
+    cy.get('button').contains('Register').click()
+
+    cy.url().should('include', '/notes')
+
 
   });
 
@@ -131,20 +45,24 @@ describe('Registration tests', () => {
     cy.get('input[type="password"]').clear()
     cy.get('input[type="password"]').should('have.value', '')
 
-    /*
-    cy.get('input[type="email"]').type('verner.etola@gmail.com')
-    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
+    cy.get('input[type="email"]').type('test.test@user.com')
+    cy.get('input[type="email"]').should('have.value', 'test.test@user.com')
 
     cy.get('input[type="password"]').type('Hello123')
     cy.get('input[type="password"]').should('have.value', 'Hello123')
 
-    cy.get('p').contains('This email is already registered. Please use a different email.').should('exist')
-    cy.url().should('include', '/register')
-    */
+    cy.get('button').contains('Register').click()
 
-    // Testing for invalid email formats
-    cy.get('input[type="email"]').type('verner.etolagmail.com')
-    cy.get('input[type="email"]').should('have.value', 'verner.etolagmail.com')
+    cy.get('p').contains('User already registered').should('exist')
+    cy.url().should('include', '/register')
+
+    cy.get('input[type="password"]').clear()
+    cy.get('input[type="email"]').clear()
+    cy.get('input[type="password"]').should('have.value', '')
+    cy.get('input[type="email"]').should('have.value', '')
+
+    cy.get('input[type="email"]').type('test.testuser.com')
+    cy.get('input[type="email"]').should('have.value', 'test.testuser.com')
 
     cy.get('input[type="password"]').type('Hello123')
     cy.get('input[type="password"]').should('have.value', 'Hello123')
@@ -164,8 +82,8 @@ describe('Registration tests', () => {
     cy.contains('Sign up').click()
     cy.url().should('include', '/register')
     // Testing for empty field
-    cy.get('input[type="email"]').type('verner.etola@gmail.com')
-    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
+    cy.get('input[type="email"]').type('test.test@user.com')
+    cy.get('input[type="email"]').should('have.value', 'test.test@user.com')
 
     cy.get('button').contains('Register').click()
 
@@ -175,8 +93,8 @@ describe('Registration tests', () => {
     cy.get('input[type="email"]').clear()
     cy.get('input[type="email"]').should('have.value', '')
 
-    cy.get('input[type="email"]').type('verner.etola@gmail.com')
-    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
+    cy.get('input[type="email"]').type('test.test@user.com')
+    cy.get('input[type="email"]').should('have.value', 'test.test@user.com')
 
     cy.get('input[type="password"]').type('hello')
     cy.get('input[type="password"]').should('have.value', 'hello')
@@ -220,15 +138,99 @@ describe('Registration tests', () => {
 
 })
 
-describe('Logout Tests', () => {
-  it('Logout button test', () => {
+describe('Login Tests', () => {
+  it('Navigate to login page and fill in credentials and log in successfully', () => {
     cy.visit('/');
 
     cy.contains('Login').click()
     cy.url().should('include', '/login')
 
-    cy.get('input[type="email"]').type('verner.etola@gmail.com')
-    cy.get('input[type="email"]').should('have.value', 'verner.etola@gmail.com')
+    cy.get('input[type="email"]').type('test.test@user.com')
+    cy.get('input[type="email"]').should('have.value', 'test.test@user.com')
+
+    cy.get('input[type="password"]').type('Hello123')
+    cy.get('input[type="password"]').should('have.value', 'Hello123')
+
+    cy.get('button').contains('Login').click()
+
+    cy.url().should('include', '/notes')
+
+    // Add non accessible login page
+  })
+
+  it('Attempt login with invalid credentials', () => {
+    cy.visit('/');
+
+    cy.contains('Login').click()
+    cy.url().should('include', '/login')
+
+    cy.get('input[type="email"]').type('fakeEmail@fake.com')
+    cy.get('input[type="email"]').should('have.value', 'fakeEmail@fake.com')
+
+    cy.get('input[type="password"]').type('Hello123')
+    cy.get('input[type="password"]').should('have.value', 'Hello123')
+
+    cy.get('button').contains('Login').click()
+
+    cy.get('p').contains('Invalid password or email').should('exist')
+    cy.url().should('include', '/login')
+
+    cy.get('input[type="email"]').clear()
+    cy.get('input[type="password"]').clear()
+
+    cy.get('input[type="email"]').type('test.test@user.com')
+    cy.get('input[type="email"]').should('have.value', 'test.test@user.com')
+
+    cy.get('input[type="password"]').type('Hello1234')
+    cy.get('input[type="password"]').should('have.value', 'Hello1234')
+
+    cy.get('button').contains('Login').click()
+
+    cy.get('p').contains('Invalid password or email').should('exist')
+    cy.url().should('include', '/login')
+
+  });
+
+  it('Test form validation errors', () => {
+    cy.visit('/');
+
+    cy.contains('Login').click()
+    cy.url().should('include', '/login')
+
+    cy.get('button').contains('Login').click()
+
+    cy.get('p').contains('Invalid password or email').should('exist')
+    cy.url().should('include', '/login')
+
+    cy.get('input[type="email"]').type('fakeEmail@fake.com')
+    cy.get('input[type="email"]').should('have.value', 'fakeEmail@fake.com')
+
+    cy.get('button').contains('Login').click()
+
+    cy.get('p').contains('Invalid password or email').should('exist')
+    cy.url().should('include', '/login')
+
+    cy.get('input[type="email"]').clear()
+    cy.get('input[type="email"]').should('have.value', '')
+
+    cy.get('input[type="password"]').type('Hello123')
+    cy.get('input[type="password"]').should('have.value', 'Hello123')
+
+    cy.get('button').contains('Login').click()
+
+    cy.get('p').contains('Invalid password or email').should('exist')
+    cy.url().should('include', '/login')
+
+  });
+
+    it('Logout button test', () => {
+    cy.visit('/');
+
+    cy.contains('Login').click()
+    cy.url().should('include', '/login')
+
+    cy.get('input[type="email"]').type('test.test@user.com')
+    cy.get('input[type="email"]').should('have.value', 'test.test@user.com')
 
     cy.get('input[type="password"]').type('Hello123')
     cy.get('input[type="password"]').should('have.value', 'Hello123')
@@ -242,5 +244,21 @@ describe('Logout Tests', () => {
     cy.url().should('include', '/')
 
   });
+
+  it('UI state tests', () => {
+
+    // Verify loading state during login attempt
+    // Test empty password field shows validation error
+    // Check password visibility toggle functionality
+    // Test form reset after failed attempts
+  });
+
 })
 
+describe('Main page tests', () => {
+  it('Notes page buttons', () => {
+    
+  });
+})
+
+ 
