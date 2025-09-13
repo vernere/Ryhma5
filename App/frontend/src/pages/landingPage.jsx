@@ -28,7 +28,7 @@ const LandingPage = () => {
                 <div className="px-4 max-w-50 text-center">
                     <CgSearch className="text-gray-600 mx-auto" />
                     <h1 className="text-lg">Search and tagging</h1>
-                    <span>Tagging of notes and advanced search gives you control over what things you want to have handy, and prgnize your notes accordingly.</span>
+                    <span>Tagging of notes and advanced search gives you control over what things you want to have handy, and organize your notes accordingly.</span>
                 </div>
                 <div className="h-40 w-px bg-gray-300"></div>
                 <div className="px-4 max-w-50 text-center">
