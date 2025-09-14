@@ -1,10 +1,17 @@
 import {Header} from "@/components/ui/Header";
-import {Footer} from "@/components/ui/footer.jsx";
+import {Footer} from "@/components/ui/Footer"
 import {Button} from "@/components/ui/Button";
 import {Link} from "react-router-dom";
+import {useAuth} from "@/hooks/useAuth.js";
+import {useEffect} from "react";
 
 
 const PasswordChanged = () => {
+    const {setPasswordRecovery} = useAuth();
+
+    useEffect(() => {
+        setPasswordRecovery(false);
+    }, [setPasswordRecovery]);
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-400">
@@ -20,8 +27,7 @@ const PasswordChanged = () => {
                 </div>
             </div>
             <Footer/>
-        </div>
-    );
+        </div>);
 };
 
 export default PasswordChanged;

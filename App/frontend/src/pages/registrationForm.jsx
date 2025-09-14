@@ -5,7 +5,7 @@ import {Header} from "@/components/ui/Header"
 import {useAuth} from "../hooks/useAuth"
 import {useState} from "react";
 import {validEmail, validPassword} from "@/utils/validation";
-import {useNavigate} from "react-router";
+import {useNavigate} from "react-router-dom";
 
 
 const RegistrationForm = () => {
@@ -63,8 +63,7 @@ const RegistrationForm = () => {
                 </div>
             </div>
             <Footer/>
-        </div>
-    );
+        </div>);
 };
 
 export default RegistrationForm;

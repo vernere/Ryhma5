@@ -2,12 +2,13 @@ import {Button} from "@/components/ui/Button";
 import {Input} from "@/components/ui/Input";
 import {Footer} from "@/components/ui/Footer"
 import {Header} from "@/components/ui/Header"
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useAuth} from "../hooks/useAuth"
 import {useState} from "react";
 
 const LoginForm = () => {
     const {signIn} = useAuth();
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -17,6 +18,7 @@ const LoginForm = () => {
         setError('');
         try {
             await signIn(email, password);
+            navigate("/notes");
         } catch (err) {
             setError(err);
             setError("Invalid password or email")
@@ -43,8 +45,7 @@ const LoginForm = () => {
                 </div>
             </div>
             <Footer/>
-        </div>
-    );
+        </div>);
 };
 
 export default LoginForm;
