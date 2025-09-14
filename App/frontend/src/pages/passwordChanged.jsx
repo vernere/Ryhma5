@@ -1,15 +1,14 @@
-import { Header } from "@/components/ui/Header";
+import {Header} from "@/components/ui/Header";
 import {Footer} from "@/components/ui/footer.jsx";
-import { Button } from "@/components/ui/Button";
-import { Link } from "react-router-dom";
-
+import {Button} from "@/components/ui/Button";
+import {Link} from "react-router-dom";
 
 
 const PasswordChanged = () => {
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-400">
-            <Header />
+            <Header/>
             <div className="flex-grow flex items-center justify-center">
                 <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-md flex-col justify-items-center">
                     <p className="mb-4 text-lg font-semibold">Your password has been successfully updated!</p>
@@ -20,8 +19,8 @@ const PasswordChanged = () => {
                     </div>
                 </div>
             </div>
-                <Footer/>
-            </div>
+            <Footer/>
+        </div>
     );
 };
 
