@@ -1,37 +1,36 @@
 import { supabase } from "./supabaseClient";
 
 /** Palauttaa Set(note_id) käyttäjän suosikeista */
-export async function getFavoritesSet(uid) {
+export async function getFavoritesSet() {
   const { data, error } = await supabase
     .from("favorites")
-    .select("note_id")
-    .eq("user_id", uid);
+    .select("note_id");  
 
   if (error) throw error;
   return new Set((data || []).map(r => r.note_id));
 }
 
 /** Lisää suosikin (idempotentti) */
-export async function addFavorite(uid, noteId) {
+export async function addFavorite(noteId) {
   const { error } = await supabase
     .from("favorites")
-    .upsert({ user_id: uid, note_id: noteId }, { onConflict: "user_id,note_id" });
+    .upsert({ note_id: noteId }, { onConflict: "note_id" });
   if (error) throw error;
 }
 
 /** Poistaa suosikin */
-export async function removeFavorite(uid, noteId) {
+export async function removeFavorite(noteId) {
   const { error } = await supabase
     .from("favorites")
     .delete()
-    .eq("user_id", uid)
-    .eq("note_id", noteId);
+    .eq("note_id", noteId);  
   if (error) throw error;
 }
 
 /** Yhdellä funktiolla on/off */
-export async function toggleFavorite(uid, noteId, nextIsFav) {
-  if (nextIsFav) return addFavorite(uid, noteId);
-  return removeFavorite(uid, noteId);
+export async function toggleFavorite(noteId, nextIsFav) {
+  if (nextIsFav) return addFavorite(noteId);
+  return removeFavorite(noteId);
 }
+
  

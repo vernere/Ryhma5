@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { supabase } from "@/lib/supabaseClient";
 
+/** Yleinen apuri: debounce */
 const debounce = (func, delay) => {
   let timeout;
   return (...args) => {
@@ -9,27 +10,71 @@ const debounce = (func, delay) => {
   };
 };
 
+/** Palauttaa Set(note_id) kyseiselle käyttäjälle */
+async function fetchFavoritesSet(userId) {
+  const { data, error } = await supabase
+    .from("favorites")
+    .select("note_id")
+    .eq("user_id", userId);
+
+  if (error) throw error;
+  return new Set((data || []).map((r) => r.note_id));
+}
+
 export const useNotesStore = create((set, get) => ({
+  /* ---------- STATE ---------- */
   notes: [],
   selectedNoteId: null,
   selectedNote: null,
   searchQuery: "",
   loading: false,
   error: null,
+
+  // Realtime presence + käyttäjä
   activeUsers: [],
   presenceChannel: null,
   isLocalChange: false,
   currentUser: null,
 
-  setSelectedNote: async (noteId) => {
-    set({ selectedNoteId: noteId, loading: true, error: null });
-    await get().fetchNoteById(noteId);
-  },
-  setActiveUsers: (users) => set({ activeUsers: users }),
-  setSearchQuery: (query) => set({ searchQuery: query }),
-  setIsLocalChange: (flag) => set({ isLocalChange: flag }),
-  setCurrentUser: (user) => set({ currentUser: user }),
+  // Realtime postgres-subscription
+  realtimeSubscription: null,
 
+  // ✅ Siirretty tänne: käyttäjän id ja suosikit
+  uid: null,
+  favs: new Set(), // Set(note_id)
+
+  /* ---------- SETTERIT ---------- */
+  setCurrentUser: (user) => set({ currentUser: user }),
+  setIsLocalChange: (flag) => set({ isLocalChange: flag }),
+  setSearchQuery: (q) => set({ searchQuery: q }),
+  setSelectedNoteIdOnly: (noteId) => set({ selectedNoteId: noteId }),
+  setUid: (id) => set({ uid: id }),
+  setFavs: (updater) =>
+    set((state) => {
+      const next =
+        typeof updater === "function" ? updater(state.favs) : updater;
+      return { favs: next };
+    }),
+
+  /* ---------- INIT käyttäjä + suosikit ---------- */
+  initAuthAndFavs: async () => {
+    const { data, error } = await supabase.auth.getUser();
+    if (error) {
+      set({ uid: null, favs: new Set() });
+      return;
+    }
+    const user = data?.user ?? null;
+    set({ uid: user?.id ?? null, currentUser: user });
+
+    if (user?.id) {
+      const favSet = await fetchFavoritesSet(user.id);
+      set({ favs: favSet });
+    } else {
+      set({ favs: new Set() });
+    }
+  },
+
+  /* ---------- NOTES ---------- */
   fetchNotes: async () => {
     set({ loading: true, error: null });
     try {
@@ -39,8 +84,7 @@ export const useNotesStore = create((set, get) => ({
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-
-      set({ notes: data, loading: false });
+      set({ notes: data || [], loading: false });
     } catch (err) {
       set({ error: err.message, loading: false });
     }
@@ -54,15 +98,83 @@ export const useNotesStore = create((set, get) => ({
         .select("*, note_tags(*, tags(name))")
         .eq("note_id", noteId)
         .single();
-
       if (error) throw error;
 
-      set({ selectedNote: data, loading: false });
+      set({ selectedNote: data, selectedNoteId: noteId, loading: false });
     } catch (err) {
       set({ error: err.message, loading: false });
     }
   },
 
+  setSelectedNote: async (noteId) => {
+    set({ selectedNoteId: noteId, loading: true, error: null });
+    await get().fetchNoteById(noteId);
+  },
+
+  /* ---------- FAVORITES ---------- */
+  isFavorite: (noteId) => get().favs.has(noteId),
+
+  addFavorite: async (noteId) => {
+    const uid = get().uid;
+    if (!uid) return;
+
+    // optimistinen
+    set((state) => {
+      const s = new Set(state.favs);
+      s.add(noteId);
+      return { favs: s };
+    });
+
+    const { error } = await supabase
+      .from("favorites")
+      .insert({ user_id: uid, note_id: noteId });
+
+    if (error) {
+      // rollback
+      set((state) => {
+        const s = new Set(state.favs);
+        s.delete(noteId);
+        return { favs: s, error: error.message };
+      });
+      throw error;
+    }
+  },
+
+  removeFavorite: async (noteId) => {
+    const uid = get().uid;
+    if (!uid) return;
+
+    // optimistinen
+    set((state) => {
+      const s = new Set(state.favs);
+      s.delete(noteId);
+      return { favs: s };
+    });
+
+    const { error } = await supabase
+      .from("favorites")
+      .delete()
+      .eq("user_id", uid)
+      .eq("note_id", noteId);
+
+    if (error) {
+      // rollback
+      set((state) => {
+        const s = new Set(state.favs);
+        s.add(noteId);
+        return { favs: s, error: error.message };
+      });
+      throw error;
+    }
+  },
+
+  toggleFavorite: async (noteId) => {
+    const { isFavorite, addFavorite, removeFavorite } = get();
+    if (isFavorite(noteId)) await removeFavorite(noteId);
+    else await addFavorite(noteId);
+  },
+
+  /* ---------- REALTIME (presence + postgres) ---------- */
   setupPresence: async (noteId, user, onContentReceive) => {
     if (!noteId || !user) return;
 
@@ -81,17 +193,14 @@ export const useNotesStore = create((set, get) => ({
 
     channel.on("broadcast", { event: "content_change" }, ({ payload }) => {
       if (payload.user.id !== user.id) {
-        get().setIsLocalChange(true);
+        set({ isLocalChange: true });
         if (onContentReceive) onContentReceive(payload.content);
       }
     });
 
     await channel.subscribe((status) => {
       if (status === "SUBSCRIBED") {
-        channel.track({
-          user_id: user.id,
-          email: user.email,
-        });
+        channel.track({ user_id: user.id, email: user.email });
       }
     });
 
@@ -106,50 +215,26 @@ export const useNotesStore = create((set, get) => ({
     }
   },
 
-  broadcastContentChange: debounce(async (newContent) => {
-    const { presenceChannel, isLocalChange } = get();
-    const user = get().currentUser;
-
-    if (!presenceChannel || !user || isLocalChange) {
-      set({ isLocalChange: false });
-      return;
-    }
-
-    await presenceChannel.send({
-      type: "broadcast",
-      event: "content_change",
-      payload: {
-        user: { id: user.id, email: user.email },
-        content: newContent,
-      },
-    });
-  }, 100),
-
   setupRealtimeSubscription: () => {
     const subscription = supabase
-      .channel('notes-changes')
+      .channel("notes-changes")
       .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'notes'
-        },
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "notes" },
         (payload) => {
           const updatedNote = payload.new;
           const { selectedNoteId, currentUser } = get();
 
           set((state) => ({
-            notes: state.notes.map(note =>
-              note.note_id === updatedNote.note_id ? updatedNote : note
-            )
+            notes: state.notes.map((n) =>
+              n.note_id === updatedNote.note_id ? updatedNote : n
+            ),
           }));
 
-          if (selectedNoteId === updatedNote.note_id &&
-            updatedNote.updated_by !== currentUser?.id) {
-
-            console.log('Note updated by another user');
-
+          if (
+            selectedNoteId === updatedNote.note_id &&
+            updatedNote.updated_by !== currentUser?.id
+          ) {
             set({ selectedNote: updatedNote });
           }
         }
@@ -160,49 +245,64 @@ export const useNotesStore = create((set, get) => ({
   },
 
   cleanupRealtimeSubscription: () => {
-    const { realtimeSubscription } = get();
-    if (realtimeSubscription) {
-      realtimeSubscription.unsubscribe();
+    const sub = get().realtimeSubscription;
+    if (sub) {
+      sub.unsubscribe();
       set({ realtimeSubscription: null });
     }
   },
 
+  /* ---------- SISÄLLÖN MUUTOS ---------- */
+  broadcastContentChange: debounce(async (newContent) => {
+    const { presenceChannel, isLocalChange, currentUser } = get();
+    if (!presenceChannel || !currentUser) return;
+
+    if (isLocalChange) {
+      // nollaa lippu ja älä lähetä
+      set({ isLocalChange: false });
+      return;
+    }
+
+    await presenceChannel.send({
+      type: "broadcast",
+      event: "content_change",
+      payload: {
+        user: { id: currentUser.id, email: currentUser.email },
+        content: newContent,
+      },
+    });
+  }, 100),
+
   saveNoteToDatabase: debounce(async (noteId, content) => {
     try {
+      const now = new Date().toISOString();
+
       const { error } = await supabase
         .from("notes")
-        .update({
-          content,
-          updated_at: new Date().toISOString()
-        })
+        .update({ content, updated_at: now })
         .eq("note_id", noteId);
 
       if (error) throw error;
 
       set((state) => ({
-        notes: state.notes.map(note =>
-          note.note_id === noteId
-            ? { ...note, content, updated_at: new Date().toISOString() }
-            : note
+        notes: state.notes.map((n) =>
+          n.note_id === noteId ? { ...n, content, updated_at: now } : n
         ),
-        selectedNote: state.selectedNote?.note_id === noteId
-          ? { ...state.selectedNote, content, updated_at: new Date().toISOString() }
-          : state.selectedNote
+        selectedNote:
+          state.selectedNote?.note_id === noteId
+            ? { ...state.selectedNote, content, updated_at: now }
+            : state.selectedNote,
       }));
-
     } catch (err) {
-      console.error('Failed to save note:', err);
       set({ error: err.message });
+      console.error("Failed to save note:", err);
     }
   }, 1000),
 
   handleContentChange: (newContent) => {
     const { selectedNoteId, broadcastContentChange, saveNoteToDatabase } = get();
-
     if (!selectedNoteId) return;
-
     broadcastContentChange(newContent);
-
     saveNoteToDatabase(selectedNoteId, newContent);
   },
 }));
