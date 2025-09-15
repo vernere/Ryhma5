@@ -205,17 +205,35 @@ const Sidebar = () => {
                     {note.title}
                   </div>
                 </div>
+ 
+            </div>
 
-                <div className="text-xs text-gray-400">
-                  {note.created_at
-                    ? new Date(note.created_at).toLocaleDateString()
-                    : ""}
-                </div>
-              </div>
-
-              <div className="text-xs text-gray-500 truncate">
-                {note.content ? note.content.replace(/\n/g, " ") : ""}
-              </div>
+            <div className="flex-1 overflow-y-auto">
+                {filteredNotes.map((note) => {
+                    const active = selectedNoteId === note.note_id;
+                    return (
+                        <div
+                            key={note.note_id}
+                            onClick={async () => {
+                                await setSelectedNote(note.note_id);
+                                setSearchQuery("");
+                            }}
+                            className={`px-4 py-3 cursor-pointer hover:bg-gray-50 flex flex-col space-y-1 border-b border-transparent ${
+                                active ? 'bg-indigo-50 border-l-4 border-indigo-500' : ''
+                            }`}
+                        >
+                            <div className="flex items-center justify-between">
+                                <div className={`text-sm truncate ${active ? 'font-semibold text-indigo-700' : 'text-gray-800'}`}>
+                                    {note.title}
+                                </div>
+                                <div className="text-xs text-gray-400">
+                                    {new Date(note.created_at).toLocaleDateString()}
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
+ 
             </div>
           );
         })}
