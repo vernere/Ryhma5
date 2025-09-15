@@ -22,7 +22,7 @@ async function fetchFavoritesSet(userId) {
 }
 
 export const useNotesStore = create((set, get) => ({
-  /* ---------- STATE ---------- */
+  
   notes: [],
   selectedNoteId: null,
   selectedNote: null,
@@ -39,7 +39,7 @@ export const useNotesStore = create((set, get) => ({
   // Realtime postgres-subscription
   realtimeSubscription: null,
 
-  // ✅ Siirretty tänne: käyttäjän id ja suosikit
+  // Siirretty tänne: käyttäjän id ja suosikit
   uid: null,
   favs: new Set(), // Set(note_id)
 
@@ -74,7 +74,7 @@ export const useNotesStore = create((set, get) => ({
     }
   },
 
-  /* ---------- NOTES ---------- */
+   
   fetchNotes: async () => {
     set({ loading: true, error: null });
     try {

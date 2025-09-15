@@ -14,7 +14,6 @@ const Sidebar = () => {
     setSelectedNote,
     fetchNotes,
     selectedNoteId,
-    //favorites + init tulevat storesta
     isFavorite,
     toggleFavorite,
     initAuthAndFavs,
@@ -69,12 +68,12 @@ const Sidebar = () => {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    {/* HEART BUTTON */}
+                    
                     <button
                       className="p-1 -ml-1"
                       onClick={(e) => {
                         e.stopPropagation();
-                        //vain store-funktio
+                         
                         toggleFavorite(note.note_id);
                       }}
                       aria-label="Toggle favorite"
@@ -131,12 +130,12 @@ const Sidebar = () => {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 min-w-0">
-                  {/* HEART BUTTON */}
+                   
                   <button
                     className="p-1 -ml-1"
                     onClick={(e) => {
                       e.stopPropagation();
-                      //vain store-funktio
+                       
                       toggleFavorite(note.note_id);
                     }}
                     aria-label="Toggle favorite"
