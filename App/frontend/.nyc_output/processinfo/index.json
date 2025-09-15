@@ -1,0 +1,1 @@
+{"processes":{"78d0f0e9-f645-4135-a573-472b1caf2ea3":{"parent":"c2b2424b-e889-4491-8842-7fb187017443","children":[]},"c2b2424b-e889-4491-8842-7fb187017443":{"parent":null,"children":["78d0f0e9-f645-4135-a573-472b1caf2ea3"]}},"files":{"C:\\Users\\R3\\Desktop\\Projects\\Ryhma5\\App\\frontend\\cypress.config.js":["78d0f0e9-f645-4135-a573-472b1caf2ea3"]},"externalIds":{}}
