@@ -1,12 +1,10 @@
+import { useEffect } from "react";
 import { Search } from "lucide-react";
+import { CgHeart } from "react-icons/cg";
+
 import { Navigation } from "@/components/ui/Navigation";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useAuth } from "@/hooks/useAuth";
-import { useEffect, useState } from "react";
-import { CgHeart } from "react-icons/cg";
-
-import { supabase } from "@/lib/supabaseClient";
-import { getFavoritesSet, toggleFavorite } from "@/lib/notesApi";
 
 const Sidebar = () => {
   const {
@@ -16,30 +14,19 @@ const Sidebar = () => {
     setSelectedNote,
     fetchNotes,
     selectedNoteId,
+    //favorites + init tulevat storesta
+    isFavorite,
+    toggleFavorite,
+    initAuthAndFavs,
   } = useNotesStore();
 
   const { user } = useAuth();
 
-   
-  const [uid, setUid] = useState(null);
-  const [favs, setFavs] = useState(new Set()); // Set(note_id)
-
+  // hae muistiinpanot ja kirjauduttu käyttäjä + suosikit
   useEffect(() => {
     fetchNotes();
-  }, [fetchNotes]);
-
-  // hae kirjautunut käyttäjä + suosikit
-  useEffect(() => {
-    (async () => {
-      const { data } = await supabase.auth.getUser();
-      const u = data?.user;
-      if (u) {
-        setUid(u.id);
-        const favSet = await getFavoritesSet(u.id);
-        setFavs(favSet);
-      }
-    })();
-  }, []);
+    initAuthAndFavs();
+  }, [fetchNotes, initAuthAndFavs]);
 
   const filteredNotes = notes.filter((note) =>
     (note.title || "").toLowerCase().includes((searchQuery || "").toLowerCase())
@@ -85,35 +72,17 @@ const Sidebar = () => {
                     {/* HEART BUTTON */}
                     <button
                       className="p-1 -ml-1"
-                      onClick={async (e) => {
+                      onClick={(e) => {
                         e.stopPropagation();
-                        if (!uid) return;
-                        const id = note.note_id;
-                        const next = !favs.has(id);
-
-                        // optimistinen UI
-                        setFavs((prev) => {
-                          const c = new Set(prev);
-                          next ? c.add(id) : c.delete(id);
-                          return c;
-                        });
-
-                        try {
-                          await toggleFavorite(uid, id, next);
-                        } catch (err) {
-                          console.error(err);
-                          // peru UI virheessä
-                          setFavs((prev) => {
-                            const c = new Set(prev);
-                            next ? c.delete(id) : c.add(id);
-                            return c;
-                          });
-                        }
+                        //vain store-funktio
+                        toggleFavorite(note.note_id);
                       }}
+                      aria-label="Toggle favorite"
+                      title="Favorite"
                     >
                       <CgHeart
                         className={`w-4 h-4 ${
-                          favs.has(note.note_id) ? "text-red-500" : "text-gray-300"
+                          isFavorite(note.note_id) ? "text-red-500" : "text-gray-300"
                         }`}
                       />
                     </button>
@@ -165,33 +134,17 @@ const Sidebar = () => {
                   {/* HEART BUTTON */}
                   <button
                     className="p-1 -ml-1"
-                    onClick={async (e) => {
+                    onClick={(e) => {
                       e.stopPropagation();
-                      if (!uid) return;
-                      const id = note.note_id;
-                      const next = !favs.has(id);
-
-                      setFavs((prev) => {
-                        const c = new Set(prev);
-                        next ? c.add(id) : c.delete(id);
-                        return c;
-                      });
-
-                      try {
-                        await toggleFavorite(uid, id, next);
-                      } catch (err) {
-                        console.error(err);
-                        setFavs((prev) => {
-                          const c = new Set(prev);
-                          next ? c.delete(id) : c.add(id);
-                          return c;
-                        });
-                      }
+                      //vain store-funktio
+                      toggleFavorite(note.note_id);
                     }}
+                    aria-label="Toggle favorite"
+                    title="Favorite"
                   >
                     <CgHeart
                       className={`w-4 h-4 ${
-                        favs.has(note.note_id) ? "text-red-500" : "text-gray-300"
+                        isFavorite(note.note_id) ? "text-red-500" : "text-gray-300"
                       }`}
                     />
                   </button>
@@ -226,4 +179,5 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
 
