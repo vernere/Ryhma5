@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { supabase } from "@/lib/supabaseClient";
 
-/** Yleinen apuri: debounce */
+/* Debounce apuri */
 const debounce = (func, delay) => {
   let timeout;
   return (...args) => {
@@ -10,7 +10,7 @@ const debounce = (func, delay) => {
   };
 };
 
-/** Palauttaa Set(note_id) kyseiselle käyttäjälle */
+/* Hae käyttäjän suosikit Set-muotoon */
 async function fetchFavoritesSet(userId) {
   const { data, error } = await supabase
     .from("favorites")
@@ -22,7 +22,7 @@ async function fetchFavoritesSet(userId) {
 }
 
 export const useNotesStore = create((set, get) => ({
-  
+  // ---------- STATE ----------
   notes: [],
   selectedNoteId: null,
   selectedNote: null,
@@ -30,20 +30,20 @@ export const useNotesStore = create((set, get) => ({
   loading: false,
   error: null,
 
-  // Realtime presence + käyttäjä
+  // Presence & user
   activeUsers: [],
   presenceChannel: null,
   isLocalChange: false,
   currentUser: null,
 
-  // Realtime postgres-subscription
+  // Realtime
   realtimeSubscription: null,
 
-  // Siirretty tänne: käyttäjän id ja suosikit
+  // Favorites
   uid: null,
   favs: new Set(), // Set(note_id)
 
-  /* ---------- SETTERIT ---------- */
+  // ---------- SETTERIT ----------
   setCurrentUser: (user) => set({ currentUser: user }),
   setIsLocalChange: (flag) => set({ isLocalChange: flag }),
   setSearchQuery: (q) => set({ searchQuery: q }),
@@ -56,7 +56,7 @@ export const useNotesStore = create((set, get) => ({
       return { favs: next };
     }),
 
-  /* ---------- INIT käyttäjä + suosikit ---------- */
+  // ---------- INIT käyttäjä + suosikit ----------
   initAuthAndFavs: async () => {
     const { data, error } = await supabase.auth.getUser();
     if (error) {
@@ -74,7 +74,7 @@ export const useNotesStore = create((set, get) => ({
     }
   },
 
-   
+  // ---------- NOTES: LISTA & HAKU ----------
   fetchNotes: async () => {
     set({ loading: true, error: null });
     try {
@@ -111,14 +111,91 @@ export const useNotesStore = create((set, get) => ({
     await get().fetchNoteById(noteId);
   },
 
-  /* ---------- FAVORITES ---------- */
+  // ---------- NOTES: CRUD ----------
+  createNote: async (title = "Untitled note") => {
+    const { currentUser } = get();
+    if (!currentUser?.id) return null;
+
+    const now = new Date().toISOString();
+    const { data, error } = await supabase
+      .from("notes")
+      .insert({
+        title,
+        content: "",
+        creator_id: currentUser.id,
+        created_at: now,
+        updated_at: now,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      set({ error: error.message });
+      return null;
+    }
+
+    set((state) => ({
+      notes: [data, ...state.notes],
+      selectedNote: data,
+      selectedNoteId: data.note_id,
+    }));
+
+    return data;
+  },
+
+  updateNoteTitle: async (noteId, newTitle) => {
+    const now = new Date().toISOString();
+    const { error } = await supabase
+      .from("notes")
+      .update({ title: newTitle, updated_at: now })
+      .eq("note_id", noteId);
+
+    if (error) {
+      set({ error: error.message });
+      return;
+    }
+
+    set((state) => ({
+      notes: state.notes.map((n) =>
+        n.note_id === noteId ? { ...n, title: newTitle, updated_at: now } : n
+      ),
+      selectedNote:
+        state.selectedNote?.note_id === noteId
+          ? { ...state.selectedNote, title: newTitle, updated_at: now }
+          : state.selectedNote,
+    }));
+  },
+
+  deleteNote: async (noteId) => {
+    const { error } = await supabase
+      .from("notes")
+      .delete()
+      .eq("note_id", noteId);
+
+    if (error) {
+      set({ error: error.message });
+      return;
+    }
+
+    set((state) => {
+      const next = state.notes.filter((n) => n.note_id !== noteId);
+      const deletingSelected = state.selectedNoteId === noteId;
+      return {
+        notes: next,
+        selectedNote: deletingSelected ? null : state.selectedNote,
+        selectedNoteId: deletingSelected ? null : state.selectedNoteId,
+      };
+    });
+  },
+
+  // ---------- FAVORITES ----------
   isFavorite: (noteId) => get().favs.has(noteId),
 
   addFavorite: async (noteId) => {
     const uid = get().uid;
     if (!uid) return;
 
-    // optimistinen
+    // Optimistinen
     set((state) => {
       const s = new Set(state.favs);
       s.add(noteId);
@@ -130,7 +207,7 @@ export const useNotesStore = create((set, get) => ({
       .insert({ user_id: uid, note_id: noteId });
 
     if (error) {
-      // rollback
+      // Rollback
       set((state) => {
         const s = new Set(state.favs);
         s.delete(noteId);
@@ -144,7 +221,7 @@ export const useNotesStore = create((set, get) => ({
     const uid = get().uid;
     if (!uid) return;
 
-    // optimistinen
+    // Optimistinen
     set((state) => {
       const s = new Set(state.favs);
       s.delete(noteId);
@@ -158,7 +235,7 @@ export const useNotesStore = create((set, get) => ({
       .eq("note_id", noteId);
 
     if (error) {
-      // rollback
+      // Rollback
       set((state) => {
         const s = new Set(state.favs);
         s.add(noteId);
@@ -174,7 +251,7 @@ export const useNotesStore = create((set, get) => ({
     else await addFavorite(noteId);
   },
 
-  /* ---------- REALTIME (presence + postgres) ---------- */
+  // ---------- REALTIME (presence + postgres) ----------
   setupPresence: async (noteId, user, onContentReceive) => {
     if (!noteId || !user) return;
 
@@ -218,6 +295,18 @@ export const useNotesStore = create((set, get) => ({
   setupRealtimeSubscription: () => {
     const subscription = supabase
       .channel("notes-changes")
+      // INSERT
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "notes" },
+        (payload) => {
+          const inserted = payload.new;
+          set((state) => ({
+            notes: [inserted, ...state.notes],
+          }));
+        }
+      )
+      // UPDATE
       .on(
         "postgres_changes",
         { event: "UPDATE", schema: "public", table: "notes" },
@@ -239,6 +328,23 @@ export const useNotesStore = create((set, get) => ({
           }
         }
       )
+      // DELETE
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "notes" },
+        (payload) => {
+          const deletedId = payload.old?.note_id;
+          set((state) => {
+            const next = state.notes.filter((n) => n.note_id !== deletedId);
+            const deletingSelected = state.selectedNoteId === deletedId;
+            return {
+              notes: next,
+              selectedNote: deletingSelected ? null : state.selectedNote,
+              selectedNoteId: deletingSelected ? null : state.selectedNoteId,
+            };
+          });
+        }
+      )
       .subscribe();
 
     set({ realtimeSubscription: subscription });
@@ -252,13 +358,12 @@ export const useNotesStore = create((set, get) => ({
     }
   },
 
-  /* ---------- SISÄLLÖN MUUTOS ---------- */
+  // ---------- SISÄLLÖN MUUTOS ----------
   broadcastContentChange: debounce(async (newContent) => {
     const { presenceChannel, isLocalChange, currentUser } = get();
     if (!presenceChannel || !currentUser) return;
 
     if (isLocalChange) {
-      // nollaa lippu ja älä lähetä
       set({ isLocalChange: false });
       return;
     }
@@ -306,3 +411,4 @@ export const useNotesStore = create((set, get) => ({
     saveNoteToDatabase(selectedNoteId, newContent);
   },
 }));
+

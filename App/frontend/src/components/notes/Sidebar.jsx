@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Search } from "lucide-react";
 import { CgHeart } from "react-icons/cg";
-
 import { Navigation } from "@/components/ui/Navigation";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useAuth } from "@/hooks/useAuth";
@@ -17,11 +16,11 @@ const Sidebar = () => {
     isFavorite,
     toggleFavorite,
     initAuthAndFavs,
+    createNote,
   } = useNotesStore();
 
   const { user } = useAuth();
 
-  // hae muistiinpanot ja kirjauduttu käyttäjä + suosikit
   useEffect(() => {
     fetchNotes();
     initAuthAndFavs();
@@ -36,6 +35,19 @@ const Sidebar = () => {
       {/* header */}
       <div className="p-2 border-b border-gray-200 flex items-center justify-between">
         <h1 className="text-lg font-semibold">{user?.email}</h1>
+        <button
+          className="px-2 py-1 text-xs border rounded hover:bg-gray-50"
+          onClick={async () => {
+            const n = await createNote();
+            if (n) {
+              // valinta tehdään store-createNotessa jo,
+              // mutta tämä varmistaa scroll/UX tilanteissa
+              setSelectedNote(n.note_id);
+            }
+          }}
+        >
+          + New
+        </button>
       </div>
 
       {/* search */}
@@ -68,12 +80,11 @@ const Sidebar = () => {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    
+                    {/* heart */}
                     <button
                       className="p-1 -ml-1"
                       onClick={(e) => {
                         e.stopPropagation();
-                         
                         toggleFavorite(note.note_id);
                       }}
                       aria-label="Toggle favorite"
@@ -81,7 +92,9 @@ const Sidebar = () => {
                     >
                       <CgHeart
                         className={`w-4 h-4 ${
-                          isFavorite(note.note_id) ? "text-red-500" : "text-gray-300"
+                          isFavorite(note.note_id)
+                            ? "text-red-500"
+                            : "text-gray-300"
                         }`}
                       />
                     </button>
@@ -130,12 +143,10 @@ const Sidebar = () => {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 min-w-0">
-                   
                   <button
                     className="p-1 -ml-1"
                     onClick={(e) => {
                       e.stopPropagation();
-                       
                       toggleFavorite(note.note_id);
                     }}
                     aria-label="Toggle favorite"
@@ -143,7 +154,9 @@ const Sidebar = () => {
                   >
                     <CgHeart
                       className={`w-4 h-4 ${
-                        isFavorite(note.note_id) ? "text-red-500" : "text-gray-300"
+                        isFavorite(note.note_id)
+                          ? "text-red-500"
+                          : "text-gray-300"
                       }`}
                     />
                   </button>
@@ -178,5 +191,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
 
