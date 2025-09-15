@@ -5,7 +5,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { CgHeart } from "react-icons/cg";
 
-// favorites API + supabase
 import { supabase } from "@/lib/supabaseClient";
 import { getFavoritesSet, toggleFavorite } from "@/lib/notesApi";
 
