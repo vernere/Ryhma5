@@ -20,7 +20,7 @@ const Sidebar = () => {
 
   const { user } = useAuth();
 
-  // favorites local state
+   
   const [uid, setUid] = useState(null);
   const [favs, setFavs] = useState(new Set()); // Set(note_id)
 
