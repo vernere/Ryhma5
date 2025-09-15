@@ -34,6 +34,7 @@ const Sidebar = () => {
                 <div className="flex justify-center items-center border border-gray-300 rounded-lg gap-2">
                     <Search className="size-4 ml-2 text-gray-400" />
                     <input
+                        data-cy="searchInput"
                         type="text"
                         placeholder="Search notes"
                         value={searchQuery}
@@ -48,6 +49,7 @@ const Sidebar = () => {
                     const active = selectedNoteId === note.note_id;
                     return (
                         <div
+                            data-cy="noteSelect"
                             key={note.note_id}
                             onClick={async () => {
                                 await setSelectedNote(note.note_id);
