@@ -26,3 +26,4 @@ dist-ssr
 
 # Cypress directories
 *screenshots
+*.nyc_output
