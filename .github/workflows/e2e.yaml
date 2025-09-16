@@ -6,7 +6,7 @@ on:
       - '!main'
     paths:
       - 'App/frontend/**'
-      - 'App/.github/workflows/e2e.yaml'
+      - '.github/workflows/e2e.yaml'
 
 jobs:
   e2e:
@@ -44,5 +44,5 @@ jobs:
         if: failure()
         with:
           name: cypress-screenshots
-          path: cypress/screenshots
+          path: App/frontend/cypress/screenshots
           if-no-files-found: ignore
