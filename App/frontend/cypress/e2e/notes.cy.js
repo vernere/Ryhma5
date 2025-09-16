@@ -1,4 +1,4 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 import { loginUser } from '../support/helpers';
 
 describe('Notes tests', () => {
