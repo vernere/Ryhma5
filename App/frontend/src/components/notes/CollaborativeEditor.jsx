@@ -99,6 +99,7 @@ export default function CollaborativeEditor() {
     return (
         <div className="rounded-2xl min-h-[400px]">
             <div
+                data-cy="noteContent"
                 className="prose max-w-none text-gray-800 bg-white rounded-b-lg shadow-sm p-6"
                 style={{ minHeight: "90vh" }}
             >
