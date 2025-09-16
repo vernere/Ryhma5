@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { supabase } from "@/lib/supabaseClient";
 
-/* Debounce apuri */
 const debounce = (func, delay) => {
   let timeout;
   return (...args) => {
@@ -195,7 +194,6 @@ export const useNotesStore = create((set, get) => ({
     const uid = get().uid;
     if (!uid) return;
 
-    // Optimistinen
     set((state) => {
       const s = new Set(state.favs);
       s.add(noteId);
@@ -207,7 +205,6 @@ export const useNotesStore = create((set, get) => ({
       .insert({ user_id: uid, note_id: noteId });
 
     if (error) {
-      // Rollback
       set((state) => {
         const s = new Set(state.favs);
         s.delete(noteId);
@@ -221,7 +218,6 @@ export const useNotesStore = create((set, get) => ({
     const uid = get().uid;
     if (!uid) return;
 
-    // Optimistinen
     set((state) => {
       const s = new Set(state.favs);
       s.delete(noteId);
@@ -235,7 +231,6 @@ export const useNotesStore = create((set, get) => ({
       .eq("note_id", noteId);
 
     if (error) {
-      // Rollback
       set((state) => {
         const s = new Set(state.favs);
         s.add(noteId);
@@ -251,7 +246,14 @@ export const useNotesStore = create((set, get) => ({
     else await addFavorite(noteId);
   },
 
-  // ---------- REALTIME (presence + postgres) ----------
+  /* <-- UUSI yhdistelmä-funktio Sidebarin kutsuun */
+  fetchFavouriteNotes: async () => {
+    const { initAuthAndFavs, fetchNotes } = get();
+    await initAuthAndFavs();
+    await fetchNotes();
+  },
+
+  // ---------- REALTIME ----------
   setupPresence: async (noteId, user, onContentReceive) => {
     if (!noteId || !user) return;
 
@@ -295,7 +297,6 @@ export const useNotesStore = create((set, get) => ({
   setupRealtimeSubscription: () => {
     const subscription = supabase
       .channel("notes-changes")
-      // INSERT
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "notes" },
@@ -306,7 +307,6 @@ export const useNotesStore = create((set, get) => ({
           }));
         }
       )
-      // UPDATE
       .on(
         "postgres_changes",
         { event: "UPDATE", schema: "public", table: "notes" },
@@ -328,7 +328,6 @@ export const useNotesStore = create((set, get) => ({
           }
         }
       )
-      // DELETE
       .on(
         "postgres_changes",
         { event: "DELETE", schema: "public", table: "notes" },
@@ -358,7 +357,6 @@ export const useNotesStore = create((set, get) => ({
     }
   },
 
-  // ---------- SISÄLLÖN MUUTOS ----------
   broadcastContentChange: debounce(async (newContent) => {
     const { presenceChannel, isLocalChange, currentUser } = get();
     if (!presenceChannel || !currentUser) return;
@@ -411,4 +409,5 @@ export const useNotesStore = create((set, get) => ({
     saveNoteToDatabase(selectedNoteId, newContent);
   },
 }));
+
 

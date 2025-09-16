@@ -12,11 +12,25 @@ const MainContent = () => {
     activeUsers,
     updateNoteTitle,
     deleteNote,
+    saveNoteToDatabase,
   } = useNotesStore();
 
   useEffect(() => {
     fetchNotes();
   }, [fetchNotes]);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      const isSaveShortcut =
+        (e.ctrlKey || e.metaKey) && e.key?.toLowerCase() === "s";
+      if (isSaveShortcut && selectedNote) {
+        e.preventDefault();
+        saveNoteToDatabase(selectedNoteId, selectedNote.content || "");
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selectedNote, selectedNoteId, saveNoteToDatabase]);
 
   const getTagName = (note) => {
     if (!note || !note.note_tags) return "No tag";
@@ -41,7 +55,6 @@ const MainContent = () => {
           <div className="flex items-center space-x-4">
             <div className="flex flex-col">
               <div className="flex items-center gap-4">
-                {/* Editable title */}
                 <input
                   className="text-xl font-semibold text-gray-900 truncate max-w-2xl border-b focus:outline-none"
                   value={selectedNote.title || ""}
@@ -85,12 +98,23 @@ const MainContent = () => {
 
         <div className="flex items-center gap-2">
           {selectedNote && (
-            <button
-              className="px-2 py-1 text-sm border rounded text-red-600 hover:bg-red-50"
-              onClick={() => deleteNote(selectedNoteId)}
-            >
-              Delete
-            </button>
+            <>
+              <button
+                className="px-3 py-1 text-sm rounded bg-green-600 text-white hover:bg-green-700"
+                onClick={() =>
+                  saveNoteToDatabase(selectedNoteId, selectedNote.content || "")
+                }
+                title="Save (Ctrl/Cmd+S)"
+              >
+                Save
+              </button>
+              <button
+                className="px-2 py-1 text-sm border rounded text-red-600 hover:bg-red-50"
+                onClick={() => deleteNote(selectedNoteId)}
+              >
+                Delete
+              </button>
+            </>
           )}
           <Toolbar />
         </div>
@@ -117,4 +141,5 @@ const MainContent = () => {
 };
 
 export default MainContent;
+
 

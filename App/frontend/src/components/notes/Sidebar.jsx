@@ -11,20 +11,19 @@ const Sidebar = () => {
     searchQuery,
     setSearchQuery,
     setSelectedNote,
-    fetchNotes,
     selectedNoteId,
     isFavorite,
     toggleFavorite,
-    initAuthAndFavs,
     createNote,
+    fetchFavouriteNotes,
   } = useNotesStore();
 
   const { user } = useAuth();
 
-  useEffect(() => {
-    fetchNotes();
-    initAuthAndFavs();
-  }, [fetchNotes, initAuthAndFavs]);
+   useEffect(() => {
+     fetchFavouriteNotes();
+   }, [fetchFavouriteNotes]);
+
 
   const filteredNotes = notes.filter((note) =>
     (note.title || "").toLowerCase().includes((searchQuery || "").toLowerCase())
