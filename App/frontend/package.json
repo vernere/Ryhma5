@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "cypress:open": "cypress open",
     "cypress:component": "cypress run --component",
-    "cypress:e2e": "nyc cypress run"
+    "cypress:e2e": "cypress run",
+    "cypress:coverage": "nyc cypress run"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
