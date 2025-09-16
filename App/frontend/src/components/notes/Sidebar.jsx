@@ -1,5 +1,5 @@
 import { Search } from "lucide-react";
-import { Navigation } from "@/components/ui/Navigation";
+import { Navigation } from "@/components/ui/navigation";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
