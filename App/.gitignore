@@ -24,6 +24,10 @@ backend/.env.*
 frontend/.env
 frontend/.env.*
 
+# Testing and code coverage output
+.nyc_output
+coverage
+
 # caches
 .eslintcache
 .cache
