@@ -25,8 +25,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-          cache-dependency-path: |
-            ./App/frontend/package-lock.json
+          cache-dependency-path: ./App/frontend/bun.lock
 
       - name: Install dependencies
         working-directory: ./App/frontend
@@ -34,13 +33,13 @@ jobs:
 
       - name: Cypress - E2E
         uses: cypress-io/github-action@v6
-        working-directory: ./App/frontend
         with:
           install: false
           build: bun run build
           start: bun start
           browser: chrome
           summary-title: 'E2E'
+          project: ./App/frontend
 
       - name: Upload screenshots on failure
         uses: actions/upload-artifact@v4
