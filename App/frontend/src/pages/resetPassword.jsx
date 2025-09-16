@@ -1,4 +1,4 @@
-import {Header} from "@/components/ui/Header";
+import {Header} from "@/components/ui/header";
 import {Input} from "@/components/ui/input.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import {Footer} from "@/components/ui/footer.jsx";
