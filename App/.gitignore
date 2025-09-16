@@ -6,9 +6,6 @@ out
 dist
 *.tgz
 
-# code coverage
-coverage
-*.lcov
 
 # logs
 logs
@@ -26,6 +23,10 @@ backend/.env
 backend/.env.*
 frontend/.env
 frontend/.env.*
+
+# Testing and code coverage output
+.nyc_output
+coverage
 
 # caches
 .eslintcache
