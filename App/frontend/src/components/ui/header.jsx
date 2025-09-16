@@ -1,5 +1,5 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const Header = () => {
     return (
@@ -12,11 +12,11 @@ export const Header = () => {
             </h2>
             <h3 className="text-2xl px-6 hover:text-purple-600">
                 <Link to="/login">Login</Link>
-
             </h3>
 
-            <div className="flex-1 flex justify-center px-6"> {/* Right side of the header */}
-
+            <div className="flex-1 flex justify-center px-6">
+                {" "}
+                {/* Right side of the header */}
             </div>
         </header>
     );
