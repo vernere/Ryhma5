@@ -52,11 +52,11 @@ const RegistrationForm = () => {
                     {error && <p style={{color: 'red'}}>{error}</p>}
                     <div className="flex flex-col">
                         <Input className="mb-2 w-60" type="email" placeholder="Email" value={email}
-                               onChange={(e) => setEmail(e.target.value)}/>
+                               onChange={(e) => setEmail(e.target.value)} data-cy="register-email"/>
                         <Input className="mb-2 w-60" type="password" placeholder="Password" value={password}
-                               onChange={(e) => setPassword(e.target.value)}/>
+                               onChange={(e) => setPassword(e.target.value)} data-cy="register-password"/>
                         <Input className="mb-2 w-60" type="password" placeholder="Confirm Password"
-                               value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}/>
+                               value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} data-cy="register-confirm-password"/>
                         <Button className="bg-secondary text-black shadow-md hover:text-white"
                                 onClick={handleSignup}> Create account </Button>
                     </div>

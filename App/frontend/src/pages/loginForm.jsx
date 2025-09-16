@@ -35,9 +35,9 @@ const LoginForm = () => {
                     {error && <p style={{color: 'red'}}>{"Invalid password or email"}</p>}
                     <div className="flex flex-col">
                         <Input className="mb-2 w-60" type="email" placeholder="Email" value={email}
-                               onChange={(e) => setEmail(e.target.value)}/>
+                               onChange={(e) => setEmail(e.target.value)} data-cy="login-email"/>
                         <Input className="mb-2 w-60" type="password" placeholder="Password" value={password}
-                               onChange={(e) => setPassword(e.target.value)}/>
+                               onChange={(e) => setPassword(e.target.value)} data-cy="login-password"/>
                         <Button className="bg-secondary text-black shadow-md hover:text-white"
                                 onClick={handleLogin}> Login </Button>
                         <Button variant="link" asChild><Link to="/resetPassword">Forgot Password?</Link></Button>
