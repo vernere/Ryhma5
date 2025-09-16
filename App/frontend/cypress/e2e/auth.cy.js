@@ -5,8 +5,6 @@ import { MailSlurp } from "mailslurp-client";
 const mailKey = import.meta.env.MAIL_KEY;
 */
 
-
-
 describe('Authentication Tests', () => {
   it('Succesfull registration', () => {
     /*
@@ -29,7 +27,6 @@ describe('Authentication Tests', () => {
 
     cy.url().should('include', '/notes')
   */
-
   });
 
   it('Email validation', () => {
@@ -169,8 +166,8 @@ describe('Authentication Tests', () => {
     cy.contains('Login').click()
     cy.url().should('include', '/login')
 
-    cy.get('input[type="email"]').type('fakeEmail@fake.com')
-    cy.get('input[type="email"]').should('have.value', 'fakeEmail@fake.com')
+    cy.get('input[type="email"]').type('fakeEmail@notely.com')
+    cy.get('input[type="email"]').should('have.value', 'fakeEmail@notely.com')
 
     cy.get('input[type="password"]').type('Hello123')
     cy.get('input[type="password"]').should('have.value', 'Hello123')
@@ -207,8 +204,8 @@ describe('Authentication Tests', () => {
     cy.get('p').contains('Invalid password or email').should('exist')
     cy.url().should('include', '/login')
 
-    cy.get('input[type="email"]').type('fakeEmail@fake.com')
-    cy.get('input[type="email"]').should('have.value', 'fakeEmail@fake.com')
+    cy.get('input[type="email"]').type('fakeEmail@notely.com')
+    cy.get('input[type="email"]').should('have.value', 'fakeEmail@notely.com')
 
     cy.get('button').contains('Login').click()
 
@@ -249,15 +246,4 @@ describe('Authentication Tests', () => {
     cy.url().should('include', '/')
 
   });
-
-  it('UI state tests', () => {
-
-    // Verify loading state during login attempt
-    // Test empty password field shows validation error
-    // Check password visibility toggle functionality
-    // Test form reset after failed attempts
-  });
-
 })
-
-
