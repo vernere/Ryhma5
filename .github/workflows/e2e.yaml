@@ -34,7 +34,7 @@ jobs:
         with:
           install: false
           build: bun run build
-          start: bun preview
+          start: bun start
           browser: chrome
           summary-title: 'E2E'
           working-directory: ./App/frontend
