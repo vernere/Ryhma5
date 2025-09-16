@@ -1,5 +1,5 @@
 import { Footer } from "@/components/ui/footer";
-import Header from "@/components/ui/feader";
+import Header from "@/components/ui/header";
 
 const LandingPage = () => {
     return (
