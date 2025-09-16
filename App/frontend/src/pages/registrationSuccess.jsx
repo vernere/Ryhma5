@@ -1,8 +1,7 @@
-import {Header} from "@/components/ui/Header";
+import {Header} from "@/components/ui/header";
 import {Footer} from "@/components/ui/footer.jsx";
-import {Button} from "@/components/ui/Button";
+import {Button} from "@/components/ui/button";
 import {Link} from "react-router-dom";
-
 
 const RegistrationSuccess = () => {
 

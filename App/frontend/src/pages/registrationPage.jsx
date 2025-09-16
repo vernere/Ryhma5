@@ -1,29 +1,27 @@
-import { Header } from "@/components/ui/header.jsx";
-import { Input } from "@/components/ui/input.jsx";
-import { Button } from "@/components/ui/button.jsx";
-import { Footer } from "@/components/ui/footer.jsx";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Footer } from "@/components/ui/footer";
+import { Header } from "@/components/ui/header";
 import { useAuth } from "../hooks/useAuth";
-import { useEffect, useState } from "react";
-import { validPassword } from "@/utils/validation.js";
-import { useNavigate } from "react-router";
+import { useState } from "react";
+import { validEmail, validPassword } from "@/utils/validation";
+import { useNavigate } from "react-router-dom";
 
-const ChangePassword = () => {
-    const { changePassword, signOut, passwordRecovery } = useAuth();
+const RegistrationPage = () => {
+    const { signUp, signOut } = useAuth();
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!passwordRecovery) {
-            navigate("/");
-        }
-    }, [passwordRecovery, navigate]);
-
-    const handleUpdatePassword = async (e) => {
+    const handleSignup = async (e) => {
         e.preventDefault();
         setError("");
-
+        if (!validEmail(email)) {
+            setError("Please enter a valid email address.");
+            return;
+        }
         if (!validPassword(password)) {
             setError(
                 "Password must be at least 7 characters, contain an uppercase letter and a number."
@@ -37,12 +35,11 @@ const ChangePassword = () => {
         }
 
         try {
-            await changePassword(password);
+            await signUp(email, password);
             await signOut();
-            navigate("/passwordChanged");
-        } catch (err) {
-            setError(err);
-            setError("Error updating password.");
+            navigate("/registrationSuccess");
+        } catch (error) {
+            setError(error?.message || "Registration failed.");
         }
     };
 
@@ -52,16 +49,25 @@ const ChangePassword = () => {
             <div className="flex-grow flex items-center justify-center">
                 <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-md flex-col justify-items-center">
                     <p className="mb-4 text-lg font-semibold">
-                        Create a new password
+                        Welcome to Notely
                     </p>
                     {error && <p style={{ color: "red" }}>{error}</p>}
                     <div className="flex flex-col">
                         <Input
                             className="mb-2 w-60"
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            data-cy="register-email"
+                        />
+                        <Input
+                            className="mb-2 w-60"
                             type="password"
-                            placeholder="Enter new password"
+                            placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            data-cy="register-password"
                         />
                         <Input
                             className="mb-2 w-60"
@@ -69,12 +75,14 @@ const ChangePassword = () => {
                             placeholder="Confirm Password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
+                            data-cy="register-confirm-password"
                         />
                         <Button
                             className="bg-secondary text-black shadow-md hover:text-white"
-                            onClick={handleUpdatePassword}
+                            onClick={handleSignup}
                         >
-                            Update
+                            {" "}
+                            Create account{" "}
                         </Button>
                     </div>
                 </div>
@@ -84,4 +92,4 @@ const ChangePassword = () => {
     );
 };
 
-export default ChangePassword;
+export default RegistrationPage;

@@ -1,4 +1,4 @@
-import { Toolbar } from "@/components/ui/Toolbar";
+import { Toolbar } from "@/components/ui/toolbar";
 import { CgNotes } from "react-icons/cg";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useEffect } from "react";
