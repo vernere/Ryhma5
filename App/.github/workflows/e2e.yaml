@@ -6,7 +6,7 @@ on:
       - '!main'
     paths:
       - '/App/frontend/**'
-      - '.github/workflows/e2e.yml'
+      - '/App/.github/workflows/e2e.yml'
 name: Cypress E2E Tests
 
 jobs:
@@ -35,7 +35,7 @@ jobs:
 
       - name: Cypress - E2E
         uses: cypress-io/github-action@v6
-        working-directory: ./Ryhmä5/App/frontend
+        working-directory: ./App/frontend
         with:
           install: false
           build: bun run build
