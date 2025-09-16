@@ -7,8 +7,7 @@ import {useState} from "react";
 import {validEmail, validPassword} from "@/utils/validation";
 import {useNavigate} from "react-router-dom";
 
-
-const RegistrationForm = () => {
+const RegistrationPage = () => {
     const {signUp, signOut} = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -66,4 +65,4 @@ const RegistrationForm = () => {
         </div>);
 };
 
-export default RegistrationForm;
+export default RegistrationPage;

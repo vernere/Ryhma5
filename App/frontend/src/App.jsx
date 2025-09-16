@@ -1,6 +1,6 @@
 import './App.css';
 import {Navigate, Route, Routes} from 'react-router-dom';
-import RegistrationForm from './pages/RegistrationForm';
+import RegistrationPage from './pages/registrationPage';
 import LoginForm from './pages/LoginForm';
 import LandingPage from './pages/LandingPage';
 import NotesPage from './pages/NotesPage';
@@ -20,7 +20,7 @@ function App() {
     return (
         <Routes>
             <Route path="/" element={<LandingPage/>}/>
-            <Route path="/register" element={<RegistrationForm/>}/>
+            <Route path="/register" element={<RegistrationPage/>}/>
             <Route path="/login" element={<LoginForm/>}/>
             <Route path="/resetPassword" element={<ResetPassword/>}/>
             <Route path="/passwordChanged" element={<PasswordChanged/>}/>
