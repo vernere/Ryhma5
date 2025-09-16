@@ -20,6 +20,7 @@ export const useNotesStore = create((set, get) => ({
   presenceChannel: null,
   isLocalChange: false,
   currentUser: null,
+  realtimeSubscription: null,
 
   setSelectedNote: async (noteId) => {
     set({ selectedNoteId: noteId, loading: true, error: null });
@@ -86,7 +87,7 @@ export const useNotesStore = create((set, get) => ({
       }
     });
 
-    await channel.subscribe((status) => {
+    channel.subscribe((status) => {
       if (status === "SUBSCRIBED") {
         channel.track({
           user_id: user.id,
@@ -126,6 +127,8 @@ export const useNotesStore = create((set, get) => ({
   }, 100),
 
   setupRealtimeSubscription: () => {
+    if (get().realtimeSubscription) return;
+
     const subscription = supabase
       .channel('notes-changes')
       .on(

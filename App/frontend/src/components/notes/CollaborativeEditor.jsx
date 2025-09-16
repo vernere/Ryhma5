@@ -4,7 +4,7 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useState } from "react";
 
-export default function CollaborativeEditor() {
+export const CollaborativeEditor = () => {
     const {
         selectedNote,
         selectedNoteId,
@@ -19,13 +19,11 @@ export default function CollaborativeEditor() {
     } = useNotesStore();
 
     const { user } = useAuth();
-    const [_, setSaveStatus] = useState('saved');
+    const [_, setSaveStatus] = useState("saved");
 
     const editor = useEditor(
         {
-            extensions: [
-                StarterKit.configure({ history: false }),
-            ],
+            extensions: [StarterKit.configure({ history: false })],
             editorProps: {
                 attributes: {
                     class: "prose max-w-none focus:outline-none min-h-[400px] p-4",
@@ -60,7 +58,14 @@ export default function CollaborativeEditor() {
             });
         }
         return () => cleanupPresence();
-    }, [selectedNoteId, user, setupPresence, cleanupPresence, editor, setIsLocalChange]);
+    }, [
+        selectedNoteId,
+        user,
+        setupPresence,
+        cleanupPresence,
+        editor,
+        setIsLocalChange,
+    ]);
 
     useEffect(() => {
         if (!editor) return;
@@ -70,10 +75,10 @@ export default function CollaborativeEditor() {
                 setIsLocalChange(false);
                 return;
             }
-            
-            setSaveStatus('saving');
+
+            setSaveStatus("saving");
             handleContentChange(editor.getHTML());
-            setTimeout(() => setSaveStatus('saved'), 2500);
+            setTimeout(() => setSaveStatus("saved"), 2500);
         };
 
         editor.on("update", onUpdate);
@@ -107,4 +112,6 @@ export default function CollaborativeEditor() {
             </div>
         </div>
     );
-}
+};
+
+export default CollaborativeEditor;

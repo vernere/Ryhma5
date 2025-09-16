@@ -3,13 +3,26 @@ import { CgNotes } from "react-icons/cg";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useEffect } from "react";
 import CollaborativeEditor from "@/components/notes/CollaborativeEditor";
+import { useInvitationsStore } from "@/hooks/useInvitationsStore";
+import { useState } from "react";
 
-const MainContent = () => {
-    const { selectedNote, fetchNotes, activeUsers } = useNotesStore();
+export const MainContent = () => {
+    const { selectedNote, fetchNotes, activeUsers, sele } = useNotesStore();
+    const { sendCollaborationInvite, getInvitesByNoteId } = useInvitationsStore();
+    const [collaborationInvites, setCollaborationInvites] = useState([]);
 
     useEffect(() => {
         fetchNotes();
     }, [fetchNotes]);
+
+    useEffect(() => {
+        if (!selectedNote?.note_id) {
+            setCollaborationInvites([]);
+            return;
+        }
+        const invites = getInvitesByNoteId(selectedNote?.note_id);
+        setCollaborationInvites(invites);
+    }, [getInvitesByNoteId, sendCollaborationInvite, selectedNote?.note_id]);
 
     const getTagName = (note) => {
         if (!note || !note.note_tags) return "No tag";
