@@ -1,4 +1,4 @@
-name: E2E
+name: Cypress E2E Tests
 on:
   push:
     branches:
@@ -7,7 +7,6 @@ on:
     paths:
       - '/App/frontend/**'
       - '/App/.github/workflows/e2e.yml'
-name: Cypress E2E Tests
 
 jobs:
   e2e:
