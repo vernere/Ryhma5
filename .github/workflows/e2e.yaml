@@ -33,11 +33,11 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           install: false
-          project: ./App/frontend
           build: bun run build
           start: bun start
           browser: chrome
           summary-title: 'E2E'
+          working-directory: ./App/frontend
 
       - name: Upload screenshots on failure
         uses: actions/upload-artifact@v4
