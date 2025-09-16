@@ -34,6 +34,8 @@ The project is implemented in React using Bun and supports localization in Engli
 ![alt text](/resources/image.png)
 ## Plugins
 
+### Bun
+
 ## Setup
 
 ## Project structure
