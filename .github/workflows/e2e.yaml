@@ -6,7 +6,7 @@ on:
       - '!main'
     paths:
       - '/App/frontend/**'
-      - '/App/.github/workflows/e2e.yml'
+      - '/App/.github/workflows/e2e.yaml'
 
 jobs:
   e2e:
