@@ -57,6 +57,8 @@ Cypress code coverage:
    ```sh
       bun cypress:coverage
 ```
+- /App/frontend/coverage/lcov-report/index.html for visual report
+
 ## Docker
 
 ## Data persistance
