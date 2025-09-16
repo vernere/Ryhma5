@@ -27,7 +27,7 @@ jobs:
         with:
           bun-version: latest
           cache-dependency-path: |
-            /App/frontend/package-lock.json
+            ./App/frontend/package-lock.json
 
       - name: Install dependencies
         working-directory: ./App/frontend
