@@ -5,7 +5,6 @@ import {Footer} from "@/components/ui/footer.jsx";
 import {useAuth} from "@/hooks/useAuth.js";
 import {useState} from "react";
 
-
 const ResetPassword = () => {
     const {resetPassword} = useAuth();
     const [email, setEmail] = useState('');
@@ -24,7 +23,6 @@ const ResetPassword = () => {
             setError("Error sending reset link");
         }
     };
-
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-400">

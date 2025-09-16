@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { Footer } from "@/components/ui/Footer";
-import { Header } from "@/components/ui/Header";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Footer } from "@/components/ui/footer";
+import { Header } from "@/components/ui/header";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useState } from "react";
