@@ -15,29 +15,27 @@ const Sidebar = () => {
     isFavorite,
     toggleFavorite,
     createNote,
-    fetchFavourites,
+    fetchFavorites,
     fetchNotes,
-    setUid,
+     
     setCurrentUser,
+
   } = useNotesStore();
 
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user) {
-      setUid(user.id);
-      setCurrentUser(user);  
-    }
-  }, [user, setUid, setCurrentUser]);
-
-  useEffect(() => {
-    if (user?.id) setUid(user.id);
-  }, [user?.id, setUid]);
-
-  useEffect(() => {
-    fetchFavourites();
+    if (!user?.id) return;
+    setCurrentUser(user);
+    fetchFavorites();
     fetchNotes();
-  }, [fetchFavourites, fetchNotes]);
+  }, [user?.id, setCurrentUser, fetchFavorites, fetchNotes]);
+  
+
+  useEffect(() => {
+    fetchFavorites();
+    fetchNotes();
+  }, [fetchFavorites, fetchNotes]);
 
   const filteredNotes = notes.filter((note) =>
     (note.title || "").toLowerCase().includes((searchQuery || "").toLowerCase())

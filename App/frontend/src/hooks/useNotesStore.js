@@ -19,25 +19,24 @@ export const useNotesStore = create((set, get) => ({
   loading: false,
   error: null,
 
-  
+
   activeUsers: [],
   presenceChannel: null,
   isLocalChange: false,
   currentUser: null,
 
-  
+
   realtimeSubscription: null,
 
-  
-  uid: null,
+
   favs: new Set(),  
 
 
   setCurrentUser: (user) => set({ currentUser: user }),
   setIsLocalChange: (flag) => set({ isLocalChange: flag }),
   setSearchQuery: (q) => set({ searchQuery: q }),
-  setSelectedNoteIdOnly: (noteId) => set({ selectedNoteId: noteId }),
-  setUid: (id) => set({ uid: id }),
+ 
+
   setFavs: (updater) =>
     set((state) => {
       const next =
@@ -45,11 +44,13 @@ export const useNotesStore = create((set, get) => ({
       return { favs: next };
     }),
 
-
-  fetchFavoritesSet: async () => {
+  fetchFavorites: async () => {
+    const uid = get().currentUser?.id;
+    if (!uid) return new Set();
     const { data, error } = await supabase
       .from("favorites")
-      .select("note_id");
+      .select("note_id")
+      .eq("user_id", uid); 
     if (error) throw error;
     return new Set((data ?? []).map(r => r.note_id));
   },
@@ -135,8 +136,8 @@ export const useNotesStore = create((set, get) => ({
     }
 
     set((state) => ({
-      notes: state.notes.map((n) =>
-        n.note_id === noteId ? { ...n, title: newTitle, updated_at: now } : n
+      notes: state.notes.map((note) =>
+        note.note_id === noteId ? { ...note, title: newTitle, updated_at: now } : note
       ),
       selectedNote:
         state.selectedNote?.note_id === noteId
@@ -150,6 +151,7 @@ export const useNotesStore = create((set, get) => ({
       .from("notes")
       .delete()
       .eq("note_id", noteId);
+      
 
     if (error) {
       set({ error: error.message });
@@ -157,7 +159,7 @@ export const useNotesStore = create((set, get) => ({
     }
 
     set((state) => {
-      const next = state.notes.filter((n) => n.note_id !== noteId);
+      const next = state.notes.filter((note) => note.note_id !== noteId);
       const deletingSelected = state.selectedNoteId === noteId;
       return {
         notes: next,
@@ -171,8 +173,9 @@ export const useNotesStore = create((set, get) => ({
   isFavorite: (noteId) => get().favs.has(noteId),
 
   addFavorite: async (noteId) => {
-    const uid = get().uid;
+    const uid = get().currentUser?.id;
     if (!uid) return;
+     
 
 
     set((state) => {
@@ -197,7 +200,7 @@ export const useNotesStore = create((set, get) => ({
   },
 
   removeFavorite: async (noteId) => {
-    const uid = get().uid;
+    const uid = get().currentUser?.id;
     if (!uid) return;
 
 
@@ -211,6 +214,7 @@ export const useNotesStore = create((set, get) => ({
       .from("favorites")
       .delete()
       .eq("note_id", noteId);
+       
 
     if (error) {
       // Rollback
@@ -299,7 +303,7 @@ export const useNotesStore = create((set, get) => ({
 
           set((state) => ({
             notes: state.notes.map((note) =>
-              note.note_id === updatedNote.note_id ? updatedNote : n
+              note.note_id === updatedNote.note_id ? updatedNote : note
             ),
           }));
 
