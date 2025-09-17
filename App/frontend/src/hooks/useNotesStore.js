@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { supabase } from "@/lib/supabaseClient";
 
+
 const debounce = (func, delay) => {
   let timeout;
   return (...args) => {
@@ -9,19 +10,8 @@ const debounce = (func, delay) => {
   };
 };
 
-/* Hae käyttäjän suosikit Set-muotoon */
-async function fetchFavoritesSet(userId) {
-  const { data, error } = await supabase
-    .from("favorites")
-    .select("note_id")
-    .eq("user_id", userId);
-
-  if (error) throw error;
-  return new Set((data || []).map((r) => r.note_id));
-}
-
 export const useNotesStore = create((set, get) => ({
-  // ---------- STATE ----------
+
   notes: [],
   selectedNoteId: null,
   selectedNote: null,
@@ -29,20 +19,20 @@ export const useNotesStore = create((set, get) => ({
   loading: false,
   error: null,
 
-  // Presence & user
+  
   activeUsers: [],
   presenceChannel: null,
   isLocalChange: false,
   currentUser: null,
 
-  // Realtime
+  
   realtimeSubscription: null,
 
-  // Favorites
+  
   uid: null,
-  favs: new Set(), // Set(note_id)
+  favs: new Set(),  
 
-  // ---------- SETTERIT ----------
+
   setCurrentUser: (user) => set({ currentUser: user }),
   setIsLocalChange: (flag) => set({ isLocalChange: flag }),
   setSearchQuery: (q) => set({ searchQuery: q }),
@@ -55,25 +45,15 @@ export const useNotesStore = create((set, get) => ({
       return { favs: next };
     }),
 
-  // ---------- INIT käyttäjä + suosikit ----------
-  initAuthAndFavs: async () => {
-    const { data, error } = await supabase.auth.getUser();
-    if (error) {
-      set({ uid: null, favs: new Set() });
-      return;
-    }
-    const user = data?.user ?? null;
-    set({ uid: user?.id ?? null, currentUser: user });
 
-    if (user?.id) {
-      const favSet = await fetchFavoritesSet(user.id);
-      set({ favs: favSet });
-    } else {
-      set({ favs: new Set() });
-    }
+  fetchFavoritesSet: async () => {
+    const { data, error } = await supabase
+      .from("favorites")
+      .select("note_id");
+    if (error) throw error;
+    return new Set((data ?? []).map(r => r.note_id));
   },
 
-  // ---------- NOTES: LISTA & HAKU ----------
   fetchNotes: async () => {
     set({ loading: true, error: null });
     try {
@@ -110,7 +90,7 @@ export const useNotesStore = create((set, get) => ({
     await get().fetchNoteById(noteId);
   },
 
-  // ---------- NOTES: CRUD ----------
+
   createNote: async (title = "Untitled note") => {
     const { currentUser } = get();
     if (!currentUser?.id) return null;
@@ -187,12 +167,13 @@ export const useNotesStore = create((set, get) => ({
     });
   },
 
-  // ---------- FAVORITES ----------
+
   isFavorite: (noteId) => get().favs.has(noteId),
 
   addFavorite: async (noteId) => {
     const uid = get().uid;
     if (!uid) return;
+
 
     set((state) => {
       const s = new Set(state.favs);
@@ -205,6 +186,7 @@ export const useNotesStore = create((set, get) => ({
       .insert({ user_id: uid, note_id: noteId });
 
     if (error) {
+
       set((state) => {
         const s = new Set(state.favs);
         s.delete(noteId);
@@ -218,6 +200,7 @@ export const useNotesStore = create((set, get) => ({
     const uid = get().uid;
     if (!uid) return;
 
+
     set((state) => {
       const s = new Set(state.favs);
       s.delete(noteId);
@@ -227,10 +210,10 @@ export const useNotesStore = create((set, get) => ({
     const { error } = await supabase
       .from("favorites")
       .delete()
-      .eq("user_id", uid)
       .eq("note_id", noteId);
 
     if (error) {
+      // Rollback
       set((state) => {
         const s = new Set(state.favs);
         s.add(noteId);
@@ -245,15 +228,13 @@ export const useNotesStore = create((set, get) => ({
     if (isFavorite(noteId)) await removeFavorite(noteId);
     else await addFavorite(noteId);
   },
-
-  /* <-- UUSI yhdistelmä-funktio Sidebarin kutsuun */
-  fetchFavouriteNotes: async () => {
-    const { initAuthAndFavs, fetchNotes } = get();
-    await initAuthAndFavs();
-    await fetchNotes();
+  fetchFavourites: async () => {
+    const favSet = await get().fetchFavoritesSet();
+    set({ favs: favSet });
   },
 
-  // ---------- REALTIME ----------
+
+
   setupPresence: async (noteId, user, onContentReceive) => {
     if (!noteId || !user) return;
 
@@ -297,6 +278,7 @@ export const useNotesStore = create((set, get) => ({
   setupRealtimeSubscription: () => {
     const subscription = supabase
       .channel("notes-changes")
+      // INSERT
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "notes" },
@@ -307,6 +289,7 @@ export const useNotesStore = create((set, get) => ({
           }));
         }
       )
+      // UPDATE
       .on(
         "postgres_changes",
         { event: "UPDATE", schema: "public", table: "notes" },
@@ -315,8 +298,8 @@ export const useNotesStore = create((set, get) => ({
           const { selectedNoteId, currentUser } = get();
 
           set((state) => ({
-            notes: state.notes.map((n) =>
-              n.note_id === updatedNote.note_id ? updatedNote : n
+            notes: state.notes.map((note) =>
+              note.note_id === updatedNote.note_id ? updatedNote : n
             ),
           }));
 
@@ -328,13 +311,14 @@ export const useNotesStore = create((set, get) => ({
           }
         }
       )
+      // DELETE
       .on(
         "postgres_changes",
         { event: "DELETE", schema: "public", table: "notes" },
         (payload) => {
           const deletedId = payload.old?.note_id;
           set((state) => {
-            const next = state.notes.filter((n) => n.note_id !== deletedId);
+            const next = state.notes.filter((note) => note.note_id !== deletedId);
             const deletingSelected = state.selectedNoteId === deletedId;
             return {
               notes: next,
@@ -350,12 +334,14 @@ export const useNotesStore = create((set, get) => ({
   },
 
   cleanupRealtimeSubscription: () => {
-    const sub = get().realtimeSubscription;
-    if (sub) {
-      sub.unsubscribe();
-      set({ realtimeSubscription: null });
+    const { realtimeSubscription } = get();
+    if (realtimeSubscription) {
+      realtimeSubscription.unsubscribe();
     }
+    set({ realtimeSubscription: null });
   },
+
+
 
   broadcastContentChange: debounce(async (newContent) => {
     const { presenceChannel, isLocalChange, currentUser } = get();
@@ -388,8 +374,8 @@ export const useNotesStore = create((set, get) => ({
       if (error) throw error;
 
       set((state) => ({
-        notes: state.notes.map((n) =>
-          n.note_id === noteId ? { ...n, content, updated_at: now } : n
+        notes: state.notes.map((note) =>
+          note.note_id === noteId ? { ...note, content, updated_at: now } : note
         ),
         selectedNote:
           state.selectedNote?.note_id === noteId
@@ -409,5 +395,4 @@ export const useNotesStore = create((set, get) => ({
     saveNoteToDatabase(selectedNoteId, newContent);
   },
 }));
-
 

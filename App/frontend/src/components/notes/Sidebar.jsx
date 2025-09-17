@@ -15,41 +15,63 @@ const Sidebar = () => {
     isFavorite,
     toggleFavorite,
     createNote,
-    fetchFavouriteNotes,
+    fetchFavourites,
+    fetchNotes,
+    setUid,
+    setCurrentUser,
   } = useNotesStore();
 
   const { user } = useAuth();
 
-   useEffect(() => {
-     fetchFavouriteNotes();
-   }, [fetchFavouriteNotes]);
+  useEffect(() => {
+    if (user) {
+      setUid(user.id);
+      setCurrentUser(user);  
+    }
+  }, [user, setUid, setCurrentUser]);
 
+  useEffect(() => {
+    if (user?.id) setUid(user.id);
+  }, [user?.id, setUid]);
+
+  useEffect(() => {
+    fetchFavourites();
+    fetchNotes();
+  }, [fetchFavourites, fetchNotes]);
 
   const filteredNotes = notes.filter((note) =>
     (note.title || "").toLowerCase().includes((searchQuery || "").toLowerCase())
   );
 
+  const handleCreateNote = async () => {
+    const n = await createNote();
+    if (n) {
+      setSelectedNote(n.note_id);
+    }
+  };
+
+  const handleSelectNote = async (noteId) => {
+    await setSelectedNote(noteId);
+    setSearchQuery("");
+  };
+
+  const handleToggleFavorite = (e, noteId) => {
+    e.stopPropagation();
+    toggleFavorite(noteId);
+  };
+
   return (
     <div className="w-60 bg-white border-r border-gray-200 flex flex-col">
-      {/* header */}
       <div className="p-2 border-b border-gray-200 flex items-center justify-between">
         <h1 className="text-lg font-semibold">{user?.email}</h1>
         <button
           className="px-2 py-1 text-xs border rounded hover:bg-gray-50"
-          onClick={async () => {
-            const n = await createNote();
-            if (n) {
-              // valinta tehdään store-createNotessa jo,
-              // mutta tämä varmistaa scroll/UX tilanteissa
-              setSelectedNote(n.note_id);
-            }
-          }}
+          onClick={handleCreateNote}
         >
           + New
         </button>
       </div>
 
-      {/* search */}
       <div className="p-2">
         <div className="flex justify-center items-center border border-gray-300 rounded-lg gap-2">
           <Search className="size-4 ml-2 text-gray-400" />
@@ -67,43 +89,33 @@ const Sidebar = () => {
             {filteredNotes.map((note) => (
               <div
                 key={note.note_id}
-                onClick={async () => {
-                  await setSelectedNote(note.note_id);
-                  setSearchQuery("");
-                }}
-                className={`px-3 py-2 cursor-pointer hover:bg-gray-50 flex flex-col space-y-1 ${
-                  selectedNoteId === note.note_id
-                    ? "bg-indigo-50 border-l-4 border-indigo-500"
-                    : ""
-                }`}
+                onClick={() => handleSelectNote(note.note_id)}
+                className={`px-3 py-2 cursor-pointer hover:bg-gray-50 flex flex-col space-y-1 ${selectedNoteId === note.note_id
+                  ? "bg-indigo-50 border-l-4 border-indigo-500"
+                  : ""
+                  }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    {/* heart */}
                     <button
                       className="p-1 -ml-1"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleFavorite(note.note_id);
-                      }}
+                      onClick={(e) => handleToggleFavorite(e, note.note_id)}
                       aria-label="Toggle favorite"
                       title="Favorite"
                     >
                       <CgHeart
-                        className={`w-4 h-4 ${
-                          isFavorite(note.note_id)
-                            ? "text-red-500"
-                            : "text-gray-300"
-                        }`}
+                        className={`w-4 h-4 ${isFavorite(note.note_id)
+                          ? "text-red-500"
+                          : "text-gray-300"
+                          }`}
                       />
                     </button>
 
                     <span
-                      className={`text-sm ${
-                        selectedNoteId === note.note_id
-                          ? "font-semibold text-indigo-700"
-                          : "font-medium text-gray-800"
-                      }`}
+                      className={`text-sm ${selectedNoteId === note.note_id
+                        ? "font-semibold text-indigo-700"
+                        : "font-medium text-gray-800"
+                        }`}
                     >
                       {note.title}
                     </span>
@@ -125,45 +137,35 @@ const Sidebar = () => {
         )}
       </div>
 
-      {/* list */}
       <div className="flex-1 overflow-y-auto">
         {filteredNotes.map((note) => {
           const active = selectedNoteId === note.note_id;
           return (
             <div
               key={note.note_id}
-              onClick={async () => {
-                await setSelectedNote(note.note_id);
-                setSearchQuery("");
-              }}
-              className={`px-4 py-3 cursor-pointer hover:bg-gray-50 flex flex-col space-y-1 border-b border-transparent ${
-                active ? "bg-indigo-50 border-l-4 border-indigo-500" : ""
-              }`}
+              onClick={() => handleSelectNote(note.note_id)}
+              className={`px-4 py-3 cursor-pointer hover:bg-gray-50 flex flex-col space-y-1 border-b border-transparent ${active ? "bg-indigo-50 border-l-4 border-indigo-500" : ""
+                }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 min-w-0">
                   <button
                     className="p-1 -ml-1"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleFavorite(note.note_id);
-                    }}
+                    onClick={(e) => handleToggleFavorite(e, note.note_id)}
                     aria-label="Toggle favorite"
                     title="Favorite"
                   >
                     <CgHeart
-                      className={`w-4 h-4 ${
-                        isFavorite(note.note_id)
-                          ? "text-red-500"
-                          : "text-gray-300"
-                      }`}
+                      className={`w-4 h-4 ${isFavorite(note.note_id)
+                        ? "text-red-500"
+                        : "text-gray-300"
+                        }`}
                     />
                   </button>
 
                   <div
-                    className={`text-sm truncate ${
-                      active ? "font-semibold text-indigo-700" : "text-gray-800"
-                    }`}
+                    className={`text-sm truncate ${active ? "font-semibold text-indigo-700" : "text-gray-800"
+                      }`}
                   >
                     {note.title}
                   </div>
@@ -190,4 +192,5 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
 

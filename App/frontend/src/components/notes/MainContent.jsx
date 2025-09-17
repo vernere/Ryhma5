@@ -19,19 +19,6 @@ const MainContent = () => {
     fetchNotes();
   }, [fetchNotes]);
 
-  useEffect(() => {
-    const onKey = (e) => {
-      const isSaveShortcut =
-        (e.ctrlKey || e.metaKey) && e.key?.toLowerCase() === "s";
-      if (isSaveShortcut && selectedNote) {
-        e.preventDefault();
-        saveNoteToDatabase(selectedNoteId, selectedNote.content || "");
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [selectedNote, selectedNoteId, saveNoteToDatabase]);
-
   const getTagName = (note) => {
     if (!note || !note.note_tags) return "No tag";
     const tagObj = Array.isArray(note.note_tags)
