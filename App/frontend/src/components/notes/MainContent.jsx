@@ -93,12 +93,7 @@ const MainContent = () => {
                 }
                 title="Save (Ctrl/Cmd+S)"
               >
-                Save
-              </button>
-              <button
-                className="px-2 py-1 text-sm border rounded text-red-600 hover:bg-red-50"
-                onClick={() => deleteNote(selectedNoteId)}
-              >
+                
                 Delete
               </button>
             </>
