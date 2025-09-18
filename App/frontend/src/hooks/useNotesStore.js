@@ -10,21 +10,17 @@ const debounce = (func, delay) => {
 };
 
 export const useNotesStore = create((set, get) => ({
-
   notes: [],
   selectedNoteId: null,
   selectedNote: null,
   searchQuery: "",
   loading: false,
   error: null,
-
   activeUsers: [],
   presenceChannel: null,
   isLocalChange: false,
   currentUser: null,
-
   realtimeSubscription: null,
-
   favs: new Set(),
 
   setCurrentUser: (user) => set({ currentUser: user }),
@@ -39,7 +35,6 @@ export const useNotesStore = create((set, get) => ({
     }),
 
   fetchFavorites: async () => {
-     
     const { data, error } = await supabase
       .from("favorites")
       .select("note_id");
@@ -143,7 +138,6 @@ export const useNotesStore = create((set, get) => ({
       .delete()
       .eq("note_id", noteId);
 
-
     if (error) {
       set({ error: error.message });
       return;
@@ -177,7 +171,6 @@ export const useNotesStore = create((set, get) => ({
       .insert({ user_id: uid, note_id: noteId });
 
     if (error) {
-
       set((state) => {
         const s = new Set(state.favs);
         s.delete(noteId);
@@ -203,7 +196,6 @@ export const useNotesStore = create((set, get) => ({
       .eq("note_id", noteId);
 
     if (error) {
-
       set((state) => {
         const s = new Set(state.favs);
         s.add(noteId);
@@ -218,7 +210,7 @@ export const useNotesStore = create((set, get) => ({
     if (isFavorite(noteId)) await removeFavorite(noteId);
     else await addFavorite(noteId);
   },
-   
+
   setupPresence: async (noteId, user, onContentReceive) => {
     if (!noteId || !user) return;
 
