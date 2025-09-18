@@ -27,7 +27,6 @@ export const useNotesStore = create((set, get) => ({
 
   favs: new Set(),
 
-
   setCurrentUser: (user) => set({ currentUser: user }),
   setIsLocalChange: (flag) => set({ isLocalChange: flag }),
   setSearchQuery: (q) => set({ searchQuery: q }),
@@ -161,7 +160,6 @@ export const useNotesStore = create((set, get) => ({
     });
   },
 
-
   isFavorite: (noteId) => get().favs.has(noteId),
 
   addFavorite: async (noteId) => {
@@ -193,7 +191,6 @@ export const useNotesStore = create((set, get) => ({
     const uid = get().currentUser?.id;
     if (!uid) return;
 
-
     set((state) => {
       const s = new Set(state.favs);
       s.delete(noteId);
@@ -204,7 +201,6 @@ export const useNotesStore = create((set, get) => ({
       .from("favorites")
       .delete()
       .eq("note_id", noteId);
-
 
     if (error) {
 
@@ -222,12 +218,7 @@ export const useNotesStore = create((set, get) => ({
     if (isFavorite(noteId)) await removeFavorite(noteId);
     else await addFavorite(noteId);
   },
-  fetchFavourites: async () => {
-    const favSet = await get().fetchFavoritesSet();
-    set({ favs: favSet });
-  },
-
-
+   
   setupPresence: async (noteId, user, onContentReceive) => {
     if (!noteId || !user) return;
 
@@ -333,8 +324,6 @@ export const useNotesStore = create((set, get) => ({
     }
     set({ realtimeSubscription: null });
   },
-
-
 
   broadcastContentChange: debounce(async (newContent) => {
     const { presenceChannel, isLocalChange, currentUser } = get();
