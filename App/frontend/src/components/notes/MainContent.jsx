@@ -1,4 +1,4 @@
-import { Toolbar } from "@/components/ui/Toolbar";
+import { Toolbar } from "@/components/ui/toolbar";
 import { CgNotes } from "react-icons/cg";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useEffect } from "react";
@@ -43,7 +43,7 @@ const MainContent = () => {
             <div className="flex flex-col">
               <div className="flex items-center gap-4">
                 <input
-                  className="text-xl font-semibold text-gray-900 truncate max-w-2xl border-b focus:outline-none"
+                  data-cy="noteTitle" className="text-xl font-semibold text-gray-900 truncate max-w-2xl border-b focus:outline-none"
                   value={selectedNote.title || ""}
                   onChange={(e) =>
                     updateNoteTitle(selectedNoteId, e.target.value)
@@ -52,6 +52,7 @@ const MainContent = () => {
                 />
                 {activeUsers.map((user) => (
                   <span
+                                        data-cy="userEmail"
                     key={user.user_id}
                     className="text-xs px-2 py-0.5 bg-gray-200 rounded-full"
                   >
@@ -60,10 +61,10 @@ const MainContent = () => {
                 ))}
               </div>
               <div className="mt-1 flex items-center space-x-2">
-                <span className="inline-block bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded">
+                <span data-cy="noteTag" className="inline-block bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded">
                   {tagName}
                 </span>
-                <span className="text-xs text-gray-400">
+                <span data-cy="noteCreatedAt" className="text-xs text-gray-400">
                   {selectedNote.created_at
                     ? new Date(selectedNote.created_at).toLocaleString()
                     : ""}

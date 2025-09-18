@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Search } from "lucide-react";
 import { CgHeart } from "react-icons/cg";
-import { Navigation } from "@/components/ui/Navigation";
+import { Navigation } from "@/components/ui/navigation";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -74,6 +74,7 @@ const Sidebar = () => {
         <div className="flex justify-center items-center border border-gray-300 rounded-lg gap-2">
           <Search className="size-4 ml-2 text-gray-400" />
           <input
+                        data-cy="searchInput"
             type="text"
             placeholder="Search notes"
             value={searchQuery}
@@ -138,6 +139,7 @@ const Sidebar = () => {
           const active = selectedNoteId === note.note_id;
           return (
             <div
+                            data-cy="noteSelect"
               key={note.note_id}
               onClick={() => handleSelectNote(note.note_id)}
               className={`px-4 py-3 cursor-pointer hover:bg-gray-50 flex flex-col space-y-1 border-b border-transparent ${active ? "bg-indigo-50 border-l-4 border-indigo-500" : ""
