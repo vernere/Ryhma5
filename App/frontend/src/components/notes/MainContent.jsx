@@ -52,7 +52,7 @@ const MainContent = () => {
                 />
                 {activeUsers.map((user) => (
                   <span
-                                        data-cy="userEmail"
+                    data-cy="userEmail"
                     key={user.user_id}
                     className="text-xs px-2 py-0.5 bg-gray-200 rounded-full"
                   >
@@ -94,7 +94,6 @@ const MainContent = () => {
                 }
                 title="Save (Ctrl/Cmd+S)"
               >
-                
                 Delete
               </button>
             </>

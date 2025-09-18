@@ -175,10 +175,6 @@ const Sidebar = () => {
                     : ""}
                 </div>
               </div>
-
-              <div className="text-xs text-gray-500 truncate">
-                {note.content ? note.content.replace(/\n/g, " ") : ""}
-              </div>
             </div>
           );
         })}
