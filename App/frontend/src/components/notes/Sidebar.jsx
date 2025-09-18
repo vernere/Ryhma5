@@ -17,9 +17,7 @@ const Sidebar = () => {
     createNote,
     fetchFavorites,
     fetchNotes,
-     
     setCurrentUser,
-
   } = useNotesStore();
 
   const { user } = useAuth();
@@ -30,7 +28,6 @@ const Sidebar = () => {
     fetchFavorites();
     fetchNotes();
   }, [user?.id, setCurrentUser, fetchFavorites, fetchNotes]);
-  
 
   useEffect(() => {
     fetchFavorites();
@@ -179,12 +176,9 @@ const Sidebar = () => {
           );
         })}
       </div>
-
       <Navigation />
     </div>
   );
 };
 
 export default Sidebar;
-
-
