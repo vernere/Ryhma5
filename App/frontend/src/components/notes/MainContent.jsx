@@ -12,7 +12,6 @@ const MainContent = () => {
     activeUsers,
     updateNoteTitle,
     deleteNote,
-    saveNoteToDatabase,
   } = useNotesStore();
 
   useEffect(() => {
@@ -86,14 +85,11 @@ const MainContent = () => {
         <div className="flex items-center gap-2">
           {selectedNote && (
             <>
+
               <button
-                className="px-3 py-1 text-sm rounded bg-green-600 text-white hover:bg-green-700"
-                onClick={() =>
-                  saveNoteToDatabase(selectedNoteId, selectedNote.content || "")
-                }
-                title="Save (Ctrl/Cmd+S)"
+                className="px-2 py-1 text-sm border rounded text-red-600 hover:bg-red-50"
+                onClick={() => deleteNote(selectedNoteId)}
               >
-                
                 Delete
               </button>
             </>
