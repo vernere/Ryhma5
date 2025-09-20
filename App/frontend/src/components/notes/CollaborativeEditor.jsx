@@ -3,6 +3,7 @@ import { useNotesStore } from "@/hooks/useNotesStore";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useState } from "react";
+import { Toolbar } from "@/components/ui/toolbar"
 
 export default function CollaborativeEditor() {
     const {
@@ -70,7 +71,7 @@ export default function CollaborativeEditor() {
                 setIsLocalChange(false);
                 return;
             }
-            
+
             setSaveStatus('saving');
             handleContentChange(editor.getHTML());
             setTimeout(() => setSaveStatus('saved'), 2500);
@@ -98,9 +99,12 @@ export default function CollaborativeEditor() {
 
     return (
         <div className="rounded-2xl min-h-[400px]">
+            <div className="sticky top-0 z-50 shadow">
+                <Toolbar editor={editor} />
+            </div>
             <div
                 data-cy="noteContent"
-                className="prose max-w-none text-gray-800 bg-white rounded-b-lg shadow-sm p-6"
+                className="prose max-w-none text-gray-800 bg-white rounded-b-lg shadow-sm p-6 [&_ul]:list-disc [&_ul]:pl-6"
                 style={{ minHeight: "90vh" }}
             >
                 <EditorContent editor={editor} />
