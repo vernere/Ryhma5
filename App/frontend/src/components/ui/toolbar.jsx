@@ -1,6 +1,5 @@
 import { CgFormatBold, CgFormatItalic, CgFormatUnderline, CgList, CgAttachment, CgImage, CgMoreAlt, CgExport } from "react-icons/cg";
-import { Download } from "lucide-react";
-import { exportToPdf } from "@/utils/exportUtils";
+import { exportToPdf, exportToTxt, downloadFile, exportToMarkDown, exportToDocx } from "@/utils/exportUtils";
 import Dropdown from "../ui/Dropdown"
 import { useEffect, useState, useRef } from "react";
 
@@ -26,10 +25,37 @@ const Toolbar = ({ editor }) => {
             case "pdf":
                 exportToPdf(htmlContent)
                 break;
+            case "txt":
+                downloadFile(exportToTxt(htmlContent), Date.now().toString() + ".txt")
+                break;
+            case "md":
+                downloadFile(exportToMarkDown(htmlContent), Date.now().toString() + ".md")
+                break;
+            case "docx":
+                exportToDocx(htmlContent);
             default:
                 break;
         }
     };
+
+    const handleClick = (type) => {
+        switch (type) {
+            case "bold":
+                editor.chain().focus().toggleBold().run()
+                break;
+            case "italic":
+                editor.chain().focus().toggleItalic().run()
+                break;
+            case "underline":
+                editor.chain().focus().toggleUnderline().run()
+                break;
+            case "list":
+                editor.chain().focus().toggleBulletList().run()
+                break;
+            default:
+                break;
+        }
+    }
 
     if (!editor) {
         return null
@@ -38,28 +64,28 @@ const Toolbar = ({ editor }) => {
         <div className="flex items-center mt-4 bg-white">
             <button
                 data-cy='boldButton'
-                onClick={() => editor.chain().focus().toggleBold().run()}
+                onClick={() => handleClick("bold")}
                 className={`p-2 hover:bg-gray-100 rounded ${editor.isActive('bold') ? 'bg-gray-200' : ''}`}
             >
                 <CgFormatBold className="w-4 h-4" />
             </button>
             <button
                 data-cy='italicButton'
-                onClick={() => editor.chain().focus().toggleItalic().run()}
+                onClick={() => handleClick("italic")}
                 className={`p-2 hover:bg-gray-100 rounded ${editor.isActive('italic') ? 'bg-gray-200' : ''}`}
             >
                 <CgFormatItalic className="w-4 h-4" />
             </button>
             <button
                 data-cy='underlineButton'
-                onClick={() => editor.chain().focus().toggleUnderline().run()}
+                onClick={() => handleClick("underline")}
                 className={`p-2 hover:bg-gray-100 rounded ${editor.isActive('Underline') ? 'bg-gray-200' : ''}`}
             >
                 <CgFormatUnderline className="w-4 h-4" />
             </button>
             <button
                 data-cy='listButton'
-                onClick={() => editor.chain().focus().toggleBulletList().run()}
+                onClick={() => handleClick("list")}
                 className={`p-2 hover:bg-gray-100 rounded ${editor.isActive('bulletList') ? 'bg-gray-200' : ''}`}
             >
                 <CgList className="w-4 h-4" />
