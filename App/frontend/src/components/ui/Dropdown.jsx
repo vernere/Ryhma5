@@ -16,7 +16,7 @@ const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
                     onExport('pdf');
                     onClose();
                 }}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100 "
+                className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-t-lg"
             >
                 Export as pdf
             </button>
@@ -46,7 +46,7 @@ const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
                     onExport('docx');
                     onClose();
                 }}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100 "
+                className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-b-lg"
             >
                 Export as docx
             </button>
