@@ -57,8 +57,8 @@ const MainContent = () => {
                                 <span data-cy="noteCreatedAt" className="text-xs text-gray-400">
                                     {selectedNote.created_at
                                         ? new Date(
-                                              selectedNote.created_at
-                                          ).toLocaleString()
+                                            selectedNote.created_at
+                                        ).toLocaleString()
                                         : ""}
                                 </span>
                             </div>
@@ -84,7 +84,7 @@ const MainContent = () => {
             <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
                 {selectedNote ? (
                     <div className="max-w-4xl mx-auto w-full">
-                        <CollaborativeEditor />
+                        <CollaborativeEditor Toolbar={Toolbar} />
                     </div>
                 ) : (
                     <div className="flex items-center justify-center h-full w-full pr-10">
