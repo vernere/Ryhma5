@@ -42,7 +42,8 @@ const MainContent = () => {
             <div className="flex flex-col">
               <div className="flex items-center gap-4">
                 <input
-                  data-cy="noteTitle" className="text-xl font-semibold text-gray-900 truncate max-w-2xl border-b focus:outline-none"
+                  data-cy="noteTitle" 
+                  className="text-xl font-semibold text-gray-900 truncate max-w-2xl border-b focus:outline-none"
                   value={selectedNote.title || ""}
                   onChange={(e) =>
                     updateNoteTitle(selectedNoteId, e.target.value)

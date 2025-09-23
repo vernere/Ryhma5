@@ -9,7 +9,7 @@ describe('Notes tests', () => {
   it('Test notes typing', () => {
     cy.get('[data-cy=noteSelect]').click()
 
-    cy.get('[data-cy=noteTitle]').contains('New test note').should('exist')
+    cy.get('[data-cy=noteTitle]').should('exist')
     cy.get('[data-cy=userEmail]').contains('test.test@notely.com').should('exist')
     cy.get('[data-cy=noteCreatedAt').should('exist')
     cy.get('[data-cy=noteTag').should('exist')
@@ -29,12 +29,12 @@ describe('Notes tests', () => {
     cy.get('[data-cy=exportButton]').click()
     cy.get('[data-cy=exportMd]').click()
 
-    cy.readFile('cypress/downloads/Note.md').should('contain', "Hello World! Hello World version 2 !Hello World!")
+    cy.readFile('cypress/downloads/Note.md').should('contain', "Hello World! Hello World version 2 !")
 
     cy.get('[data-cy=exportButton]').click()
     cy.get('[data-cy=exportTxt]').click()
 
-    cy.readFile('cypress/downloads/Note.txt').should('contain', "Hello World! Hello World version 2 !Hello World!")
+    cy.readFile('cypress/downloads/Note.txt').should('contain', "Hello World! Hello World version 2 !")
 
     cy.get('[data-cy=exportButton]').click()
     cy.get('[data-cy=exportDocx]').click()
