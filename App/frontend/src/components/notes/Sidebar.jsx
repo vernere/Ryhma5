@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Search } from "lucide-react";
-import { CgHeart } from "react-icons/cg";
+import { CgHeart, CgAddR } from "react-icons/cg";
 import { Navigation } from "@/components/ui/navigation";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useAuth } from "@/hooks/useAuth";
@@ -60,10 +60,10 @@ const Sidebar = () => {
       <div className="p-2 border-b border-gray-200 flex items-center justify-between">
         <h1 className="text-lg font-semibold">{user?.email}</h1>
         <button
-          className="px-2 py-1 text-xs border rounded hover:bg-gray-50"
+          className="pt-1 text-xl hover:text-gray-600"
           onClick={handleCreateNote}
         >
-          + New
+          <CgAddR/>
         </button>
       </div>
 
