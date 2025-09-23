@@ -24,6 +24,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cypress": "^15.1.0",
+    "cypress-downloadfile": "^1.2.4",
     "docx": "^9.5.1",
     "file-saver": "^2.0.5",
     "html-to-text": "^9.0.5",

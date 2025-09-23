@@ -173,5 +173,5 @@ export const exportToDocx = async (html) => {
     });
 
     const blob = await Packer.toBlob(docx);
-    saveAs(blob, 'document.docx')
+    saveAs(blob, 'Note.docx')
 };

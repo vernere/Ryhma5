@@ -12,6 +12,7 @@ const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
             }}
         >
             <button
+                data-cy='exportPdf'
                 onClick={() => {
                     onExport('pdf');
                     onClose();
@@ -22,6 +23,7 @@ const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
             </button>
             <div className="h-px w-40 bg-gray-300"></div>
             <button
+                data-cy='exportMd'
                 onClick={() => {
                     onExport('md');
                     onClose();
@@ -32,6 +34,7 @@ const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
             </button>
             <div className="h-px w-40 bg-gray-300"></div>
             <button
+                data-cy='exportTxt'
                 onClick={() => {
                     onExport('txt');
                     onClose();
@@ -42,6 +45,7 @@ const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
             </button>
             <div className="h-px w-40 bg-gray-300"></div>
             <button
+                data-cy='exportDocx'
                 onClick={() => {
                     onExport('docx');
                     onClose();

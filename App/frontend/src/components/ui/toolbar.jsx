@@ -26,10 +26,10 @@ const Toolbar = ({ editor }) => {
                 exportToPdf(htmlContent)
                 break;
             case "txt":
-                downloadFile(exportToTxt(htmlContent), Date.now().toString() + ".txt")
+                downloadFile(exportToTxt(htmlContent), "Note")
                 break;
             case "md":
-                downloadFile(exportToMarkDown(htmlContent), Date.now().toString() + ".md")
+                downloadFile(exportToMarkDown(htmlContent), "Note.md")
                 break;
             case "docx":
                 exportToDocx(htmlContent);
@@ -98,6 +98,7 @@ const Toolbar = ({ editor }) => {
                 <CgImage className="w-4 h-4" />
             </button>
             <button
+                data-cy='exportButton'
                 ref={buttonRef}
                 onClick={(e) => {
                     setAnchorEl(buttonRef.current);
@@ -112,6 +113,7 @@ const Toolbar = ({ editor }) => {
                 <CgMoreAlt className="w-4 h-4" />
             </button>
             <Dropdown
+                data-cy='dropdownMenu'
                 isOpen={isDropdownOpen}
                 anchorEl={anchorEl}
                 onExport={handleExport}
