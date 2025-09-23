@@ -27,6 +27,8 @@ The project is implemented in React using Bun and supports localization in Engli
 - Babel
 - Mailslurp
 - css.gg
+- docx
+- file-saver
 
 ## Use case diagram
 
