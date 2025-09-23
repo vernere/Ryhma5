@@ -28,6 +28,8 @@ The project is implemented in React using Bun and supports localization in Engli
 - Mailslurp
 - css.gg
 - Tiptap
+- docx
+- file-saver
 
 ## Use case diagram
 
