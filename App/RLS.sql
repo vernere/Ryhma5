@@ -43,34 +43,31 @@ on public.notes
 for insert
 with check (creator_id = auth.uid());
 
+drop policy if exists "Users can view their own collaborations" on public.note_collaborators;
 create policy "Users can view their own collaborations"
 on public.note_collaborators
 for select
 using (user_id = auth.uid());
 
-drop policy if exists "Only owners can add collaborators" on public.note_collaborators;
-create policy "Only owners can add collaborators"
-on public.note_collaborators
-for insert
-with check (
-  exists (
-    select 1
-    from public.notes n
-    where n.note_id = note_collaborators.note_id
-      and n.creator_id = auth.uid()
+drop policy "Owners can add collaborators and users can accept invitations" ON note_collaborators;
+create policy "Owners can add collaborators and users can accept invitations" 
+ON note_collaborators 
+FOR INSERT 
+WITH CHECK (
+  EXISTS (
+    SELECT 1 FROM notes n 
+    WHERE n.note_id = note_collaborators.note_id 
+    AND n.creator_id = auth.uid()
   )
-);
-
-drop policy if exists "Only owners can add collaborators" on public.note_collaborators;
-create policy "Only owners can add collaborators"
-on public.note_collaborators
-for insert
-with check (
-  exists (
-    select 1
-    from public.notes n
-    where n.note_id = note_collaborators.note_id
-      and n.creator_id = auth.uid()
+  OR
+  (
+    user_id = auth.uid() 
+    AND EXISTS (
+      SELECT 1 FROM collaboration_invites ci 
+      WHERE ci.note_id = note_collaborators.note_id 
+      AND ci.recipient_id = auth.uid() 
+      AND ci.status = 'accepted'
+    )
   )
 );
 
