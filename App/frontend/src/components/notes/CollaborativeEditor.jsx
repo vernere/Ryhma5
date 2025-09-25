@@ -4,8 +4,12 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useState } from "react";
 import { Toolbar } from "@/components/ui/toolbar"
+import Underline from '@tiptap/extension-underline'
+import TextAlign from '@tiptap/extension-text-align'
+import BulletList from '@tiptap/extension-bullet-list'
+import ListItem from '@tiptap/extension-list-item';
 
-export default function CollaborativeEditor() {
+export default function CollaborativeEditor({ Toolbar }) {
     const {
         selectedNote,
         selectedNoteId,
@@ -25,7 +29,16 @@ export default function CollaborativeEditor() {
     const editor = useEditor(
         {
             extensions: [
-                StarterKit.configure({ history: false }),
+                StarterKit.configure({ 
+                    history: false,
+                    bulletList: false // disable the built-in bullet list to use our own
+                }),
+                Underline,
+                BulletList,
+                ListItem,
+                TextAlign.configure({
+                    types: ['heading', 'paragraph', 'bulletList'],
+                }),
             ],
             editorProps: {
                 attributes: {
@@ -108,6 +121,7 @@ export default function CollaborativeEditor() {
                 style={{ minHeight: "90vh" }}
             >
                 <EditorContent editor={editor} />
+
             </div>
         </div>
     );
