@@ -38,7 +38,8 @@ const Toolbar = ({ editor }) => {
         }
     };
 
-    const handleClick = (type) => {
+
+        const handleClick = (type) => {
         switch (type) {
             case "bold":
                 editor.chain().focus().toggleBold().run()
@@ -55,7 +56,7 @@ const Toolbar = ({ editor }) => {
             default:
                 break;
         }
-    }
+    };
 
     if (!editor) {
         return null
@@ -106,6 +107,10 @@ const Toolbar = ({ editor }) => {
                 }}
                 className="p-2 hover:bg-gray-100 rounded"
             >
+                <CgExport className="w-4 h-4" />
+            </button>
+            <div className="h-5 w-px bg-gray-300"></div>
+            <button className="p-2 hover:bg-gray-100 rounded">
                 <CgExport className="w-4 h-4" />
             </button>
             <div className="h-5 w-px bg-gray-300"></div>

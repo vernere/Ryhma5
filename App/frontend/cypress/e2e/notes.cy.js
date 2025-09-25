@@ -16,6 +16,7 @@ describe('Notes tests', () => {
 
     cy.get('[data-cy=noteContent').type(' Hello World version 2 !')
     cy.get('[data-cy=noteContent').contains('Hello World! Hello World version 2 !')
+
   });
 
   it('Test export', () => {
@@ -41,7 +42,33 @@ describe('Notes tests', () => {
 
     cy.readFile('cypress/downloads/Note.docx').should('exist')
 
-  })
+  });
+
+
+    it('Test note text formatting', () => {
+        cy.get('[data-cy=noteSelect]').click()
+
+        cy.get('[data-cy=noteContent]').type('{selectall}')
+
+        cy.get('[data-cy=boldButton]').click()
+        cy.get('[data-cy=noteContent]').find('strong').should('exist')
+
+        cy.get('[data-cy=noteContent]').type('{selectall}')
+
+        cy.get('[data-cy=italicButton]').click()
+        cy.get('[data-cy=noteContent]').find('em').should('exist')
+
+        cy.get('[data-cy=noteContent]').type('{selectall}')
+
+        cy.get('[data-cy=underlineButton]').click()
+        cy.get('[data-cy=noteContent]').find('u').should('exist')
+
+        cy.get('[data-cy=noteContent]').type('{selectall}')
+
+        cy.get('[data-cy=listButton]').click()
+        cy.get('[data-cy=noteContent]').find('ul').should('exist')
+    });
+
 })
 
 describe('Search tests', () => {
@@ -54,3 +81,10 @@ describe('Search tests', () => {
     cy.get('[data-cy=noteSelect]').should('not.exist')
   });
 })
+
+    it('Test search input and response', () => {
+        cy.get('[data-cy=searchInput]').type('New test ntoe')
+        cy.get('[data-cy=noteSelect]').should('not.exist')
+    });
+})
+

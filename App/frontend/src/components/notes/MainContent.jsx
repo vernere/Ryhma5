@@ -34,6 +34,9 @@ const MainContent = () => {
 
   const tagName = getTagName(selectedNote);
 
+
+
+
   return (
     <div className="flex-1 flex flex-col">
       <div className="bg-white border-b border-gray-200 p-2 flex items-center justify-between">
@@ -88,6 +91,7 @@ const MainContent = () => {
           {selectedNote && (
             <>
 
+
               <button
                 className="px-2 py-1 text-sm border rounded text-red-600 hover:bg-red-50"
                 onClick={() => deleteNote(selectedNoteId)}
@@ -96,14 +100,13 @@ const MainContent = () => {
               </button>
             </>
           )}
-          <Toolbar />
         </div>
+        <Toolbar />
       </div>
-
       <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
         {selectedNote ? (
           <div className="max-w-4xl mx-auto w-full">
-            <CollaborativeEditor />
+            <CollaborativeEditor Toolbar={Toolbar} />
           </div>
         ) : (
           <div className="flex items-center justify-center h-full w-full pr-10">
