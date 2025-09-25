@@ -98,6 +98,7 @@ const Toolbar = ({ editor }) => {
             <button className="p-2 hover:bg-gray-100 rounded">
                 <CgImage className="w-4 h-4" />
             </button>
+            <div className="h-5 w-px bg-gray-300"></div>
             <button
                 data-cy='exportButton'
                 ref={buttonRef}
@@ -109,10 +110,7 @@ const Toolbar = ({ editor }) => {
             >
                 <CgExport className="w-4 h-4" />
             </button>
-            <div className="h-5 w-px bg-gray-300"></div>
-            <button className="p-2 hover:bg-gray-100 rounded">
-                <CgExport className="w-4 h-4" />
-            </button>
+  
             <div className="h-5 w-px bg-gray-300"></div>
             <button className="p-2 hover:bg-gray-100 rounded">
                 <CgMoreAlt className="w-4 h-4" />
