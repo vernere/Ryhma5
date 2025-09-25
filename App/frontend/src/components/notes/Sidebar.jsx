@@ -1,10 +1,12 @@
-import { useEffect } from "react";
-import { Search, Bell } from "lucide-react";
-import { CgHeart } from "react-icons/cg";
+import { useEffect, useState } from "react";
+import { Search, Bell, FilePlus2 } from "lucide-react";
 import { Navigation } from "@/components/ui/navigation";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useAuth } from "@/hooks/useAuth";
-import { useEffect } from "react";
+import { useInvitationsStore } from "@/hooks/useInvitationsStore";
+import { InvitePopup } from "./InvitePopup";
+import NoteMenuItem from "./NoteMenuItem";
+import { useRealtimeStore } from "@/hooks/useRealtimeStore";
 
 const Sidebar = () => {
   const {
@@ -19,36 +21,56 @@ const Sidebar = () => {
     fetchFavorites,
     fetchNotes,
     setCurrentUser,
+    deleteNote
   } = useNotesStore();
 
-    const {
-        inbox,
-        getInvitations,
-        setupInvitesSubscription,
-        cleanupInvitesSubscription,
-    } = useInvitationsStore();
+  const {
+    inbox,
+    getInvites
+  } = useInvitationsStore();
 
-    const { user } = useAuth();
+  const {
+    setupNoteCollaboratorSubscription,
+    cleanupCollaboratorsSubscription,
+  }= useRealtimeStore();
+  
+  const { user } = useAuth();
 
-    const [isInvitePopupOpen, setIsInvitePopupOpen] = useState(false);
+  const [isInvitePopupOpen, setIsInvitePopupOpen] = useState(false);
 
   useEffect(() => {
     if (!user?.id) return;
     setCurrentUser(user);
     fetchFavorites();
     fetchNotes();
+    getInvites(user.id);
   }, [user?.id, setCurrentUser, fetchFavorites, fetchNotes]);
 
-  useEffect(() => {
-    fetchFavorites();
-    fetchNotes();
-  }, [fetchFavorites, fetchNotes]);
+  // useEffect(() => {
+  //   if (!user?.id) return;
+    
+  //   console.log("EFFECT: Setting up invites subscription for user:", user.id);
+  //   getInvites(user.id);
 
-    useEffect(() => {
-        getInvitations();
-        setupInvitesSubscription();
-        return () => cleanupInvitesSubscription();
-    }, [getInvitations, setupInvitesSubscription, cleanupInvitesSubscription]);
+  //   setupInvitesSubscription(user.id);
+
+  //   return () => {
+  //     console.log("CLEANUP: Cleaning up invites subscription.");
+  //     cleanupInvitesSubscription();
+  //   };
+  // }, [user?.id]);
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    console.log("EFFECT: Setting up collaborator subscription for user:", user.id);
+    setupNoteCollaboratorSubscription(user.id);
+
+    return () => {
+      console.log("CLEANUP: Cleaning up collaborator subscription.");
+      cleanupCollaboratorsSubscription();
+    };
+  }, [user?.id]);
 
   const filteredNotes = notes.filter((note) =>
     (note.title || "").toLowerCase().includes((searchQuery || "").toLowerCase())
@@ -66,161 +88,74 @@ const Sidebar = () => {
     setSearchQuery("");
   };
 
-  const handleToggleFavorite = (e, noteId) => {
-    e.stopPropagation();
+  const handleToggleFavorite = (noteId) => {
     toggleFavorite(noteId);
   };
 
-    const handleAcceptInvite = (invite) => async (e) => {
-        e.stopPropagation();
-        console.log("Accepting invite:", invite);
-    };
+  const handleDeleteNote = (noteId) => {
+    deleteNote(noteId);
+  };
 
-    const handleDeclineInvite = (invite) => async (e) => {
-        e.stopPropagation();
-        console.log("Declining invite:", invite);
-    };
-
-    const toggleInvitePopup = () => {
-        console.log("Toggling invite popup");
-        setIsInvitePopupOpen(!isInvitePopupOpen);
-    };
+  const toggleInvitePopup = () => {
+    setIsInvitePopupOpen(!isInvitePopupOpen);
+  };
 
   return (
-        <>
-        <div className="w-60 bg-white border-r border-gray-200 flex flex-col">
-          <div className="p-2 border-b border-gray-200 flex items-center justify-between overflow-ellipsis">
-            <p className="text-md font-semibold">{user?.email}</p>
-                    <button
-                        onClick={toggleInvitePopup}
-                        className="relative p-1 rounded-md hover:bg-gray-100 transition-colors cursor-pointer"
-                    >
-                        <Bell className="size-5 text-gray-400 hover:text-gray-600" />
-                        {inbox.length > 0 && (
-                            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
-                                {inbox.length > 9 ? "9+" : inbox.length}
-                            </span>
-                        )}
-                    </button>
-            <button
-          className="px-2 py-1 text-xs border rounded hover:bg-gray-50"
-          onClick={handleCreateNote}
-        >
-          + New
-        </button>
-      </div>
+    <>
+      <div className="w-60 bg-white border-r border-gray-200 flex flex-col">
+        <div className="p-2 border-b border-gray-200 flex items-center justify-between overflow-ellipsis">
+          <p className="text-md font-semibold">{user?.email}</p>
+          <button
+            onClick={toggleInvitePopup}
+            className="relative p-1 rounded-md hover:bg-gray-100 transition-colors cursor-pointer"
+          >
+            <Bell className="size-5 text-gray-400 hover:text-gray-600" />
+            {inbox.length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                {inbox.length > 9 ? "9+" : inbox.length}
+              </span>
+            )}
+          </button>
+        </div>
 
-          <div className="p-2">
-            <div className="flex justify-center items-center border border-gray-300 rounded-lg gap-2">
-              <Search className="size-4 ml-2 text-gray-400" />
-              <input
-                data-cy="searchInput"
-                type="text"
-                placeholder="Search notes"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full focus:outline-none focus:ring-transparent py-1"
-              />
-            </div>
-    
-        {searchQuery && filteredNotes.length > 0 && (
-          <div className="mt-2 bg-white border border-gray-200 rounded shadow max-h-60 overflow-y-auto">
-            {filteredNotes.map((note) => (
-              <div
-                key={note.note_id}
-                onClick={() => handleSelectNote(note.note_id)}
-                className={`px-3 py-2 cursor-pointer hover:bg-gray-50 flex flex-col space-y-1 ${selectedNoteId === note.note_id
-                  ? "bg-indigo-50 border-l-4 border-indigo-500"
-                  : ""
-                  }`}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <button
-                      className="p-1 -ml-1"
-                      onClick={(e) => handleToggleFavorite(e, note.note_id)}
-                      aria-label="Toggle favorite"
-                      title="Favorite"
-                    >
-                      <CgHeart
-                        className={`w-4 h-4 ${isFavorite(note.note_id)
-                          ? "text-red-500"
-                          : "text-gray-300"
-                          }`}
-                      />
-                    </button>
-
-                    <span
-                      className={`text-sm ${selectedNoteId === note.note_id
-                        ? "font-semibold text-indigo-700"
-                        : "font-medium text-gray-800"
-                        }`}
-                    >
-                      {note.title}
-                    </span>
-                  </div>
-
-                  <span className="text-xs text-gray-400">
-                    {note.created_at
-                      ? new Date(note.created_at).toLocaleDateString()
-                      : ""}
-                  </span>
-                </div>
-
-                 
-              </div>
-            ))}
+        <div className="p-2 flex gap-3">
+          <div className="flex justify-center items-center border border-gray-300 rounded-lg gap-2">
+            <Search className="size-4 ml-2 text-gray-400" />
+            <input
+              data-cy="searchInput"
+              type="text"
+              placeholder="Search notes"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full focus:outline-none focus:ring-transparent py-1"
+            />
           </div>
-        )}
-      </div>
+          <button className="" onClick={handleCreateNote}>
+            <FilePlus2 className="size-5 text-gray-400 hover:text-gray-600" />
+          </button>
+        </div>
 
-      <div className="flex-1 overflow-y-auto">
-        {filteredNotes.map((note) => {
-          const active = selectedNoteId === note.note_id;
-          return (
-            <div
-              data-cy="noteSelect"
+        <div className="flex-1 overflow-y-auto">
+          {filteredNotes.map((note) => (
+            <NoteMenuItem
               key={note.note_id}
-              onClick={() => handleSelectNote(note.note_id)}
-              className={`px-4 py-3 cursor-pointer hover:bg-gray-50 flex flex-col space-y-1 border-b border-transparent ${active ? "bg-indigo-50 border-l-4 border-indigo-500" : ""
-                }`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 min-w-0">
-                  <button
-                    className="p-1 -ml-1"
-                    onClick={(e) => handleToggleFavorite(e, note.note_id)}
-                    aria-label="Toggle favorite"
-                    title="Favorite"
-                  >
-                    <CgHeart
-                      className={`w-4 h-4 ${isFavorite(note.note_id)
-                        ? "text-red-500"
-                        : "text-gray-300"
-                        }`}
-                    />
-                  </button>
-
-                  <div
-                    className={`text-sm truncate ${active ? "font-semibold text-indigo-700" : "text-gray-800"
-                      }`}
-                  >
-                    {note.title}
-                  </div>
-                </div>
-
-                <div className="text-xs text-gray-400">
-                  {note.created_at
-                    ? new Date(note.created_at).toLocaleDateString()
-                    : ""}
-                </div>
-              </div>
-            </div>
-          );
-        })}
+              note={note}
+              isActive={selectedNoteId === note.note_id}
+              isNoteFavorite={isFavorite(note.note_id)}
+              onSelectNote={handleSelectNote}
+              onToggleFavorite={handleToggleFavorite}
+              onDeleteNote={handleDeleteNote}
+            />
+          ))}
+        </div>
+        <Navigation />
       </div>
-      <Navigation />
-    </div>
+
+      <InvitePopup
+        isOpen={isInvitePopupOpen}
+        onClose={toggleInvitePopup}
+      />
+    </>
   );
 };
 

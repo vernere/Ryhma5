@@ -3,31 +3,64 @@ import { supabase } from "@/lib/supabaseClient";
 
 export const useInvitationsStore = create((set, get) => ({
     inbox: [],
+    invitations: [],
     loading: false,
     error: null,
-    invitesSubscription: null,
 
-    sendCollaborationInvite: async (email, noteId) => {
+    addInvite: (invite) =>
+        set((state) => ({
+            invites: [...state.invites, invite],
+        })),
+
+    updateInvite: (updatedInvite) =>
+        set((state) => ({
+            invites: state.invites.map((inv) =>
+                inv.invitation_id === updatedInvite.invitation_id ? updatedInvite : inv
+            ),
+        })),
+
+    deleteInvite: (invitation_id) =>
+        set((state) => ({
+            invitations: state.invitations.filter((inv) => inv.invitation_id !== invitation_id),
+        })),
+
+    deleteInboxInvite: (invitation_id) =>
+        set((state) => ({
+            inbox: state.inbox.filter((inv) => inv.invitation_id !== invitation_id),
+        })),
+
+    sendCollaborationInvite: async (senderId, recipientId, noteId) => {
+        console.log("User sending:", senderId, "Sending invite to user ID:", recipientId, "for note ID:", noteId);
         const { data, error } = await supabase
             .from("collaboration_invites")
-            .insert([{ email, note_id: noteId, status: "pending" }])
+            .insert([{ sender_id: senderId, recipient_id: recipientId, note_id: noteId }])
             .select()
             .single();
 
         if (error) {
             set({ error: error.message });
+            console.log("Error sending invite:", error.message);
             return null;
         }
 
-        set((state) => ({ invitations: [data, ...state.invitations] }));
+        if (senderId === get().currentUser?.id) {
+            set((state) => ({ invitations: [data, ...state.invitations] }));
+        }
         return data;
     },
 
-    getInvitations: async () => {
+    getInvites: async (userId) => {
+        if (!userId) {
+            set({ error: "User ID is required", loading: false });
+            return;
+        }
+
         set({ loading: true, error: null });
         const { data, error } = await supabase
             .from("collaboration_invites")
-            .select("*")
+            .select("*, sender:users!sender_id(id, username)")
+            .eq("recipient_id", userId)
+            .eq("status", "pending")
             .order("created_at", { ascending: false });
 
         if (error) {
@@ -38,20 +71,24 @@ export const useInvitationsStore = create((set, get) => ({
         set({ inbox: data || [], loading: false });
     },
 
-    getInvitesByNoteId: async (noteId) => {
+    getInvitesByNoteId: async (noteId, userId) => {
         set({ loading: true, error: null });
+
         const { data, error } = await supabase
             .from("collaboration_invites")
-            .select("*")
+            .select("*, recipient:users!recipient_id(id, username)")
             .eq("note_id", noteId)
+            .eq("status", "pending")
+            .neq("recipient_id", userId)
             .order("created_at", { ascending: false });
 
         if (error) {
+            console.error("Error fetching invites by note ID:", error.message);
             set({ error: error.message, loading: false });
             return [];
         }
 
-        set({ loading: false });
+        set({ invitations: data, loading: false });
         return data || [];
     },
 
@@ -71,52 +108,5 @@ export const useInvitationsStore = create((set, get) => ({
                 inv.invitation_id === id ? { ...inv, status, responded_at: new Date().toISOString() } : inv
             ),
         });
-    },
-
-    setupInvitesSubscription: () => {
-        if (get().invitesSubscription) return;
-
-        const channel = supabase
-            .channel("note_invitations_changes")
-            .on(
-                "postgres_changes",
-                { event: "*", schema: "public", table: "note_invitations" },
-                (payload) => {
-                    const { eventType, new: newRow, old: oldRow } = payload;
-
-                    set((state) => {
-                        let updated = [...state.inbox];
-
-                        if (eventType === "INSERT" && newRow) {
-                            updated = [newRow, ...updated];
-                        }
-
-                        if (eventType === "UPDATE" && newRow) {
-                            updated = updated.map((inv) =>
-                                inv.invitation_id === newRow.invitation_id ? newRow : inv
-                            );
-                        }
-
-                        if (eventType === "DELETE" && oldRow) {
-                            updated = updated.filter(
-                                (inv) => inv.invitation_id !== oldRow.invitation_id
-                            );
-                        }
-
-                        return { inbox: updated };
-                    });
-                }
-            )
-            .subscribe();
-
-        set({ invitesSubscription: channel });
-    },
-
-    cleanupInvitesSubscription: () => {
-        const { invitesSubscription } = get();
-        if (invitesSubscription) {
-            supabase.removeChannel(invitesSubscription);
-            set({ invitesSubscription: null });
-        }
-    },
+    }
 }));

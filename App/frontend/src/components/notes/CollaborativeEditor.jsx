@@ -1,5 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useNotesStore } from "@/hooks/useNotesStore";
+import { useRealtimeStore } from "@/hooks/useRealtimeStore";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useState } from "react";
@@ -8,15 +9,18 @@ export const CollaborativeEditor = () => {
     const {
         selectedNote,
         selectedNoteId,
-        setupPresence,
-        cleanupPresence,
-        setupRealtimeSubscription,
-        cleanupRealtimeSubscription,
         setCurrentUser,
         isLocalChange,
         setIsLocalChange,
         handleContentChange,
     } = useNotesStore();
+
+    const {
+        setupPresence,
+        cleanupPresence,
+        setupRealtimeSubscription,
+        cleanupRealtimeSubscription,
+    } = useRealtimeStore();
 
     const { user } = useAuth();
     const [_, setSaveStatus] = useState("saved");
@@ -36,7 +40,7 @@ export const CollaborativeEditor = () => {
     useEffect(() => {
         setupRealtimeSubscription();
         return () => cleanupRealtimeSubscription();
-    }, [setupRealtimeSubscription, cleanupRealtimeSubscription]);
+    }, []);
 
     useEffect(() => {
         if (editor && selectedNote?.content) {
@@ -46,7 +50,7 @@ export const CollaborativeEditor = () => {
 
     useEffect(() => {
         if (user) setCurrentUser(user);
-    }, [user, setCurrentUser]);
+    }, [user]);
 
     useEffect(() => {
         if (selectedNoteId && user) {
@@ -61,10 +65,7 @@ export const CollaborativeEditor = () => {
     }, [
         selectedNoteId,
         user,
-        setupPresence,
-        cleanupPresence,
         editor,
-        setIsLocalChange,
     ]);
 
     useEffect(() => {
@@ -83,7 +84,7 @@ export const CollaborativeEditor = () => {
 
         editor.on("update", onUpdate);
         return () => editor.off("update", onUpdate);
-    }, [editor, isLocalChange, handleContentChange, setIsLocalChange]);
+    }, [editor, isLocalChange]);
 
     if (!selectedNoteId) {
         return (
