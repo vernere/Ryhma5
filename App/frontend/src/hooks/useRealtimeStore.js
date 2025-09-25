@@ -11,7 +11,19 @@ const debounce = (func, delay) => {
     };
 };
 
+const RETRY_CONFIG = {
+    maxAttempts: 5,
+    initialDelay: 500,
+    factor: 2,
+};
+
 export const useRealtimeStore = create((set, get) => ({
+    invitesSubscription: null,
+    collaboratorsSubscription: null,
+    realtimeSubscription: null,
+    presenceSubscription: null,
+    reconnectTimers: {},
+
     setupPresence: async (noteId, user, onContentReceive) => {
         if (!noteId || !user) return;
 
@@ -90,6 +102,7 @@ export const useRealtimeStore = create((set, get) => ({
                     console.error("❌ Channel error:", err);
                 } else if (status === 'TIMED_OUT') {
                     console.error("⏰ realtimeSubscription timed out");
+                    get().reconnect('realtimeSubscription', get().setupRealtimeSubscription);
                 } else if (status === 'CLOSED') {
                     console.log("🔒 realtimeSubscription closed");
                 }
@@ -141,6 +154,7 @@ export const useRealtimeStore = create((set, get) => ({
                     console.error("❌ Channel error:", err);
                 } else if (status === 'TIMED_OUT') {
                     console.error("⏰ collaboratorsSubscription timed out");
+                    get().reconnect('collaboratorsSubscription', () => get().setupNoteCollaboratorSubscription(userId));
                 } else if (status === 'CLOSED') {
                     console.log("🔒 collaboratorsSubscription closed");
                 }
@@ -159,6 +173,12 @@ export const useRealtimeStore = create((set, get) => ({
 
         const channel = supabase
             .channel(`collaboration_invites_changes_${userId}`)
+            .on(
+                "postgres_changes", { event: "*", schema: "public", table: "collaboration_invites" },
+                (payload) => {
+                    console.log("New invitation EVENT", payload);
+                }
+            )
             .on(
                 "postgres_changes",
                 {
@@ -196,19 +216,10 @@ export const useRealtimeStore = create((set, get) => ({
                 },
                 (payload) => {
                     const deleted = payload.old;
+                    console.log("Invitation deleted EVENT", payload);
                     if (!deleted) return;
-
-                    const isRecipient = deleted.recipient_id === userId;
-                    const isSender = deleted.sender_id === userId;
-                    
-                    if (!isRecipient && !isSender) return;
-
-                    if (isRecipient) {
-                        useInvitationsStore.getState().deleteInboxInvite(deleted.invitation_id);
-                    }
-                    if (isSender) {
-                        useInvitationsStore.getState().deleteInvite(deleted.invitation_id);
-                    }
+                    useInvitationsStore.getState().deleteInboxInvite(deleted.invitation_id);
+                    useInvitationsStore.getState().deleteInvite(deleted.invitation_id);
                 }
             )
             .subscribe((status, err) => {
@@ -219,6 +230,7 @@ export const useRealtimeStore = create((set, get) => ({
                     console.error("❌ Channel error:", err);
                 } else if (status === 'TIMED_OUT') {
                     console.error("⏰ invitesSubscription timed out");
+                    get().reconnect('invitesSubscription', () => get().setupInvitesSubscription(userId));
                 } else if (status === 'CLOSED') {
                     console.log("🔒 invitesSubscription closed");
                 }
@@ -227,39 +239,53 @@ export const useRealtimeStore = create((set, get) => ({
         set({ invitesSubscription: channel });
     },
 
-    cleanupInvitesSubscription: () => {
-        const { invitesSubscription } = get();
-        console.log("Cleaning up invites subscription");
-        if (invitesSubscription) {
-            invitesSubscription.unsubscribe();
-            set({ invitesSubscription: null });
+    reconnect: (key, setupFn) => {
+        get().cleanupSubscription(key);
+
+        const attempt = (attemptNum = 1) => {
+            if (attemptNum > RETRY_CONFIG.maxAttempts) {
+                console.error(`🚨 Reconnection failed for ${key} after ${RETRY_CONFIG.maxAttempts} attempts.`);
+                return;
+            }
+
+            const delay = RETRY_CONFIG.initialDelay * Math.pow(RETRY_CONFIG.factor, attemptNum - 1);
+            console.log(`Retrying ${key} connection... Attempt ${attemptNum} in ${delay}ms`);
+
+            const timer = setTimeout(() => {
+                setupFn();
+            }, delay);
+
+            set(state => ({
+                reconnectTimers: { ...state.reconnectTimers, [key]: timer }
+            }));
+        };
+
+        attempt();
+    },
+
+    cleanupSubscription: (key) => {
+        const channel = get()[key];
+        if (channel) {
+            console.log(`🔒 Cleaning up ${key}`);
+            channel.unsubscribe();
+            set({ [key]: null });
+        }
+        
+        const timer = get().reconnectTimers[key];
+        if (timer) {
+            clearTimeout(timer);
+            set(state => {
+                const newTimers = { ...state.reconnectTimers };
+                delete newTimers[key];
+                return { reconnectTimers: newTimers };
+            });
         }
     },
 
-    cleanupPresence: () => {
-        const { presenceSubscription } = get();
-        if (presenceSubscription) {
-            presenceSubscription.unsubscribe();
-            useNotesStore.setState({ activeUsers: [] });
-            set({ presenceSubscription: null });
-        }
-    },
-
-    cleanupRealtimeSubscription: () => {
-        const { realtimeSubscription } = get();
-        if (realtimeSubscription) {
-            realtimeSubscription.unsubscribe();
-            set({ realtimeSubscription: null });
-        }
-    },
-
-    cleanupCollaboratorsSubscription: () => {
-        const { collaboratorsSubscription } = get();
-        if (collaboratorsSubscription) {
-            collaboratorsSubscription.unsubscribe();
-            set({ collaboratorsSubscription: null });
-        }
-    },
+    cleanupInvitesSubscription: () => get().cleanupSubscription('invitesSubscription'),
+    cleanupCollaboratorsSubscription: () => get().cleanupSubscription('collaboratorsSubscription'),
+    cleanupPresence: () => get().cleanupSubscription('presenceSubscription'),
+    cleanupRealtimeSubscription: () => get().cleanupSubscription('realtimeSubscription'),
 
     broadcastContentChange: debounce(async (newContent) => {
         const { presenceSubscription } = get();
