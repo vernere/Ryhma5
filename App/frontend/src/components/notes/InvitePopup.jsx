@@ -19,6 +19,7 @@ export const InvitePopup = ({ isOpen, onClose }) => {
         await setStatus(invite.invitation_id, "declined");
         await getInvites(user.id);
         await fetchNotes();
+        console.log("Inbox:", inbox);
     };
 
     return (

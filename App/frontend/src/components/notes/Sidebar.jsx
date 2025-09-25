@@ -32,6 +32,8 @@ const Sidebar = () => {
   const {
     setupNoteCollaboratorSubscription,
     cleanupCollaboratorsSubscription,
+    setupInvitesSubscription,
+    cleanupInvitesSubscription
   }= useRealtimeStore();
   
   const { user } = useAuth();
@@ -46,28 +48,23 @@ const Sidebar = () => {
     getInvites(user.id);
   }, [user?.id, setCurrentUser, fetchFavorites, fetchNotes]);
 
-  // useEffect(() => {
-  //   if (!user?.id) return;
+  useEffect(() => {
+    if (!user?.id) return;
     
-  //   console.log("EFFECT: Setting up invites subscription for user:", user.id);
-  //   getInvites(user.id);
+    getInvites(user.id);
+    setupInvitesSubscription(user.id);
 
-  //   setupInvitesSubscription(user.id);
-
-  //   return () => {
-  //     console.log("CLEANUP: Cleaning up invites subscription.");
-  //     cleanupInvitesSubscription();
-  //   };
-  // }, [user?.id]);
+    return () => {
+      cleanupInvitesSubscription();
+    };
+  }, [user?.id]);
 
   useEffect(() => {
     if (!user?.id) return;
 
-    console.log("EFFECT: Setting up collaborator subscription for user:", user.id);
     setupNoteCollaboratorSubscription(user.id);
 
     return () => {
-      console.log("CLEANUP: Cleaning up collaborator subscription.");
       cleanupCollaboratorsSubscription();
     };
   }, [user?.id]);

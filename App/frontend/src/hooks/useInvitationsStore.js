@@ -29,8 +29,14 @@ export const useInvitationsStore = create((set, get) => ({
             inbox: state.inbox.filter((inv) => inv.invitation_id !== invitation_id),
         })),
 
+    updateInboxInvite: (updatedInvite) =>
+        set((state) => ({
+            inbox: state.inbox.map((inv) =>
+                inv.invitation_id === updatedInvite.invitation_id ? updatedInvite : inv
+            ),
+        })),
+
     sendCollaborationInvite: async (senderId, recipientId, noteId) => {
-        console.log("User sending:", senderId, "Sending invite to user ID:", recipientId, "for note ID:", noteId);
         const { data, error } = await supabase
             .from("collaboration_invites")
             .insert([{ sender_id: senderId, recipient_id: recipientId, note_id: noteId }])
@@ -93,7 +99,7 @@ export const useInvitationsStore = create((set, get) => ({
     },
 
     setStatus: async (id, status) => {
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from("collaboration_invites")
             .update({ status })
             .eq("invitation_id", id);
@@ -102,6 +108,9 @@ export const useInvitationsStore = create((set, get) => ({
             set({ error: error.message });
             return;
         }
+
+        console.log("Updated invite status:", data);
+        console.log("Error:", error);
 
         set({
             inbox: get().inbox.map((inv) =>

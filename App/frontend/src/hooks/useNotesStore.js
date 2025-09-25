@@ -28,6 +28,7 @@ export const useNotesStore = create((set, get) => ({
   setCurrentUser: (user) => set({ currentUser: user }),
   setIsLocalChange: (flag) => set({ isLocalChange: flag }),
   setSearchQuery: (q) => set({ searchQuery: q }),
+  
   addNote: (note) =>
     set((state) => ({
       notes: [note, ...state.notes],

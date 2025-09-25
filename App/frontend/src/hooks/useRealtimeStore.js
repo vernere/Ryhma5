@@ -95,12 +95,7 @@ export const useRealtimeStore = create((set, get) => ({
                 }
             )
             .subscribe((status, err) => {
-                console.log("📡 realtimeSubscription status:", status, err);
-                if (status === 'SUBSCRIBED') {
-                    console.log("✅ Successfully subscribed to realtimeSubscription");
-                } else if (status === 'CHANNEL_ERROR') {
-                    console.error("❌ Channel error:", err);
-                } else if (status === 'TIMED_OUT') {
+                if (status === 'TIMED_OUT') {
                     console.error("⏰ realtimeSubscription timed out");
                     get().reconnect('realtimeSubscription', get().setupRealtimeSubscription);
                 } else if (status === 'CLOSED') {
@@ -115,7 +110,6 @@ export const useRealtimeStore = create((set, get) => ({
         if (get().collaboratorsSubscription) return;
 
         if (!userId) {
-            console.log("No user ID provided for collaboratorsSubscription");
             return;
         }
 
@@ -148,12 +142,7 @@ export const useRealtimeStore = create((set, get) => ({
             )
             .subscribe((status, err) => {
                 console.log("📡 collaboratorsSubscription status:", status, err);
-                if (status === 'SUBSCRIBED') {
-                    console.log("✅ Successfully subscribed to collaboratorsSubscription for user:", userId);
-                } else if (status === 'CHANNEL_ERROR') {
-                    console.error("❌ Channel error:", err);
-                } else if (status === 'TIMED_OUT') {
-                    console.error("⏰ collaboratorsSubscription timed out");
+                if (status === 'TIMED_OUT') {
                     get().reconnect('collaboratorsSubscription', () => get().setupNoteCollaboratorSubscription(userId));
                 } else if (status === 'CLOSED') {
                     console.log("🔒 collaboratorsSubscription closed");
@@ -167,7 +156,6 @@ export const useRealtimeStore = create((set, get) => ({
         if (get().invitesSubscription) return;
 
         if (!userId) {
-            console.log("No user ID provided for subscription");
             return;
         }
 
@@ -199,12 +187,7 @@ export const useRealtimeStore = create((set, get) => ({
                 },
                 (payload) => {
                     const updated = payload.new;
-                    console.log("Invitation updated for user:", updated);
-                    set((state) => ({
-                        inbox: state.inbox.map((inv) =>
-                            inv.invitation_id === updated.invitation_id ? { ...inv, ...updated } : inv
-                        ),
-                    }));
+                    useInvitationsStore.getState().updateInboxInvite(updated);
                 }
             )
             .on(
@@ -216,19 +199,13 @@ export const useRealtimeStore = create((set, get) => ({
                 },
                 (payload) => {
                     const deleted = payload.old;
-                    console.log("Invitation deleted EVENT", payload);
                     if (!deleted) return;
                     useInvitationsStore.getState().deleteInboxInvite(deleted.invitation_id);
                     useInvitationsStore.getState().deleteInvite(deleted.invitation_id);
                 }
             )
             .subscribe((status, err) => {
-                console.log("📡 invitesSubscription status:", status, err);
-                if (status === 'SUBSCRIBED') {
-                    console.log("✅ Successfully subscribed to invitesSubscription for user:", userId);
-                } else if (status === 'CHANNEL_ERROR') {
-                    console.error("❌ Channel error:", err);
-                } else if (status === 'TIMED_OUT') {
+                if (status === 'TIMED_OUT') {
                     console.error("⏰ invitesSubscription timed out");
                     get().reconnect('invitesSubscription', () => get().setupInvitesSubscription(userId));
                 } else if (status === 'CLOSED') {
@@ -244,13 +221,10 @@ export const useRealtimeStore = create((set, get) => ({
 
         const attempt = (attemptNum = 1) => {
             if (attemptNum > RETRY_CONFIG.maxAttempts) {
-                console.error(`🚨 Reconnection failed for ${key} after ${RETRY_CONFIG.maxAttempts} attempts.`);
                 return;
             }
 
             const delay = RETRY_CONFIG.initialDelay * Math.pow(RETRY_CONFIG.factor, attemptNum - 1);
-            console.log(`Retrying ${key} connection... Attempt ${attemptNum} in ${delay}ms`);
-
             const timer = setTimeout(() => {
                 setupFn();
             }, delay);
@@ -266,7 +240,6 @@ export const useRealtimeStore = create((set, get) => ({
     cleanupSubscription: (key) => {
         const channel = get()[key];
         if (channel) {
-            console.log(`🔒 Cleaning up ${key}`);
             channel.unsubscribe();
             set({ [key]: null });
         }
