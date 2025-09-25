@@ -7,7 +7,7 @@ describe('Notes tests', () => {
   });
 
   it('Test notes typing', () => {
-    cy.get('[data-cy=noteSelect]').click()
+    cy.get('[data-cy=noteSelect]').first().click()
 
     cy.get('[data-cy=noteTitle]').should('exist')
     cy.get('[data-cy=userEmail]').contains('test.test@notely.com').should('exist')
@@ -19,7 +19,7 @@ describe('Notes tests', () => {
   });
 
   it('Test export', () => {
-    cy.get('[data-cy=noteSelect]').click()
+    cy.get('[data-cy=noteSelect]').first().click()
 
     /*
     cy.get('[data-cy=exportButton]').click()

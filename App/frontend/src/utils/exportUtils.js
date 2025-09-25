@@ -1,5 +1,6 @@
 import { Document, Paragraph, TextRun, HeadingLevel, Packer } from "docx";
 import { saveAs } from "file-saver";
+import TurndownService from "turndown";
 
 export const exportToPdf = (html) => {
     const printWindow = window.open('', '_blank');
@@ -52,21 +53,11 @@ export const downloadFile = (content, filename) => {
 };
 
 export const exportToMarkDown = (html) => {
-    let markdown = html
-        .replace(/<h1[^>]*>(.*?)<\/h1>/g, '# $1\n\n')
-        .replace(/<h2[^>]*>(.*?)<\/h2>/g, '## $1\n\n')
-        .replace(/<h3[^>]*>(.*?)<\/h3>/g, '### $1\n\n')
-        .replace(/<p[^>]*>(.*?)<\/p>/g, '$1\n\n')
-        .replace(/<strong[^>]*>(.*?)<\/strong>/g, '**$1**')
-        .replace(/<em[^>]*>(.*?)<\/em>/g, '*$1*')
-        .replace(/<ul[^>]*>(.*?)<\/ul>/g, '$1\n')
-        .replace(/<li[^>]*>(.*?)<\/li>/g, '- $1\n')
-        .replace(/<br[^>]*>/g, '\n')
-        .replace(/&nbsp;/g, ' ')
-        .replace(/\n\s*\n/g, '\n\n')
-        .trim();
-
-    return markdown;
+    const turndownService = new TurndownService({
+        headingStyle: 'atx',
+        codeBlockStyle: 'fenced'
+    });
+    return turndownService.turndown(html);
 };
 
 export const exportToDocx = async (html) => {
