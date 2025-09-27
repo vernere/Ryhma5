@@ -9,7 +9,7 @@ import TextAlign from '@tiptap/extension-text-align'
 import BulletList from '@tiptap/extension-bullet-list'
 import ListItem from '@tiptap/extension-list-item';
 
-export default function CollaborativeEditor({ Toolbar }) {
+export default function CollaborativeEditor() {
     const {
         selectedNote,
         selectedNoteId,
@@ -113,7 +113,7 @@ export default function CollaborativeEditor({ Toolbar }) {
     return (
         <div className="rounded-2xl min-h-[400px]">
             <div className="sticky top-0 z-50 shadow">
-                <Toolbar editor={editor} />
+                <Toolbar editor={editor} noteTitle={selectedNote.title} />
             </div>
             <div
                 data-cy="noteContent"

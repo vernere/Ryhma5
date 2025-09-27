@@ -3,7 +3,7 @@ import { exportToPdf, exportToTxt, downloadFile, exportToMarkDown, exportToDocx 
 import Dropdown from "../ui/Dropdown"
 import { useEffect, useState, useRef } from "react";
 
-const Toolbar = ({ editor }) => {
+const Toolbar = ({ editor, noteTitle = 'Untitled note' }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const buttonRef = useRef(null);
@@ -26,13 +26,13 @@ const Toolbar = ({ editor }) => {
                 exportToPdf(htmlContent)
                 break;
             case "txt":
-                downloadFile(exportToTxt(htmlContent), "Note")
+                downloadFile(exportToTxt(htmlContent), noteTitle)
                 break;
             case "md":
-                downloadFile(exportToMarkDown(htmlContent), "Note.md")
+                downloadFile(exportToMarkDown(htmlContent), noteTitle)
                 break;
             case "docx":
-                exportToDocx(htmlContent);
+                exportToDocx(htmlContent, noteTitle);
             default:
                 break;
         }

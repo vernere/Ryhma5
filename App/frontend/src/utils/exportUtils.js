@@ -60,7 +60,7 @@ export const exportToMarkDown = (html) => {
     return turndownService.turndown(html);
 };
 
-export const exportToDocx = async (html) => {
+export const exportToDocx = async (html, noteTitle) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
 
@@ -164,5 +164,5 @@ export const exportToDocx = async (html) => {
     });
 
     const blob = await Packer.toBlob(docx);
-    saveAs(blob, 'Note.docx')
+    saveAs(blob, noteTitle)
 };
