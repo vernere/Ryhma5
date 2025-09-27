@@ -21,6 +21,8 @@ export const AuthProvider = ({children}) => {
 
             if (_event === "PASSWORD_RECOVERY") {
                 setPasswordRecovery(true);
+            } else if (_event === "TOKEN_REFRESHED") {
+                console.log('Token refreshed, re-establishing subscriptions...');
             }
         });
 
