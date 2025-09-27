@@ -29,12 +29,12 @@ test("Initial state of notes store", () => {
   expect(error).toBeNull();
 });
 
-test("favorites: isFavorite on false kun mitään ei ole asetettu", () => {
+test("favorites: isFavorite returns false when nothing is set", () => {
   const s = useNotesStore.getState();
   expect(s.isFavorite("X")).toBe(false);
 });
 
-test("favorites: setFavs toimii Setillä", () => {
+test("favorites: setFavs with a Set marks those ids as favorite", () => {
   const s = useNotesStore.getState();
 
   s.setFavs(new Set(["n1", "n2"]));
@@ -44,7 +44,7 @@ test("favorites: setFavs toimii Setillä", () => {
   expect(s.isFavorite("zzz")).toBe(false);
 });
 
-test("favorites: setFavs toimii updater-funktiolla", () => {
+test("favorites: setFavs updater adds to the previous Set", () => {
   const s = useNotesStore.getState();
 
   s.setFavs(new Set(["a"]));
@@ -54,14 +54,13 @@ test("favorites: setFavs toimii updater-funktiolla", () => {
   expect(s.isFavorite("b")).toBe(true);
 });
 
-test("favorites: setFavs korvaa koko setin kun annat suoraan uuden Setin", () => {
+test("favorites: passing a new Set replaces the old one", () => {
   const s = useNotesStore.getState();
 
   s.setFavs(new Set(["old"]));
-  s.setFavs(new Set(["new1", "new2"]));  
+  s.setFavs(new Set(["new1", "new2"]));
 
   expect(s.isFavorite("old")).toBe(false);
   expect(s.isFavorite("new1")).toBe(true);
   expect(s.isFavorite("new2")).toBe(true);
 });
-
