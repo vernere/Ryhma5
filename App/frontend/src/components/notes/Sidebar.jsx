@@ -41,30 +41,18 @@ const Sidebar = () => {
   const [isInvitePopupOpen, setIsInvitePopupOpen] = useState(false);
 
   useEffect(() => {
-    if (!user?.id) return;
-    setCurrentUser(user);
-    fetchFavorites();
-    fetchNotes();
-    getInvites(user.id);
-  }, [user?.id, setCurrentUser, fetchFavorites, fetchNotes]);
+    if (user?.id) {
+      setCurrentUser(user);
+      fetchFavorites();
+      fetchNotes();
+      getInvites(user.id);
 
-  useEffect(() => {
-    if (!user?.id) return;
-    
-    getInvites(user.id);
-    setupInvitesSubscription(user.id);
+      setupInvitesSubscription(user.id);
+      setupNoteCollaboratorSubscription(user.id);
+    }
 
     return () => {
       cleanupInvitesSubscription();
-    };
-  }, [user?.id]);
-
-  useEffect(() => {
-    if (!user?.id) return;
-
-    setupNoteCollaboratorSubscription(user.id);
-
-    return () => {
       cleanupCollaboratorsSubscription();
     };
   }, [user?.id]);
