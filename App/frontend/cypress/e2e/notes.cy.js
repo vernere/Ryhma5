@@ -51,7 +51,7 @@ describe('Notes tests', () => {
 
 
   it('Test note text formatting', () => {
-    cy.get('[data-cy=noteSelect]').first.click()
+    cy.get('[data-cy=noteSelect]').first().click()
 
     cy.get('[data-cy=noteContent]').type('{selectall}')
 
