@@ -11,7 +11,15 @@
     "cypress:open": "cypress open",
     "cypress:component": "cypress run --component",
     "cypress:e2e": "cypress run",
-    "cypress:coverage": "nyc cypress run"
+    "cypress:coverage": "nyc cypress run",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage --coverage-dir=coverage/unit",
+    "test:e2e": "cypress run",
+    "test:e2e:coverage": "cypress run && mkdir -p coverage/e2e && mv coverage/civerage-final.josn coverage/e2e/",
+    "coverage:merge": "node scripts/merge-coverage.js",
+    "coverage:full": "bun run test:coverage && bun run test:e2e:coverage && bun run coverage:merge"
+    
+
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
@@ -60,10 +68,14 @@
     "@vitejs/plugin-react": "^5.0.3",
     "@vitejs/plugin-react-swc": "^4.0.0",
     "babel-plugin-istanbul": "^7.0.1",
+    "c8": "^10.1.3",
     "eslint": "^9.33.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "istanbul-lib-coverage": "^3.2.2",
+    "istanbul-lib-report": "^3.0.1",
+    "istanbul-reports": "^3.2.0",
     "nyc": "^17.1.0",
     "tw-animate-css": "^1.3.8",
     "vite": "^7.1.6",

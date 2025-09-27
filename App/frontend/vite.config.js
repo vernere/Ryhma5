@@ -10,8 +10,8 @@ export default defineConfig({
     react(),
     tailwindcss(),
     istanbul({
-      include: ['src/**/*.js', 'src/**/*.jsx', 'src/**/*.ts', 'src/**/*.tsx'],
-      exclude: ['node_modules', 'cypress', 'tests'],
+      include: ['src/**/*'],
+      exclude: ['node_modules', 'cypress', 'tests/'],
       extension: ['.js', '.jsx', '.ts', '.tsx'],
       cypress: true,
       requireEnv: false,

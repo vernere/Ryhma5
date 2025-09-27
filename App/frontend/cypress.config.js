@@ -9,5 +9,6 @@ module.exports = defineConfig({
       on('task', { downloadFile })
       return config
     },
+    supportFile:'cypress/support/e2e.js'
   },
 });
