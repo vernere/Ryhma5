@@ -1,75 +1,78 @@
-import {useEffect, useState} from "react";
+import { create } from "zustand";
 import {supabase} from "@/lib/supabaseClient";
 
-export const useTagStore = () => {
-    const [allTags, setAllTags] = useState([]);
+export const useTagStore = create((set, get) => ({
+    allTags: [],
+    loading: false,
+    error: null,
 
-    const fetchTags = async () => {
-        const { data, error } = await supabase
-            .from("tags")
-            .select("*")
-            .order("name", { ascending: true });
+    fetchTags: async () => {
+        set({ loading: true, error: null });
+        try {
+            const { data, error } = await supabase
+                .from("tags")
+                .select("*")
+                .order("name", { ascending: true });
 
-        if (error) {
-            console.error("Error fetching tags:", error);
-            return;
+            if (error) throw error;
+            set({ allTags: data || [], loading: false });
+        } catch (err) {
+            set({ error: err.message, loading: false });
         }
+    },
 
-        setAllTags(data);
-    };
-
-    const addTag = async (noteId, tagId = []) => {
+    addTag: async (noteId, tagId) => {
         if (!noteId || !tagId) return;
 
-        const { data: existingNoteTags, error: fetchError } = await supabase
-            .from("note_tags")
-            .select("*")
-            .eq("note_id", noteId);
+        try {
+            const { data: existingNoteTags, error: fetchError } = await supabase
+                .from("note_tags")
+                .select("*")
+                .eq("note_id", noteId);
 
-        if (fetchError) {
-            console.error("Error fetching current note_tags:", fetchError);
-            return null;
+            if (fetchError) throw fetchError;
+
+            if (existingNoteTags.some((t) => t.tag_id === tagId)) {
+                return null;
+            }
+
+            const { data, error } = await supabase
+                .from("note_tags")
+                .insert({
+                    note_id: noteId,
+                    tag_id: tagId,
+                })
+                .select();
+
+            if (error) throw error;
+            return data;
+        } catch (error) {
+            set({ error: error.message });
+            throw error;
         }
+    },
 
-        if (existingNoteTags.some((t) => t.tag_id === tagId)) {
-            console.log("Tag already added to note");
-            return null;
-        }
-
-        const { data, error } = await supabase
-            .from("note_tags")
-            .insert({
-            note_id: noteId,
-            tag_id: tagId,
-        })
-            .select();
-
-        if (error) {
-            console.error("Error adding tag:", error);
-            return null;
-        }
-        return data;
-    };
-
-    const removeTag = async (noteId, tagId) => {
+    removeTag: async (noteId, tagId) => {
         if (!noteId || !tagId) return;
 
-        const { error } = await supabase
-            .from("note_tags")
-            .delete()
-            .eq("note_id", noteId)
-            .eq("tag_id", tagId);
+        try {
+            const { error } = await supabase
+                .from("note_tags")
+                .delete()
+                .eq("note_id", noteId)
+                .eq("tag_id", tagId);
 
-        if (error) {
-            console.error("Error removing tag:", error);
-            return null;
+            if (error) throw error;
+            return true;
+        } catch (error) {
+            set({ error: error.message });
+            throw error;
         }
-        return true;
-    };
+    },
 
-    useEffect(() => {
-        fetchTags();
-    }, []);
+    init: () => {
+        get().fetchTags();
+    }
+}));
 
-    return { allTags, fetchTags, addTag, removeTag };
-};
+useTagStore.getState().init();
