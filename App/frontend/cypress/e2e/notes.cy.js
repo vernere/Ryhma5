@@ -22,30 +22,35 @@ describe('Notes tests', () => {
   it('Test export', () => {
     cy.get('[data-cy=noteSelect]').first().click()
 
-    /*
-    cy.get('[data-cy=exportButton]').click()
-    cy.get('[data-cy=exportPdf]').click()
-    */
+    let noteTitle;
+    cy.get('[data-cy=noteTitle]').invoke('val').then((value) => {
+      noteTitle = value;
 
-    cy.get('[data-cy=exportButton]').click()
-    cy.get('[data-cy=boldButton]').click()
-    
-    cy.get('[data-cy=dropdownMenu]').should('not.exist')
+      /*
+      cy.get('[data-cy=exportButton]').click()
+      cy.get('[data-cy=exportPdf]').click()
+      */
 
-    cy.get('[data-cy=exportButton]').click()
-    cy.get('[data-cy=exportMd]').click()
+      cy.get('[data-cy=exportButton]').click()
+      cy.get('[data-cy=boldButton]').click()
 
-    cy.readFile('cypress/downloads/Note.md').should('contain', "Hello World! Hello World version 2 !")
+      cy.get('[data-cy=dropdownMenu]').should('not.exist')
 
-    cy.get('[data-cy=exportButton]').click()
-    cy.get('[data-cy=exportTxt]').click()
+      cy.get('[data-cy=exportButton]').click()
+      cy.get('[data-cy=exportMd]').click()
 
-    cy.readFile('cypress/downloads/Note.txt').should('contain', "Hello World! Hello World version 2 !")
+      cy.readFile(`cypress/downloads/${noteTitle}.md`).should('contain', "Hello World! Hello World version 2 !")
 
-    cy.get('[data-cy=exportButton]').click()
-    cy.get('[data-cy=exportDocx]').click()
+      cy.get('[data-cy=exportButton]').click()
+      cy.get('[data-cy=exportTxt]').click()
 
-    cy.readFile('cypress/downloads/Note.docx').should('exist')
+      cy.readFile(`cypress/downloads/${noteTitle}.txt`).should('contain', "Hello World! Hello World version 2 !")
+
+      cy.get('[data-cy=exportButton]').click()
+      cy.get('[data-cy=exportDocx]').click()
+
+      cy.readFile(`cypress/downloads/${noteTitle}.docx`).should('exist')
+    })
 
   });
 

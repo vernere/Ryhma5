@@ -26,10 +26,10 @@ const Toolbar = ({ editor, noteTitle = 'Untitled note' }) => {
                 exportToPdf(htmlContent)
                 break;
             case "txt":
-                downloadFile(exportToTxt(htmlContent), noteTitle)
+                downloadFile(exportToTxt(htmlContent), noteTitle + '.txt')
                 break;
             case "md":
-                downloadFile(exportToMarkDown(htmlContent), noteTitle)
+                downloadFile(exportToMarkDown(htmlContent), noteTitle + '.md')
                 break;
             case "docx":
                 exportToDocx(htmlContent, noteTitle);
