@@ -1,23 +1,21 @@
-import { create } from "zustand";
+import {create} from "zustand";
 import {supabase} from "@/lib/supabaseClient";
 
 export const useTagStore = create((set, get) => ({
-    allTags: [],
-    loading: false,
-    error: null,
+    allTags: [], loading: false, error: null,
 
     fetchTags: async () => {
-        set({ loading: true, error: null });
+        set({loading: true, error: null});
         try {
-            const { data, error } = await supabase
+            const {data, error} = await supabase
                 .from("tags")
                 .select("*")
-                .order("name", { ascending: true });
+                .order("name", {ascending: true});
 
             if (error) throw error;
-            set({ allTags: data || [], loading: false });
+            set({allTags: data || [], loading: false});
         } catch (err) {
-            set({ error: err.message, loading: false });
+            set({error: err.message, loading: false});
         }
     },
 
@@ -25,7 +23,7 @@ export const useTagStore = create((set, get) => ({
         if (!noteId || !tagId) return;
 
         try {
-            const { data: existingNoteTags, error: fetchError } = await supabase
+            const {data: existingNoteTags, error: fetchError} = await supabase
                 .from("note_tags")
                 .select("*")
                 .eq("note_id", noteId);
@@ -36,18 +34,17 @@ export const useTagStore = create((set, get) => ({
                 return null;
             }
 
-            const { data, error } = await supabase
+            const {data, error} = await supabase
                 .from("note_tags")
                 .insert({
-                    note_id: noteId,
-                    tag_id: tagId,
+                    note_id: noteId, tag_id: tagId,
                 })
                 .select();
 
             if (error) throw error;
             return data;
         } catch (error) {
-            set({ error: error.message });
+            set({error: error.message});
             throw error;
         }
     },
@@ -56,7 +53,7 @@ export const useTagStore = create((set, get) => ({
         if (!noteId || !tagId) return;
 
         try {
-            const { error } = await supabase
+            const {error} = await supabase
                 .from("note_tags")
                 .delete()
                 .eq("note_id", noteId)
@@ -65,7 +62,7 @@ export const useTagStore = create((set, get) => ({
             if (error) throw error;
             return true;
         } catch (error) {
-            set({ error: error.message });
+            set({error: error.message});
             throw error;
         }
     },
