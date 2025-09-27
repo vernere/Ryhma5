@@ -2,8 +2,7 @@ name: CI
 on:
   push:
     branches:
-      - '**'
-      - '!main'
+      - 'ccr'
     paths:
       - 'App/frontend/**'
       - '.github/workflows/ci.yaml'
