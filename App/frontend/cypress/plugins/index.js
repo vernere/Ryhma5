@@ -3,3 +3,9 @@ module.exports = (on, config) => {
   on('file:preprocessor', require('@cypress/code-coverage/use-babelrc'))
   return config
 }
+
+const {downloadFile} = require('cypress-downloadfile/lib/addPlugin');
+
+module.exports = (on, config) => {
+  on('task', {downloadFile});
+}

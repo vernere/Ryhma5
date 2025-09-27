@@ -18,3 +18,6 @@ import './commands'
 
 // Import code coverage support
 import '@cypress/code-coverage/support';
+
+// Import download file support
+require('cypress-downloadfile/lib/downloadFileCommand');
