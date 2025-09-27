@@ -28,6 +28,11 @@ describe('Notes tests', () => {
     */
 
     cy.get('[data-cy=exportButton]').click()
+    cy.get('[data-cy=boldButton]').click()
+    
+    cy.get('[data-cy=dropdownMenu]').should('not.exist')
+
+    cy.get('[data-cy=exportButton]').click()
     cy.get('[data-cy=exportMd]').click()
 
     cy.readFile('cypress/downloads/Note.md').should('contain', "Hello World! Hello World version 2 !")

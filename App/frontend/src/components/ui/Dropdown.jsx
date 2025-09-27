@@ -1,10 +1,32 @@
+import React from "react";
+
 const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
+    const dropdownRef = React.useRef(null);
+
+    React.useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target) && !anchorEl?.contains(event.target)) {
+                onClose();
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+
+    }, [isOpen, onClose, anchorEl]);
+
     if (!isOpen) return null;
 
     const rect = anchorEl?.getBoundingClientRect();
 
     return (
         <div
+            ref={dropdownRef}
             className="fixed bg-white rounded-lg shadow-lg border z-50"
             style={{
                 top: rect ? `${rect.bottom + window.scrollY + 5}px` : '0',
