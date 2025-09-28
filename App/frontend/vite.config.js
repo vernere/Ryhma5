@@ -10,17 +10,11 @@ export default defineConfig({
     react(),
     tailwindcss(),
     istanbul({
-      include: ['src/**/*'],
-      exclude: ['node_modules', 'cypress', 'tests/'],
+      include: 'src/**/*.{js,jsx,ts,tsx}',
+      exclude: ['node_modules', 'cypress', 'tests', 'coverage', 'dist'],
       extension: ['.js', '.jsx', '.ts', '.tsx'],
       cypress: true,
-      requireEnv: false,
-      onTransform(source, id) {
-        if (id.includes('src/')) {
-          console.log('[istanbul] Instrumenting for coverage:', id);
-        }
-        return source;
-      }
+      requireEnv: false
     })
   ],
   resolve: {
