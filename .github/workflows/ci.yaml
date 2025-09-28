@@ -53,6 +53,14 @@ jobs:
           echo "Stopping dev server..."
           pkill -f "bun run dev" || true
 
+      - name: Debug coverage files
+        working-directory: ./App/frontend
+        run: |
+          echo "Unit test coverage files:"
+          ls -la coverage/unit/
+          echo "E2E test coverage files:"
+          ls -la coverage/e2e/
+          
       - name: Merge coverage reports
         working-directory: ./App/frontend
         run: |
@@ -61,6 +69,9 @@ jobs:
           
           echo "Coverage directory structure:"
           find coverage -type f -exec ls -l {} \;
+          
+          echo "Content of merged coverage file:"
+          cat coverage/merged/coverage-final.json || echo "Merged coverage file not found"
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
