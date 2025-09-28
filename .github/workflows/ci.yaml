@@ -35,42 +35,59 @@ jobs:
       - name: Run unit tests with coverage
         working-directory: ./App/frontend
         run: |
+          echo "Running unit tests with coverage..."
           bun test --coverage
-          if [ -f coverage/coverage-final.json ]; then
-            cp coverage/coverage-final.json coverage/unit/
-          fi
+          echo "Checking for coverage files..."
+          find . -name "coverage-final.json" -type f
+          mkdir -p coverage/unit
+          find . -name "coverage-final.json" -type f -exec cp {} coverage/unit/ \;
 
       - name: Run Cypress e2e tests
         working-directory: ./App/frontend
         run: |
+          echo "Starting dev server..."
           bun run dev &
           sleep 15
           echo "Development server should be ready..."
-          bunx cypress run --config video=false || true
-          if [ -f coverage/coverage-final.json ]; then
-            cp coverage/coverage-final.json coverage/e2e/
-          fi
+          CYPRESS_COVERAGE=true bunx cypress run --config video=false || true
+          echo "Checking for Cypress coverage files..."
+          find . -name "coverage-final.json" -type f
+          mkdir -p coverage/e2e
+          find . -name "coverage-final.json" -type f -exec cp {} coverage/e2e/cypress-coverage.json \;
           pkill -f "bun run dev" || true
 
       - name: Merge coverage reports
         working-directory: ./App/frontend
         run: |
-          echo "Checking coverage files..."
-          ls -la coverage/unit/ || true
-          ls -la coverage/e2e/ || true
+          echo "Debug: Listing all coverage files..."
+          find . -name "coverage-final.json" -type f
           
-          if [ -f coverage/unit/coverage-final.json ] || [ -f coverage/e2e/coverage-final.json ]; then
-            echo "Found coverage files, merging..."
-            if [ -f coverage/unit/coverage-final.json ]; then
-              cp coverage/unit/coverage-final.json coverage/merged/
-            fi
-            if [ -f coverage/e2e/coverage-final.json ]; then
-              cp coverage/e2e/coverage-final.json coverage/merged/e2e-coverage.json
-            fi
+          echo "Debug: Coverage directory structure..."
+          tree coverage || ls -R coverage
+          
+          mkdir -p coverage/merged
+          
+          # Copy any coverage files we find to merged directory
+          if [ -f coverage/unit/coverage-final.json ]; then
+            echo "Found unit test coverage"
+            cp coverage/unit/coverage-final.json coverage/merged/unit-coverage.json
+          fi
+          
+          if [ -f coverage/e2e/cypress-coverage.json ]; then
+            echo "Found E2E test coverage"
+            cp coverage/e2e/cypress-coverage.json coverage/merged/e2e-coverage.json
+          fi
+          
+          # List files in merged directory
+          echo "Files in merged directory:"
+          ls -la coverage/merged/
+          
+          if [ -f coverage/merged/unit-coverage.json ] || [ -f coverage/merged/e2e-coverage.json ]; then
+            echo "Running coverage merge script..."
             node scripts/merge-coverage.js
           else
-            echo "No coverage files found. Creating empty merged directory."
-            touch coverage/merged/.gitkeep
+            echo "No coverage files found to merge"
+            echo '{"coverageMap":{}}' > coverage/merged/coverage-final.json
           fi
 
       - name: Upload coverage to Codecov
