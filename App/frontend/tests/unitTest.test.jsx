@@ -6,5 +6,5 @@ test("can check if using Bun", () => {
 });
 
 test("test times", () => {
-    expect(times).equal
+    expect(times()).toBe(4);
 });
