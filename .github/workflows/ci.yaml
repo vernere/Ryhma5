@@ -32,69 +32,68 @@ jobs:
         working-directory: ./App/frontend
         run: mkdir -p coverage/{unit,e2e,merged}
 
+      - name: Install coverage tools
+        working-directory: ./App/frontend
+        run: |
+          npm install -g nyc
+          npm install -D c8
+
       - name: Run unit tests with coverage
         working-directory: ./App/frontend
         run: |
           echo "Running unit tests with coverage..."
-          bun test --coverage
-          echo "Checking for coverage files..."
+          c8 --reporter=lcov --reporter=text-summary bun test
           mkdir -p coverage/unit
-          if [ -d .nyc_output ]; then
-            cp .nyc_output/coverage-final.json coverage/unit/ || true
-          fi
-          nyc report --reporter=json --report-dir=coverage/unit || true
+          mv coverage/lcov.info coverage/unit/lcov.info || true
 
       - name: Run Cypress e2e tests
         working-directory: ./App/frontend
         run: |
-          echo "Installing nyc globally..."
-          npm install -g nyc
-          
           echo "Starting dev server..."
           bun run dev &
           sleep 15
           echo "Development server should be ready..."
           
           echo "Running Cypress tests with coverage..."
-          CYPRESS_COVERAGE=true bunx cypress run --config video=false || true
-          
-          echo "Generating Cypress coverage report..."
-          mkdir -p coverage/e2e
-          if [ -d .nyc_output ]; then
-            cp .nyc_output/coverage-final.json coverage/e2e/ || true
-          fi
-          nyc report --reporter=json --report-dir=coverage/e2e || true
+          CYPRESS_COVERAGE=true bunx cypress run --config video=false
           
           echo "Stopping dev server..."
           pkill -f "bun run dev" || true
 
-      - name: Merge coverage reports
+      - name: Generate merged coverage report
         working-directory: ./App/frontend
         run: |
-          echo "Debug: Coverage directory contents..."
-          ls -la coverage/unit/ || true
-          ls -la coverage/e2e/ || true
-          
+          echo "Setting up coverage directories..."
           mkdir -p coverage/merged
           
-          if [ -f coverage/unit/coverage-final.json ]; then
+          echo "Checking for coverage files..."
+          if [ -f coverage/unit/lcov.info ]; then
             echo "Found unit test coverage"
-            cp coverage/unit/coverage-final.json coverage/merged/coverage-final.json
-          elif [ -f coverage/e2e/coverage-final.json ]; then
-            echo "Found E2E test coverage"
-            cp coverage/e2e/coverage-final.json coverage/merged/coverage-final.json
-          else
-            echo "No coverage files found, creating empty coverage report"
-            echo '{"coverageMap":{}}' > coverage/merged/coverage-final.json
+            cp coverage/unit/lcov.info coverage/merged/
           fi
           
-          # Generate HTML report
-          nyc report --reporter=html --report-dir=coverage/merged/lcov-report || true
+          if [ -f coverage/lcov.info ]; then
+            echo "Found E2E test coverage"
+            if [ -f coverage/merged/lcov.info ]; then
+              cat coverage/lcov.info >> coverage/merged/lcov.info
+            else
+              cp coverage/lcov.info coverage/merged/
+            fi
+          fi
+          
+          echo "Coverage directory structure:"
+          ls -R coverage/
+          
+          if [ ! -f coverage/merged/lcov.info ]; then
+            echo "No coverage files found, creating empty lcov.info"
+            touch coverage/merged/lcov.info
+          fi
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with: 
-          directory: ./coverage/merged/
+          directory: ./App/frontend/coverage/merged
+          files: ./lcov.info
           flags: merged
           name: merged-coverage
           fail_ci_if_error: true
