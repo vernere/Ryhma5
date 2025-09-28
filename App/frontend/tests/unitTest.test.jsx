@@ -5,6 +5,6 @@ test("can check if using Bun", () => {
   expect(Bun).toBeDefined();
 });
 
-test("test times", () => {
+test("test times result 4", () => {
     expect(times()).toBe(4);
 });
