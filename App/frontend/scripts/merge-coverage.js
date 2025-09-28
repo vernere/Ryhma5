@@ -1,11 +1,13 @@
-const { createCoverageMap } = require('instanbul-lib-coverage')
-const { createReporter } = require('instanbul-lib-report')
-const reports = require('instabul-reports')
-const fs = require('fs')
-const path = require('path')
-const { CoverageMap } = require('istanbul-lib-coverage')
+import pgk from 'istanbul-lib-coverage'
+import {cr} from 'istanbul-lib-report'
+import r from 'istanbul-reports'
+import fs from 'fs'
+import path from 'path'
 
 async function mergeCoverage() {
+    const { createCoverageMap } = pgk;
+    const { createReporter } = cr;
+    const { reports } = r;
     const map = createCoverageMap({})
 
     const unitCoveragePath = path.join(process.cwd(), 'coverage/unit/coverage-final.js')
@@ -45,4 +47,4 @@ async function mergeCoverage() {
 
 }
 
-mergeCoverage.catch(console.error)
+mergeCoverage().catch(console.error)

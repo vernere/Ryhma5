@@ -15,7 +15,7 @@
     "test": "bun test",
     "test:coverage": "bun test --coverage --coverage-dir=coverage/unit",
     "test:e2e": "cypress run",
-    "test:e2e:coverage": "cypress run && mkdir -p coverage/e2e && mv coverage/civerage-final.josn coverage/e2e/",
+    "test:e2e:coverage": "cypress run && mkdir -p coverage/e2e && mv coverage/coverage-final.json coverage/e2e/",
     "coverage:merge": "node scripts/merge-coverage.js",
     "coverage:full": "bun run test:coverage && bun run test:e2e:coverage && bun run coverage:merge"
     
