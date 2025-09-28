@@ -35,9 +35,13 @@ jobs:
       - name: Run Cypress e2e tests
         working-directory: ./App/frontend
         run: |
+          bun run dev &
+          sleep 15
+          echo "Development server should be ready..."
           bunx cypress run --config video=false
           mkdir -p coverage/e2e
           mv coverage/coverage-final.json coverage/e2e/ 2>/dev/null || true
+          kill $(lsof -t -i:5173) || true
 
       - name: Merge coverage reports
         working-directory: ./App/frontend
