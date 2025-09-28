@@ -28,11 +28,17 @@ jobs:
         working-directory: ./App/frontend
         run: bun install --frozen-lockfile
 
+      - name: Create coverage directories
+        working-directory: ./App/frontend
+        run: mkdir -p coverage/{unit,e2e,merged}
+
       - name: Run unit tests with coverage
         working-directory: ./App/frontend
         run: |
-          mkdir -p coverage/unit coverage/e2e coverage/merged
-          bun test --coverage --coverage-dir=coverage/unit
+          bun test --coverage
+          if [ -f coverage/coverage-final.json ]; then
+            cp coverage/coverage-final.json coverage/unit/
+          fi
 
       - name: Run Cypress e2e tests
         working-directory: ./App/frontend
@@ -41,21 +47,30 @@ jobs:
           sleep 15
           echo "Development server should be ready..."
           bunx cypress run --config video=false || true
-          mkdir -p coverage/e2e
           if [ -f coverage/coverage-final.json ]; then
-            mv coverage/coverage-final.json coverage/e2e/
+            cp coverage/coverage-final.json coverage/e2e/
           fi
           pkill -f "bun run dev" || true
 
       - name: Merge coverage reports
         working-directory: ./App/frontend
         run: |
-          if [ -f coverage/unit/coverage-final.json ] && [ -f coverage/e2e/coverage-final.json ]; then
+          echo "Checking coverage files..."
+          ls -la coverage/unit/ || true
+          ls -la coverage/e2e/ || true
+          
+          if [ -f coverage/unit/coverage-final.json ] || [ -f coverage/e2e/coverage-final.json ]; then
+            echo "Found coverage files, merging..."
+            if [ -f coverage/unit/coverage-final.json ]; then
+              cp coverage/unit/coverage-final.json coverage/merged/
+            fi
+            if [ -f coverage/e2e/coverage-final.json ]; then
+              cp coverage/e2e/coverage-final.json coverage/merged/e2e-coverage.json
+            fi
             node scripts/merge-coverage.js
           else
-            echo "Warning: Some coverage files are missing. Continuing anyway..."
-            mkdir -p coverage/merged
-            cp coverage/unit/coverage-final.json coverage/merged/ || true
+            echo "No coverage files found. Creating empty merged directory."
+            touch coverage/merged/.gitkeep
           fi
 
       - name: Upload coverage to Codecov
