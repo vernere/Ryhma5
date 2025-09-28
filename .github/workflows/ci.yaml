@@ -35,8 +35,8 @@ jobs:
       - name: Install coverage tools
         working-directory: ./App/frontend
         run: |
-          npm install -g nyc
-          npm install -D c8
+          bun install -g nyc
+          bun install -D c8
 
       - name: Run unit tests with coverage
         working-directory: ./App/frontend
