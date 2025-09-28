@@ -1,0 +1,373 @@
+const fs = require('fs')const fs = require('fs')
+
+const path = require('path')const path = require('path')
+
+const { createCoverageMap } = require('istanbul-lib-coverage')const { createC                                try {
+
+const v8ToIstanbul = require('v8-to-istanbul')                                    // Try to detect V8 format by checking if this has functions property
+
+                                    // V8 format will have functions array that contains ranges
+
+async function mergeCoverage() {                                    if (fileCov.functions && Array.isArray(fileCov.functions)) {
+
+    const map = createCoverageMap({})                                        // This looks like V8 format, convert it
+
+                                            const absolutePath = path.resolve(process.cwd(), file)
+
+    // Helper function to normalize file paths                                        const converter = v8ToIstanbul(absolutePath)
+
+    function normalizePath(filePath) {                                        converter.applyCoverage(fileCov)
+
+        // Remove absolute path prefix and normalize slashes                                        fileCov = converter.toIstanbul()
+
+        const normalizedPath = filePath.replace(/\\/g, '/')                                    }
+
+        const workspacePath = process.cwd().replace(/\\/g, '/')                                } catch (err) {
+
+        return normalizedPath.includes(workspacePath)                                     console.error(`Error converting coverage for ${file}:`, err)
+
+            ? normalizedPath.replace(`${workspacePath}/`, '')                                    return // Skip this file
+
+            : normalizedPath                                }ap } = require('istanbul-lib-coverage')
+
+    }const v8ToIstanbul = require('v8-to-istanbul')
+
+
+
+    // Merge unit test coverageasync function mergeCoverage() {
+
+    const unitCoveragePath = path.join(process.cwd(), 'coverage/unit')    const map = createCoverageMap({})
+
+        
+
+    if (fs.existsSync(unitCoveragePath)) {    // Helper function to normalize file paths
+
+        const files = fs.readdirSync(unitCoveragePath)    function normalizePath(filePath) {
+
+        console.log('Unit coverage directory contents:', files)        // Remove absolute path prefix and normalize slashes
+
+                const normalizedPath = filePath.replace(/\\/g, '/')
+
+        // Look for JSON files        const workspacePath = process.cwd().replace(/\\/g, '/')
+
+        const jsonFiles = files.filter(f => f.endsWith('.json'))        return normalizedPath.includes(workspacePath) 
+
+        if (jsonFiles.length > 0) {            ? normalizedPath.replace(`${workspacePath}/`, '')
+
+            for (const file of jsonFiles) {            : filePath
+
+                const fullPath = path.join(unitCoveragePath, file)    }
+
+                console.log('Reading coverage from:', fullPath)
+
+                try {    // Merge unit test coverage
+
+                    const coverage = JSON.parse(fs.readFileSync(fullPath, 'utf-8'))    const unitCoveragePath = path.join(process.cwd(), 'coverage/unit')
+
+                    Object.entries(coverage).forEach(([file, fileCov]) => {    
+
+                        // Convert V8 format to Istanbul format if needed    if (fs.existsSync(unitCoveragePath)) {
+
+                        if ('scriptId' in fileCov || ('functions' in fileCov && Array.isArray(fileCov.functions))) {        const files = fs.readdirSync(unitCoveragePath)
+
+                            // This looks like V8 format, convert it        console.log('Unit coverage directory contents:', files)
+
+                            try {        
+
+                                const absolutePath = path.resolve(process.cwd(), file)        // Look for lcov.info first
+
+                                const converter = v8ToIstanbul(absolutePath)        const lcovFile = path.join(unitCoveragePath, 'lcov.info')
+
+                                converter.applyCoverage(fileCov)        if (fs.existsSync(lcovFile)) {
+
+                                fileCov = converter.toIstanbul()            console.log('Found lcov file:', lcovFile)
+
+                            } catch (err) {            const lcovParse = require('lcov-parse')
+
+                                console.error(`Error converting V8 coverage for ${file}:`, err)            const lcovData = await new Promise((resolve, reject) => {
+
+                                return // Skip this file                lcovParse(lcovFile, (err, data) => {
+
+                            }                    if (err) reject(err)
+
+                        }                    else resolve(data)
+
+                                        })
+
+                        // Remove 'all' property if it exists            })
+
+                        if (fileCov.all) delete fileCov.all            
+
+                                    lcovData.forEach(entry => {
+
+                        // Normalize path - use the path from the key if path is missing                const coverage = {
+
+                        fileCov.path = fileCov.path || file                    path: entry.file,
+
+                        const normalizedPath = normalizePath(fileCov.path)                    s: {},
+
+                        fileCov.path = normalizedPath                    b: {},
+
+                                            f: {},
+
+                        // Convert statement/branch/function count objects                    statementMap: {},
+
+                        if (fileCov.s) {                    branchMap: {},
+
+                            Object.keys(fileCov.s).forEach(key => {                    fnMap: {}
+
+                                fileCov.s[key] = typeof fileCov.s[key] === 'boolean' ? (fileCov.s[key] ? 1 : 0) : fileCov.s[key]                }
+
+                            })                entry.lines.details.forEach((line, idx) => {
+
+                        }                    coverage.s[idx] = line.hit
+
+                        if (fileCov.b) {                    coverage.statementMap[idx] = {
+
+                            Object.keys(fileCov.b).forEach(key => {                        start: { line: line.line, column: 0 },
+
+                                fileCov.b[key] = typeof fileCov.b[key] === 'boolean' ? [fileCov.b[key] ? 1 : 0] : fileCov.b[key]                        end: { line: line.line, column: 999999 }
+
+                            })                    }
+
+                        }                })
+
+                        if (fileCov.f) {                map.addFileCoverage(coverage)
+
+                            Object.keys(fileCov.f).forEach(key => {            })
+
+                                fileCov.f[key] = typeof fileCov.f[key] === 'boolean' ? (fileCov.f[key] ? 1 : 0) : fileCov.f[key]            console.log('Merged unit test coverage from lcov')
+
+                            })        } else {
+
+                        }            console.log('No lcov file found, checking for JSON coverage')
+
+                                    // Then look for JSON files
+
+                        try {            const jsonFiles = files.filter(f => f.endsWith('.json'))
+
+                            console.log('Adding coverage for file:', fileCov.path)            if (jsonFiles.length > 0) {
+
+                            map.addFileCoverage(fileCov)                for (const file of jsonFiles) {
+
+                        } catch (err) {                    const fullPath = path.join(unitCoveragePath, file)
+
+                            console.error(`Error adding coverage for ${file}:`, err)                    console.log('Reading coverage from:', fullPath)
+
+                        }                    try {
+
+                    })                        const coverage = JSON.parse(fs.readFileSync(fullPath, 'utf-8'))
+
+                } catch (err) {                        Object.entries(coverage).forEach(([file, fileCov]) => {
+
+                    console.error(`Error reading coverage from ${fullPath}:`, err)                            // Remove 'all' property as it's not used by istanbul
+
+                    continue                            if (fileCov.all) delete fileCov.all
+
+                }                            
+
+            }                            // Convert V8 format to Istanbul format if needed
+
+            console.log('Merged unit test coverage from JSON')                            if ('functions' in fileCov) {
+
+        } else {                                // Convert V8 format to Istanbul format
+
+            console.warn('No coverage files found in unit coverage directory')                                const v8ToIstanbul = require('v8-to-istanbul')
+
+        }                                const converter = v8ToIstanbul(file)
+
+    } else {                                converter.applyCoverage(fileCov)
+
+        console.warn('Unit coverage directory not found:', unitCoveragePath)                                fileCov = converter.toIstanbul()
+
+    }                            }
+
+                            // Check if this is V8 format
+
+    // Merge e2e test coverage                            if (fileCov.functions && Array.isArray(fileCov.functions)) {
+
+    const e2eCoveragePath = path.join(process.cwd(), 'coverage/e2e/coverage-final.json')                                // This looks like V8 format, convert it
+
+    if (fs.existsSync(e2eCoveragePath)) {                                const absolutePath = path.resolve(process.cwd(), file)
+
+        console.log('Reading e2e test coverage from', e2eCoveragePath)                                const converter = v8ToIstanbul(absolutePath)
+
+        try {                                converter.applyCoverage(fileCov)
+
+            const e2eCoverage = JSON.parse(fs.readFileSync(e2eCoveragePath, 'utf-8'))                                fileCov = converter.toIstanbul()
+
+            Object.entries(e2eCoverage).forEach(([file, fileCov]) => {                            }
+
+                const normalizedPath = normalizePath(fileCov.path)                            
+
+                fileCov.path = normalizedPath                            // Normalize path - use the path from the key if path is missing
+
+                                            fileCov.path = fileCov.path || file
+
+                // Remove 'all' property and convert counts like above                            const normalizedPath = normalizePath(fileCov.path)
+
+                if (fileCov.all) delete fileCov.all                            fileCov.path = normalizedPath
+
+                                            
+
+                if (fileCov.s) {                            // Convert statement/branch/function count objects
+
+                    Object.keys(fileCov.s).forEach(key => {                            if (fileCov.s) {
+
+                        fileCov.s[key] = typeof fileCov.s[key] === 'boolean' ? (fileCov.s[key] ? 1 : 0) : fileCov.s[key]                                Object.keys(fileCov.s).forEach(key => {
+
+                    })                                    fileCov.s[key] = typeof fileCov.s[key] === 'boolean' ? (fileCov.s[key] ? 1 : 0) : fileCov.s[key]
+
+                }                                })
+
+                if (fileCov.b) {                            }
+
+                    Object.keys(fileCov.b).forEach(key => {                            if (fileCov.b) {
+
+                        fileCov.b[key] = typeof fileCov.b[key] === 'boolean' ? [fileCov.b[key] ? 1 : 0] : fileCov.b[key]                                Object.keys(fileCov.b).forEach(key => {
+
+                    })                                    fileCov.b[key] = typeof fileCov.b[key] === 'boolean' ? [fileCov.b[key] ? 1 : 0] : fileCov.b[key]
+
+                }                                })
+
+                if (fileCov.f) {                            }
+
+                    Object.keys(fileCov.f).forEach(key => {                            if (fileCov.f) {
+
+                        fileCov.f[key] = typeof fileCov.f[key] === 'boolean' ? (fileCov.f[key] ? 1 : 0) : fileCov.f[key]                                Object.keys(fileCov.f).forEach(key => {
+
+                    })                                    fileCov.f[key] = typeof fileCov.f[key] === 'boolean' ? (fileCov.f[key] ? 1 : 0) : fileCov.f[key]
+
+                }                                })
+
+                                            }
+
+                try {                            
+
+                    console.log('Adding coverage for file:', fileCov.path)                            map.addFileCoverage(fileCov)
+
+                    map.addFileCoverage(fileCov)                        })
+
+                } catch (err) {                    } catch (err) {
+
+                    console.error(`Error adding coverage for ${file}:`, err)                        console.error(`Error reading coverage from ${fullPath}:`, err)
+
+                }                        continue
+
+            })                    }
+
+            console.log('Merged e2e test coverage')                }
+
+        } catch (err) {                console.log('Merged unit test coverage from JSON')
+
+            console.error('Error reading e2e coverage:', err)            } else {
+
+        }                console.warn('No coverage files found in unit coverage directory')
+
+    }            }
+
+        }
+
+    // Create merged directory if it doesn't exist    } else {
+
+    const mergedDir = path.join(process.cwd(), 'coverage/merged')        console.warn('Unit coverage directory not found:', unitCoveragePath)
+
+    if (!fs.existsSync(mergedDir)) {    }
+
+        fs.mkdirSync(mergedDir, { recursive: true })
+
+    }    // Merge e2e test coverage
+
+    const e2eCoveragePath = path.join(process.cwd(), 'coverage/e2e/coverage-final.json')
+
+    // Write merged coverage data    if (fs.existsSync(e2eCoveragePath)) {
+
+    const mergedCoveragePath = path.join(mergedDir, 'coverage-final.json')        console.log('Reading e2e test coverage from', e2eCoveragePath)
+
+    fs.writeFileSync(mergedCoveragePath, JSON.stringify(map))        const e2eCoverage = JSON.parse(fs.readFileSync(e2eCoveragePath, 'utf-8'))
+
+        Object.entries(e2eCoverage).forEach(([file, fileCov]) => {
+
+    // Write LCOV format too            const normalizedPath = normalizePath(fileCov.path)
+
+    const Reporter = require('istanbul-lib-report')            fileCov.path = normalizedPath
+
+    const reports = require('istanbul-reports')            
+
+    const { createContext } = require('istanbul-lib-report')            // Remove 'all' property and convert counts like above
+
+            if (fileCov.all) delete fileCov.all
+
+    const context = createContext({            
+
+        dir: mergedDir,            if (fileCov.s) {
+
+        coverageMap: map                Object.keys(fileCov.s).forEach(key => {
+
+    })                    fileCov.s[key] = typeof fileCov.s[key] === 'boolean' ? (fileCov.s[key] ? 1 : 0) : fileCov.s[key]
+
+                })
+
+    const lcovReport = reports.create('lcov', { dir: mergedDir })            }
+
+    lcovReport.execute(context)            if (fileCov.b) {
+
+                Object.keys(fileCov.b).forEach(key => {
+
+    const htmlReport = reports.create('html', { dir: path.join(mergedDir, 'lcov-report') })                    fileCov.b[key] = typeof fileCov.b[key] === 'boolean' ? [fileCov.b[key] ? 1 : 0] : fileCov.b[key]
+
+    htmlReport.execute(context)                })
+
+            }
+
+    console.log('Merged coverage reports written to', mergedDir)            if (fileCov.f) {
+
+}                Object.keys(fileCov.f).forEach(key => {
+
+                    fileCov.f[key] = typeof fileCov.f[key] === 'boolean' ? (fileCov.f[key] ? 1 : 0) : fileCov.f[key]
+
+// Call the function and catch any errors                })
+
+mergeCoverage().catch(err => {            }
+
+    console.error('Error merging coverage:', err)            
+
+    process.exit(1)            map.addFileCoverage(fileCov)
+
+})        })
+        console.log('Merged e2e test coverage')
+    }
+
+    // Create merged directory if it doesn't exist
+    const mergedDir = path.join(process.cwd(), 'coverage/merged')
+    if (!fs.existsSync(mergedDir)) {
+        fs.mkdirSync(mergedDir, { recursive: true })
+    }
+
+    // Write merged coverage data
+    const mergedCoveragePath = path.join(mergedDir, 'coverage-final.json')
+    fs.writeFileSync(mergedCoveragePath, JSON.stringify(map))
+
+    // Write LCOV format too
+    const Reporter = require('istanbul-lib-report')
+    const reports = require('istanbul-reports')
+    const { createContext } = require('istanbul-lib-report')
+
+    const context = createContext({
+        dir: mergedDir,
+        coverageMap: map
+    })
+
+    const lcovReport = reports.create('lcov', { dir: mergedDir })
+    lcovReport.execute(context)
+
+    const htmlReport = reports.create('html', { dir: path.join(mergedDir, 'lcov-report') })
+    htmlReport.execute(context)
+
+    console.log('Merged coverage reports written to', mergedDir)
+}
+
+mergeCoverage().catch(err => {
+    console.error('Error merging coverage:', err)
+    process.exit(1)
+})

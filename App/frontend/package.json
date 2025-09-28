@@ -13,12 +13,12 @@
     "cypress:e2e": "cypress run",
     "cypress:coverage": "nyc cypress run",
     "test": "bun test",
-    "test:coverage": "bun test --coverage --coverageDirectory=coverage/unit --coverageFormat=json-v8",
+  "test:coverage": "bun test --coverage && nyc report --report-dir=coverage/unit --reporter=json --reporter=lcov",
     "test:e2e": "cypress run",
-    "test:e2e:coverage": "cypress run",
+  "test:e2e:coverage": "cypress run && nyc report --report-dir=coverage/e2e --reporter=json",
     "coverage:merge": "node scripts/merge-coverage.cjs",
     "coverage:report": "nyc report --reporter=html --reporter=text --temp-dir=coverage/merged",
-    "coverage:full": "bun run test:coverage && bun run test:e2e:coverage && bun run coverage:merge"
+  "coverage:full": "bun run test:coverage && bun run test:e2e:coverage && bun run coverage:merge && bun run coverage:report"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
@@ -57,6 +57,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "lcov-parse": "^1.0.0",
     "v8-to-istanbul": "^1.2.1",
     "@biomejs/biome": "2.2.3",
     "@cypress/code-coverage": "^3.14.6",

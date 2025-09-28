@@ -38,20 +38,28 @@ jobs:
           echo "Running unit tests with coverage..."
           bun run test:coverage
           echo "Unit test coverage generated"
+          ls -la coverage/unit/
 
-      - name: Run Cypress e2e tests
+      - name: Start dev server for E2E tests
         working-directory: ./App/frontend
         run: |
           echo "Starting dev server..."
           bun run dev &
           sleep 15
           echo "Development server should be ready..."
-          
+
+      - name: Run Cypress e2e tests with coverage
+        working-directory: ./App/frontend
+        env:
+          NODE_ENV: test
+        run: |
           echo "Running Cypress tests with coverage..."
-          bun run test:e2e:coverage
+          COVERAGE=true bun run test:e2e:coverage
+          ls -la coverage/e2e/
           
-          echo "Stopping dev server..."
-          pkill -f "bun run dev" || true
+      - name: Stop dev server
+        working-directory: ./App/frontend
+        run: pkill -f "bun run dev" || true
 
       - name: Debug coverage files
         working-directory: ./App/frontend

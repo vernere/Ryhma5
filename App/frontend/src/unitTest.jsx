@@ -1,3 +1,5 @@
 export const times = () => {
-    return 2*2
+    const result = 2 * 2;
+    console.log('Calculating:', result);
+    return result;
 }

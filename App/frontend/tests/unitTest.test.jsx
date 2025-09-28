@@ -1,5 +1,5 @@
 import { test, expect, beforeEach, mock } from "bun:test";
-import {times} from "@/unitTest"
+import {times} from "../src/unitTest.jsx"
 
 test("can check if using Bun", () => {
   expect(Bun).toBeDefined();
