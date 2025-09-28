@@ -27,6 +27,10 @@ jobs:
       - name: Install dependencies
         working-directory: ./App/frontend
         run: bun install --frozen-lockfile
+        
+      - name: Create .nyc_output directory
+        working-directory: ./App/frontend
+        run: mkdir -p .nyc_output
 
       - name: Create coverage directories
         working-directory: ./App/frontend
