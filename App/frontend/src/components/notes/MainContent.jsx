@@ -8,7 +8,6 @@ import { CollaboratorBalls } from "./CollaboratorBalls";
 import { UserRoundPlus } from "lucide-react";
 import CollaborationPopup from "./collaborationPopup/CollaborationPopup";
 import { useAuth } from "@/hooks/useAuth";
-import { Tags } from "./tags/Tags";
 import { Toolbar } from "@/components/ui/Toolbar";
 
 export const MainContent = () => {
@@ -50,9 +49,6 @@ export const MainContent = () => {
 
   const tagName = getTagName(selectedNote);
 
-
-
-
   return (
     <div className="flex-1 flex flex-col">
       <div className="bg-white border-b border-gray-200 p-2 flex items-center justify-between">
@@ -88,7 +84,9 @@ export const MainContent = () => {
                     ? new Date(selectedNote.created_at).toLocaleString()
                     : ""}
                 </span>
-                <Tags tagName={tagName} />
+                <span data-cy="noteTag" className="inline-block bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded">
+                  {tagName}
+                </span>
               </div>
             </div>
           </div>
