@@ -67,9 +67,20 @@ export const useTagStore = create((set, get) => ({
         }
     },
 
-    init: () => {
-        get().fetchTags();
-    }
-}));
+    getTags: async (noteId) => {
+        if (!noteId) return [];
+        try {
+            const {data, error} = await supabase
+                .from("note_tags")
+                .select("tag_id")
+                .eq("note_id", noteId);
+            if (error) throw error;
+            return (data || []).map(nt => get().allTags.find(t => t.id === nt.tag_id)).filter(Boolean);
+        } catch (err) {
+            set({error: err.message});
+            return [];
+        }
+    },
 
-useTagStore.getState().init();
+
+}));

@@ -1,28 +1,35 @@
+import {useEffect} from "react";
 import {useTagStore} from "@/hooks/useTagStore";
 import {useNotesStore} from "@/hooks/useNotesStore";
 
 
 export const Tags = ({note}) => {
-    const {allTags, addTag, removeTag,} = useTagStore();
+    const {allTags, fetchTags, addTag, removeTag,} = useTagStore();
     const {fetchNoteById} = useNotesStore();
+
+    useEffect(() => {
+        fetchTags();
+    }, [fetchTags]);
 
 
     const handleSelectTag = async (tagId) => {
+
         if (!note?.note_id) {
             return
         }
 
         const alreadyHasTag = note.note_tags?.some((t) => t.tag_id === tagId);
 
-        if (alreadyHasTag) {
-            await removeTag(note.note_id, tagId);
-
-        } else {
-            await addTag(note.note_id, tagId);
-
+        try {
+            if (alreadyHasTag) {
+                await removeTag(note.note_id, tagId);
+            } else {
+                await addTag(note.note_id, tagId);
+            }
+            await fetchNoteById(note.note_id);
+        } catch (err) {
+            console.error("Error updating tag:", err);
         }
-
-        await fetchNoteById(note.note_id);
 
     }
 
@@ -42,4 +49,3 @@ export const Tags = ({note}) => {
         })}
     </div>);
 };
-
