@@ -60,7 +60,9 @@ export const CollaboratorForm = ({
     } finally {
       setIsSubmitting(false);
     }
-  };  return (
+  };
+  
+  return (
     <form onSubmit={handleInvite} className="mb-6">
       <label className="block text-sm font-medium text-gray-700 mb-2">
         Invite Collaborator

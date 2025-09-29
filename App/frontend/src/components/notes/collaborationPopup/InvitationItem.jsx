@@ -1,15 +1,6 @@
-import { Trash2 } from "lucide-react";
 import { CollaboratorContextBadge } from "./CollaboratorContextBadge";
 
 export const InvitationItem = ({ invite }) => {
-  const handleRemove = async () => {
-    try {
-      await onRemoveCollaborator(invite.to_user_id);
-    } catch (error) {
-      console.error("Failed to remove collaborator:", error);
-    }
-  };
-
   const username = invite.recipient?.username || invite.username || "Unknown";
 
   return (

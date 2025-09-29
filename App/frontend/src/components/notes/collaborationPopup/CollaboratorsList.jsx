@@ -10,7 +10,7 @@ export const CollaboratorsList = ({
   const { invitations } = useInvitationsStore();
 
   const handleRemoveCollaborator = async (userId) => {
-    console.log("Remove collaborator:", userId);
+
   };
 
   if (isLoading) {
@@ -42,7 +42,6 @@ export const CollaboratorsList = ({
         <InvitationItem
           key={invite.invitation_id}
           invite={invite}
-          onRemoveCollaborator={handleRemoveCollaborator}
         />
       ))}
     </div>
