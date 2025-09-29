@@ -8,7 +8,7 @@ import { CollaboratorBalls } from "./CollaboratorBalls";
 import { UserRoundPlus } from "lucide-react";
 import CollaborationPopup from "./collaborationPopup/CollaborationPopup";
 import { useAuth } from "@/hooks/useAuth";
-import { Toolbar } from "@/components/ui/Toolbar";
+import { Toolbar } from "@/components/ui/toolbar";
 
 export const MainContent = () => {
   const {
