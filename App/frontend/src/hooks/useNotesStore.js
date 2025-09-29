@@ -28,16 +28,16 @@ export const useNotesStore = create((set, get) => ({
   setSearchQuery: (q) => set({ searchQuery: q }),
 
   setFavs: (updater) =>
-    set((state) => {
-      const next =
-        typeof updater === "function" ? updater(state.favs) : updater;
-      return { favs: next };
-    }),
+      set((state) => {
+        const next =
+            typeof updater === "function" ? updater(state.favs) : updater;
+        return { favs: next };
+      }),
 
   fetchFavorites: async () => {
     const { data, error } = await supabase
-      .from("favorites")
-      .select("note_id");
+        .from("favorites")
+        .select("note_id");
     if (error) { set({ error: error.message }); return; }
     set({ favs: new Set((data ?? []).map(r => r.note_id)) });
   },
@@ -46,9 +46,9 @@ export const useNotesStore = create((set, get) => ({
     set({ loading: true, error: null });
     try {
       const { data, error } = await supabase
-        .from("notes")
-        .select("*")
-        .order("created_at", { ascending: false });
+          .from("notes")
+          .select("*")
+          .order("created_at", { ascending: false });
 
       if (error) throw error;
       set({ notes: data || [], loading: false });
@@ -61,10 +61,10 @@ export const useNotesStore = create((set, get) => ({
     set({ loading: true, error: null });
     try {
       const { data, error } = await supabase
-        .from("notes")
-        .select("*, note_tags(*, tags(name))")
-        .eq("note_id", noteId)
-        .single();
+          .from("notes")
+          .select("*, note_tags(*, tags(name))")
+          .eq("note_id", noteId)
+          .single();
       if (error) throw error;
 
       set({ selectedNote: data, selectedNoteId: noteId, loading: false });
@@ -84,16 +84,16 @@ export const useNotesStore = create((set, get) => ({
 
     const now = new Date().toISOString();
     const { data, error } = await supabase
-      .from("notes")
-      .insert({
-        title,
-        content: "",
-        creator_id: currentUser.id,
-        created_at: now,
-        updated_at: now,
-      })
-      .select()
-      .single();
+        .from("notes")
+        .insert({
+          title,
+          content: "",
+          creator_id: currentUser.id,
+          created_at: now,
+          updated_at: now,
+        })
+        .select()
+        .single();
 
     if (error) {
       set({ error: error.message });
@@ -112,9 +112,9 @@ export const useNotesStore = create((set, get) => ({
   updateNoteTitle: async (noteId, newTitle) => {
     const now = new Date().toISOString();
     const { error } = await supabase
-      .from("notes")
-      .update({ title: newTitle, updated_at: now })
-      .eq("note_id", noteId);
+        .from("notes")
+        .update({ title: newTitle, updated_at: now })
+        .eq("note_id", noteId);
 
     if (error) {
       set({ error: error.message });
@@ -123,20 +123,20 @@ export const useNotesStore = create((set, get) => ({
 
     set((state) => ({
       notes: state.notes.map((note) =>
-        note.note_id === noteId ? { ...note, title: newTitle, updated_at: now } : note
+          note.note_id === noteId ? { ...note, title: newTitle, updated_at: now } : note
       ),
       selectedNote:
-        state.selectedNote?.note_id === noteId
-          ? { ...state.selectedNote, title: newTitle, updated_at: now }
-          : state.selectedNote,
+          state.selectedNote?.note_id === noteId
+              ? { ...state.selectedNote, title: newTitle, updated_at: now }
+              : state.selectedNote,
     }));
   },
 
   deleteNote: async (noteId) => {
     const { error } = await supabase
-      .from("notes")
-      .delete()
-      .eq("note_id", noteId);
+        .from("notes")
+        .delete()
+        .eq("note_id", noteId);
 
     if (error) {
       set({ error: error.message });
@@ -167,8 +167,8 @@ export const useNotesStore = create((set, get) => ({
     });
 
     const { error } = await supabase
-      .from("favorites")
-      .insert({ user_id: uid, note_id: noteId });
+        .from("favorites")
+        .insert({ user_id: uid, note_id: noteId });
 
     if (error) {
       set((state) => {
@@ -191,9 +191,9 @@ export const useNotesStore = create((set, get) => ({
     });
 
     const { error } = await supabase
-      .from("favorites")
-      .delete()
-      .eq("note_id", noteId);
+        .from("favorites")
+        .delete()
+        .eq("note_id", noteId);
 
     if (error) {
       set((state) => {
@@ -253,58 +253,58 @@ export const useNotesStore = create((set, get) => ({
 
   setupRealtimeSubscription: () => {
     const subscription = supabase
-      .channel("notes-changes")
+        .channel("notes-changes")
 
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "notes" },
-        (payload) => {
-          const inserted = payload.new;
-          set((state) => ({
-            notes: [inserted, ...state.notes],
-          }));
-        }
-      )
+        .on(
+            "postgres_changes",
+            { event: "INSERT", schema: "public", table: "notes" },
+            (payload) => {
+              const inserted = payload.new;
+              set((state) => ({
+                notes: [inserted, ...state.notes],
+              }));
+            }
+        )
 
-      .on(
-        "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "notes" },
-        (payload) => {
-          const updatedNote = payload.new;
-          const { selectedNoteId, currentUser } = get();
+        .on(
+            "postgres_changes",
+            { event: "UPDATE", schema: "public", table: "notes" },
+            (payload) => {
+              const updatedNote = payload.new;
+              const { selectedNoteId, currentUser } = get();
 
-          set((state) => ({
-            notes: state.notes.map((note) =>
-              note.note_id === updatedNote.note_id ? updatedNote : note
-            ),
-          }));
+              set((state) => ({
+                notes: state.notes.map((note) =>
+                    note.note_id === updatedNote.note_id ? updatedNote : note
+                ),
+              }));
 
-          if (
-            selectedNoteId === updatedNote.note_id &&
-            updatedNote.updated_by !== currentUser?.id
-          ) {
-            set({ selectedNote: updatedNote });
-          }
-        }
-      )
+              if (
+                  selectedNoteId === updatedNote.note_id &&
+                  updatedNote.updated_by !== currentUser?.id
+              ) {
+                set({ selectedNote: updatedNote });
+              }
+            }
+        )
 
-      .on(
-        "postgres_changes",
-        { event: "DELETE", schema: "public", table: "notes" },
-        (payload) => {
-          const deletedId = payload.old?.note_id;
-          set((state) => {
-            const next = state.notes.filter((note) => note.note_id !== deletedId);
-            const deletingSelected = state.selectedNoteId === deletedId;
-            return {
-              notes: next,
-              selectedNote: deletingSelected ? null : state.selectedNote,
-              selectedNoteId: deletingSelected ? null : state.selectedNoteId,
-            };
-          });
-        }
-      )
-      .subscribe();
+        .on(
+            "postgres_changes",
+            { event: "DELETE", schema: "public", table: "notes" },
+            (payload) => {
+              const deletedId = payload.old?.note_id;
+              set((state) => {
+                const next = state.notes.filter((note) => note.note_id !== deletedId);
+                const deletingSelected = state.selectedNoteId === deletedId;
+                return {
+                  notes: next,
+                  selectedNote: deletingSelected ? null : state.selectedNote,
+                  selectedNoteId: deletingSelected ? null : state.selectedNoteId,
+                };
+              });
+            }
+        )
+        .subscribe();
 
     set({ realtimeSubscription: subscription });
   },
@@ -341,20 +341,20 @@ export const useNotesStore = create((set, get) => ({
       const now = new Date().toISOString();
 
       const { error } = await supabase
-        .from("notes")
-        .update({ content, updated_at: now })
-        .eq("note_id", noteId);
+          .from("notes")
+          .update({ content, updated_at: now })
+          .eq("note_id", noteId);
 
       if (error) throw error;
 
       set((state) => ({
         notes: state.notes.map((note) =>
-          note.note_id === noteId ? { ...note, content, updated_at: now } : note
+            note.note_id === noteId ? { ...note, content, updated_at: now } : note
         ),
         selectedNote:
-          state.selectedNote?.note_id === noteId
-            ? { ...state.selectedNote, content, updated_at: now }
-            : state.selectedNote,
+            state.selectedNote?.note_id === noteId
+                ? { ...state.selectedNote, content, updated_at: now }
+                : state.selectedNote,
       }));
     } catch (err) {
       set({ error: err.message });
