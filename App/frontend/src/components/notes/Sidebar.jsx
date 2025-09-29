@@ -89,7 +89,7 @@ const Sidebar = () => {
     <>
       <div className="w-60 bg-white border-r border-gray-200 flex flex-col">
         <div className="p-2 border-b border-gray-200 flex items-center justify-between overflow-ellipsis">
-          <p className="text-md font-semibold">{user?.email}</p>
+          <p data-cy="userEmail" className="text-md font-semibold">{user?.email}</p>
           <button
             onClick={toggleInvitePopup}
             className="relative p-1 rounded-md hover:bg-gray-100 transition-colors cursor-pointer"
