@@ -45,9 +45,9 @@ The project is implemented in React using Bun and supports localization in Engli
 - /App: Contains the main application code.
 - /App/frontend: Contains the configuration files.
 - /App/frontend/cypress/e2e: Contains the frontend e2e testing code.
-- /App/frontend/coverage: Cypress code coverage
+- /App/frontend/coverage: contains coverage code reports and data
 - /App/schema.sql: DB schema
-- Docker
+- /App/frontennd/dockerfile: Docker
 
 ## GitHub actions
 
@@ -62,7 +62,38 @@ Cypress code coverage:
 ```
 - /App/frontend/coverage/lcov-report/index.html for visual report
 
-## Docker
+## Running the Application with Docker
+**Running Docker locally**
+
+**Set the environment variables:**
+
+- Create a .env file in the frontend directory of the project.
+
+Add the following code to the .env file:
+```sh
+   VITE_SUPABASE_URL={your_supabase_url}
+   VITE_SUPABASE_PUBLISHABLE_KEY={your_supabase_key}
+```
+
+**Build Docker Image:**
+   
+   ```sh
+      docker build -t ryhma5:latest .
+   ```
+**Check docker image:**
+   
+   ```sh
+      docker images
+   ```
+
+**Run docker image**
+
+   ```sh
+      docker run -p 5173:5173 --env-file .env ryhma5:latest
+   ```
+
+**Docker Hub**
+   
 
 ## Data persistance
 
