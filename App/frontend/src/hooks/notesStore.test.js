@@ -1,6 +1,20 @@
 import { test, expect, beforeEach, mock } from "bun:test";
 import { useNotesStore } from "./useNotesStore";
 
+mock.module("@/lib/supabaseClient", () => ({
+  supabase: {
+    from: mock(() => ({
+      select: mock(() => ({ data: [], error: null })),
+      insert: mock(() => ({ data: [], error: null })),
+      update: mock(() => ({ data: [], error: null })),
+      delete: mock(() => ({ data: [], error: null })),
+      eq: mock(() => ({ data: [], error: null })),
+      single: mock(() => ({ data: null, error: null })),
+      order: mock(() => ({ data: [], error: null })),
+    })),
+  },
+}));
+
 beforeEach(() => {
   useNotesStore.setState({
     notes: [],
