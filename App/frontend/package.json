@@ -12,14 +12,13 @@
     "cypress:component": "cypress run --component",
     "cypress:e2e": "cypress run",
     "cypress:coverage": "nyc cypress run",
-    "test": "bun test",
-    "test:coverage": "nyc --all --report-dir=coverage/unit --reporter=json --reporter=lcov bun test",
+    "test": "bun test --coverage",
+  "test:coverage": "bun test --coverage",
     "test:e2e": "cypress run",
     "test:e2e:coverage": "cypress run && nyc --all report --report-dir=coverage/e2e --reporter=json",
     "coverage:merge": "node scripts/merge-coverage.cjs",
     "coverage:report": "nyc report --reporter=html --reporter=text --temp-dir=coverage/merged",
-    "coverage:full": "pwsh -c 'Get-ChildItem -Path coverage/bun,coverage/e2e,coverage/merged,coverage/unit,coverage/src -Recurse -File | Remove-Item -Force' && bun test --coverage && bun run bun:coverage:lcov && bun run test:e2e:coverage && bun run coverage:merge && bun run coverage:report",
-    "bun:coverage:lcov": "nyc report --reporter=lcov --temp-dir=.nyc_output --report-dir=coverage/bun"
+  "coverage:full": "pwsh -c 'if (Test-Path .nyc_output) { Remove-Item .nyc_output/* -Force } ; Get-ChildItem -Path coverage -Recurse -File | Remove-Item -Force' && bun run test:coverage && bun run test:e2e:coverage && bun run coverage:merge && bun run coverage:report"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
