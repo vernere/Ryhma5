@@ -1,0 +1,51 @@
+name: CI
+on:
+  push:
+    branches:
+      - 'ccr'
+    paths:
+      - 'App/frontend/**'
+      - '.github/workflows/ci.yaml'
+
+jobs:
+  test:
+    env:
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+          cache-dependency-path: ./App/frontend/bun.lock
+
+      - name: Install dependencies
+        working-directory: ./App/frontend
+        run: bun install --frozen-lockfile
+
+      - name: Run unit tests with coverage
+        run: bun test --coverage --coverage-dir=coverage/unit
+
+      - name: Run Cypress e2e tests
+        run: |
+          bunx cypress run --config video=false
+          mkdir -p coverage/e2e
+          mv coverage/coverage-final.json coverage/e2e/ 2>/dev/null || true
+
+      - name: Merge coverage reports
+        run: node scripts/merge-coverage,js
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with: 
+          directory: ./coverage/merged/
+          flags: merged
+          name: merged-coverage
+          fail_ci_if_error: true
+          
+
