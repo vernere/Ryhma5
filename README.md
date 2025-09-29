@@ -30,6 +30,11 @@ The project is implemented in React using Bun and supports localization in Engli
 - Tiptap
 - docx
 - file-saver
+- clsx
+- html-to-text
+- html2pdf
+- turndown
+- v8-to-istanbul
 
 ## Use case diagram
 
