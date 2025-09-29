@@ -58,10 +58,10 @@ export default function CollaborativeEditor({ Toolbar }) {
     }, []);
 
     useEffect(() => {
-        if (editor && selectedNote?.content) {
-            editor.commands.setContent(selectedNote.content);
+        if (editor && selectedNote) {
+            editor.commands.setContent(selectedNote.content || '');
         }
-    }, [editor, selectedNoteId, selectedNote?.content]);
+    }, [editor, selectedNoteId, selectedNote]);
 
     useEffect(() => {
         if (user) setCurrentUser(user);
