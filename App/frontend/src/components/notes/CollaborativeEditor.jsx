@@ -135,5 +135,3 @@ export default function CollaborativeEditor({ Toolbar }) {
 
     );
 };
-
-export default CollaborativeEditor;

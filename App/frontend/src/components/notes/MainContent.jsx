@@ -9,6 +9,7 @@ import { UserRoundPlus } from "lucide-react";
 import CollaborationPopup from "./collaborationPopup/CollaborationPopup";
 import { useAuth } from "@/hooks/useAuth";
 import { Tags } from "./tags/Tags";
+import { Toolbar } from "@/components/ui/Toolbar";
 
 export const MainContent = () => {
   const {
@@ -118,6 +119,8 @@ export const MainContent = () => {
             </div>
           </div>
         )}
+
+        <Toolbar />
       </div>
 
       <CollaborationPopup
