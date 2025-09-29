@@ -4,8 +4,12 @@ import { useRealtimeStore } from "@/hooks/useRealtimeStore";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useState } from "react";
+import Underline from '@tiptap/extension-underline'
+import TextAlign from '@tiptap/extension-text-align'
+import BulletList from '@tiptap/extension-bullet-list'
+import ListItem from '@tiptap/extension-list-item';
 
-export const CollaborativeEditor = () => {
+export default function CollaborativeEditor({ Toolbar }) {
     const {
         selectedNote,
         selectedNoteId,
@@ -27,7 +31,18 @@ export const CollaborativeEditor = () => {
 
     const editor = useEditor(
         {
-            extensions: [StarterKit.configure({ history: false })],
+            extensions: [
+                StarterKit.configure({ 
+                    history: false,
+                    bulletList: false // disable the built-in bullet list to use our own
+                }),
+                Underline,
+                BulletList,
+                ListItem,
+                TextAlign.configure({
+                    types: ['heading', 'paragraph', 'bulletList'],
+                }),
+            ],
             editorProps: {
                 attributes: {
                     class: "prose max-w-none focus:outline-none min-h-[400px] p-4",
@@ -76,8 +91,8 @@ export const CollaborativeEditor = () => {
                 setIsLocalChange(false);
                 return;
             }
-
-            setSaveStatus("saving");
+            
+            setSaveStatus('saving');
             handleContentChange(editor.getHTML());
             setTimeout(() => setSaveStatus("saved"), 2500);
         };
@@ -103,15 +118,21 @@ export const CollaborativeEditor = () => {
     }
 
     return (
-        <div className="rounded-2xl min-h-[400px]">
-            <div
-                data-cy="noteContent"
-                className="prose max-w-none text-gray-800 bg-white rounded-b-lg shadow-sm p-6"
-                style={{ minHeight: "90vh" }}
-            >
-                <EditorContent editor={editor} />
+        <div className="space-y-6">
+            <div className="sticky top-0 z-50 shadow">
+                <Toolbar editor={editor} />
+            </div>
+            <div className="rounded-2xl min-h-[400px]">
+                <div
+                    data-cy="noteContent"
+                    className="prose max-w-none text-gray-800 bg-white rounded-b-lg shadow-sm p-6 [&_ul]:list-disc [&_ul]:pl-6"
+                    style={{ minHeight: "90vh" }}
+                >
+                    <EditorContent editor={editor} />
+                </div>
             </div>
         </div>
+
     );
 };
 
