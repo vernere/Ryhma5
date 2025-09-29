@@ -56,11 +56,15 @@ The project includes e2e tests for the frontend layer To run the tests, use the 
    ```sh
       bun cypress:e2e
 ```
-Cypress code coverage:
+Unit tests:
    ```sh
-      bun cypress:coverage
+      bun test
 ```
-- /App/frontend/coverage/lcov-report/index.html for visual report
+Code coverage:
+   ```sh
+      bun coverage:full
+```
+- /App/frontend/coverage/merged/index.html for visual report
 
 ## Docker
 
