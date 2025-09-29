@@ -154,7 +154,7 @@ async function mergeCoverage() {
                 finalMap.addFileCoverage(coverage)
             }
                 // Merge Bun LCOV coverage
-                const bunLcovPath = path.join(process.cwd(), 'coverage/bun/lcov.info')
+                const bunLcovPath = path.join(process.cwd(), 'coverage/lcov.info')
                 let bunLcovData = []
                 let bunLcovParseError = null;
                 let bunLcovExists = fs.existsSync(bunLcovPath);
