@@ -50,9 +50,11 @@ The project is implemented in React using Bun and supports localization in Engli
 - /App: Contains the main application code.
 - /App/frontend: Contains the configuration files.
 - /App/frontend/cypress/e2e: Contains the frontend e2e testing code.
-- /App/frontend/coverage: Cypress code coverage
-- /App/schema.sql: DB schema
+- /App/frontend/coverage: Cypress code coverage.
+- /App/schema.sql: DB schema.
 - Docker
+- .github/ci.yaml: GitHub actions pipeline.
+- .env: contains environment variables for application.
 
 ## GitHub actions
 
