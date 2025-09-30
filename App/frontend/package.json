@@ -28,6 +28,7 @@
     "@tiptap/starter-kit": "^3.4.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cn-func": "^1.0.1",
     "cypress": "^15.1.0",
     "cypress-downloadfile": "^1.2.4",
     "docx": "^9.5.1",
