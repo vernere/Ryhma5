@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Search } from "lucide-react";
-import { CgHeart, CgAddR } from "react-icons/cg";
+import { CgAddR, CgHeart } from "react-icons/cg";
 import { Navigation } from "@/components/ui/navigation";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useAuth } from "@/hooks/useAuth";
@@ -59,11 +59,8 @@ const Sidebar = () => {
     <div className="w-60 bg-white border-r border-gray-200 flex flex-col">
       <div className="p-2 border-b border-gray-200 flex items-center justify-between">
         <h1 className="text-lg font-semibold">{user?.email}</h1>
-        <button
-          className="pt-1 text-xl hover:text-gray-600"
-          onClick={handleCreateNote}
-        >
-          <CgAddR/>
+        <button className="pt-1 text-xl hover:text-gray-600" onClick={handleCreateNote}>
+          <CgAddR />
         </button>
       </div>
 
@@ -86,10 +83,9 @@ const Sidebar = () => {
               <div
                 key={note.note_id}
                 onClick={() => handleSelectNote(note.note_id)}
-                className={`px-3 py-2 cursor-pointer hover:bg-gray-50 flex flex-col space-y-1 ${selectedNoteId === note.note_id
-                  ? "bg-indigo-50 border-l-4 border-indigo-500"
-                  : ""
-                  }`}
+                className={`px-3 py-2 cursor-pointer hover:bg-gray-50 flex flex-col space-y-1 ${
+                  selectedNoteId === note.note_id ? "bg-indigo-50 border-l-4 border-indigo-500" : ""
+                }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -100,31 +96,27 @@ const Sidebar = () => {
                       title="Favorite"
                     >
                       <CgHeart
-                        className={`w-4 h-4 ${isFavorite(note.note_id)
-                          ? "text-red-500"
-                          : "text-gray-300"
-                          }`}
+                        className={`w-4 h-4 ${
+                          isFavorite(note.note_id) ? "text-red-500" : "text-gray-300"
+                        }`}
                       />
                     </button>
 
                     <span
-                      className={`text-sm ${selectedNoteId === note.note_id
-                        ? "font-semibold text-indigo-700"
-                        : "font-medium text-gray-800"
-                        }`}
+                      className={`text-sm ${
+                        selectedNoteId === note.note_id
+                          ? "font-semibold text-indigo-700"
+                          : "font-medium text-gray-800"
+                      }`}
                     >
                       {note.title}
                     </span>
                   </div>
 
                   <span className="text-xs text-gray-400">
-                    {note.created_at
-                      ? new Date(note.created_at).toLocaleDateString()
-                      : ""}
+                    {note.created_at ? new Date(note.created_at).toLocaleDateString() : ""}
                   </span>
                 </div>
-
-                 
               </div>
             ))}
           </div>
@@ -139,8 +131,9 @@ const Sidebar = () => {
               data-cy="noteSelect"
               key={note.note_id}
               onClick={() => handleSelectNote(note.note_id)}
-              className={`px-4 py-3 cursor-pointer hover:bg-gray-50 flex flex-col space-y-1 border-b border-transparent ${active ? "bg-indigo-50 border-l-4 border-indigo-500" : ""
-                }`}
+              className={`px-4 py-3 cursor-pointer hover:bg-gray-50 flex flex-col space-y-1 border-b border-transparent ${
+                active ? "bg-indigo-50 border-l-4 border-indigo-500" : ""
+              }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 min-w-0">
@@ -151,25 +144,23 @@ const Sidebar = () => {
                     title="Favorite"
                   >
                     <CgHeart
-                      className={`w-4 h-4 ${isFavorite(note.note_id)
-                        ? "text-red-500"
-                        : "text-gray-300"
-                        }`}
+                      className={`w-4 h-4 ${
+                        isFavorite(note.note_id) ? "text-red-500" : "text-gray-300"
+                      }`}
                     />
                   </button>
 
                   <div
-                    className={`text-sm truncate ${active ? "font-semibold text-indigo-700" : "text-gray-800"
-                      }`}
+                    className={`text-sm truncate ${
+                      active ? "font-semibold text-indigo-700" : "text-gray-800"
+                    }`}
                   >
                     {note.title}
                   </div>
                 </div>
 
                 <div className="text-xs text-gray-400">
-                  {note.created_at
-                    ? new Date(note.created_at).toLocaleDateString()
-                    : ""}
+                  {note.created_at ? new Date(note.created_at).toLocaleDateString() : ""}
                 </div>
               </div>
             </div>
