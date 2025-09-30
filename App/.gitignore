@@ -27,6 +27,7 @@ frontend/.env.*
 # Testing and code coverage output
 .nyc_output
 coverage
+*/cypress/downloads
 
 # caches
 .eslintcache

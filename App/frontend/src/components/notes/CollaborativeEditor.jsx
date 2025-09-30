@@ -3,12 +3,13 @@ import { useNotesStore } from "@/hooks/useNotesStore";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useState } from "react";
+import { Toolbar } from "@/components/ui/toolbar"
 import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import BulletList from '@tiptap/extension-bullet-list'
 import ListItem from '@tiptap/extension-list-item';
 
-export default function CollaborativeEditor({ Toolbar }) {
+export default function CollaborativeEditor() {
     const {
         selectedNote,
         selectedNoteId,
@@ -110,20 +111,18 @@ export default function CollaborativeEditor({ Toolbar }) {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="rounded-2xl min-h-[400px]">
             <div className="sticky top-0 z-50 shadow">
-                <Toolbar editor={editor} />
+                <Toolbar editor={editor} noteTitle={selectedNote.title} />
             </div>
-            <div className="rounded-2xl min-h-[400px]">
-                <div
-                    data-cy="noteContent"
-                    className="prose max-w-none text-gray-800 bg-white rounded-b-lg shadow-sm p-6 [&_ul]:list-disc [&_ul]:pl-6"
-                    style={{ minHeight: "90vh" }}
-                >
-                    <EditorContent editor={editor} />
-                </div>
+            <div
+                data-cy="noteContent"
+                className="prose max-w-none text-gray-800 bg-white rounded-b-lg shadow-sm p-6 [&_ul]:list-disc [&_ul]:pl-6"
+                style={{ minHeight: "90vh" }}
+            >
+                <EditorContent editor={editor} />
+
             </div>
         </div>
-
     );
 }
