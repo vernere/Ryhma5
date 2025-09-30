@@ -2,6 +2,11 @@ import { CgNotes } from "react-icons/cg";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useEffect } from "react";
 import CollaborativeEditor from "@/components/notes/CollaborativeEditor";
+import { Tags } from "@/components/tags/Tags";
+
+const MainContent = () => {
+  const { selectedNote, selectedNoteId, fetchNotes, activeUsers, updateNoteTitle, deleteNote } =
+    useNotesStore();
 import { useInvitationsStore } from "@/hooks/useInvitationsStore";
 import { useState } from "react";
 import { CollaboratorBalls } from "./CollaboratorBalls";
@@ -28,11 +33,8 @@ export const MainContent = () => {
 
   useEffect(() => {
     fetchNotes();
-    if (!selectedNoteId || !user.id) return;
-    fetchNoteCollaborators(selectedNoteId);
-    getInvitesByNoteId(selectedNoteId, user.id);
-  }, [selectedNoteId, user.id]);
-  
+  }, [fetchNotes]);
+
   const getTagName = (note) => {
     if (!note || !note.note_tags) return "No tag";
     const tagObj = Array.isArray(note.note_tags)
@@ -49,6 +51,9 @@ export const MainContent = () => {
 
   const tagName = getTagName(selectedNote);
 
+
+
+
   return (
     <div className="flex-1 flex flex-col">
       <div className="bg-white border-b border-gray-200 p-2 flex items-center justify-between">
@@ -60,9 +65,7 @@ export const MainContent = () => {
                   data-cy="noteTitle"
                   className="text-lg focus:outline-none"
                   value={selectedNote.title || ""}
-                  onChange={(e) =>
-                    updateNoteTitle(selectedNote.note_id, e.target.value)
-                  }
+                  onChange={(e) => updateNoteTitle(selectedNoteId, e.target.value)}
                   placeholder="Title…"
                 />
 
@@ -84,9 +87,7 @@ export const MainContent = () => {
                     ? new Date(selectedNote.created_at).toLocaleString()
                     : ""}
                 </span>
-                <span data-cy="noteTag" className="inline-block bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded">
-                  {tagName}
-                </span>
+                <Tags note={selectedNote} />
               </div>
             </div>
           </div>
@@ -101,6 +102,22 @@ export const MainContent = () => {
             </div>
           </div>
         )}
+
+        <div className="flex items-center gap-2">
+          {selectedNote && (
+            <>
+
+
+              <button
+                className="px-2 py-1 text-sm border rounded text-red-600 hover:bg-red-50"
+                onClick={() => deleteNote(selectedNoteId)}
+              >
+                Delete
+              </button>
+            </>
+          )}
+        </div>
+        <Toolbar />
       </div>
       <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
         {selectedNote ? (
@@ -111,9 +128,7 @@ export const MainContent = () => {
           <div className="flex items-center justify-center h-full w-full pr-10">
             <div className="text-center">
               <CgNotes className="text-gray-300 text-4xl mx-auto mb-4" />
-              <div className="text-gray-400 text-lg">
-                Select a note to start editing
-              </div>
+              <div className="text-gray-400 text-lg">Select a note to start editing</div>
             </div>
           </div>
         )}
@@ -131,3 +146,4 @@ export const MainContent = () => {
 };
 
 export default MainContent;
+

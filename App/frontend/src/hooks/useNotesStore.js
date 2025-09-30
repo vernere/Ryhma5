@@ -54,17 +54,17 @@ export const useNotesStore = create((set, get) => ({
 
   setFavs: (updater) =>
     set((state) => {
-      const next =
-        typeof updater === "function" ? updater(state.favs) : updater;
+      const next = typeof updater === "function" ? updater(state.favs) : updater;
       return { favs: next };
     }),
 
   fetchFavorites: async () => {
-    const { data, error } = await supabase
-      .from("favorites")
-      .select("note_id");
-    if (error) { set({ error: error.message }); return; }
-    set({ favs: new Set((data ?? []).map(r => r.note_id)) });
+    const { data, error } = await supabase.from("favorites").select("note_id");
+    if (error) {
+      set({ error: error.message });
+      return;
+    }
+    set({ favs: new Set((data ?? []).map((r) => r.note_id)) });
   },
 
   fetchNotes: async () => {
@@ -177,10 +177,7 @@ export const useNotesStore = create((set, get) => ({
   },
 
   deleteNote: async (noteId) => {
-    const { error } = await supabase
-      .from("notes")
-      .delete()
-      .eq("note_id", noteId);
+    const { error } = await supabase.from("notes").delete().eq("note_id", noteId);
 
     if (error) {
       set({ error: error.message });
@@ -210,9 +207,7 @@ export const useNotesStore = create((set, get) => ({
       return { favs: s };
     });
 
-    const { error } = await supabase
-      .from("favorites")
-      .insert({ user_id: uid, note_id: noteId });
+    const { error } = await supabase.from("favorites").insert({ user_id: uid, note_id: noteId });
 
     if (error) {
       set((state) => {
@@ -234,10 +229,7 @@ export const useNotesStore = create((set, get) => ({
       return { favs: s };
     });
 
-    const { error } = await supabase
-      .from("favorites")
-      .delete()
-      .eq("note_id", noteId);
+    const { error } = await supabase.from("favorites").delete().eq("note_id", noteId);
 
     if (error) {
       set((state) => {
