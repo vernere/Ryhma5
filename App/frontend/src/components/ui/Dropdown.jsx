@@ -1,9 +1,9 @@
-import React from "react";
+import { useRef, useEffect } from "react";
 
 const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
-    const dropdownRef = React.useRef(null);
+    const dropdownRef = useRef(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target) && !anchorEl?.contains(event.target)) {
                 onClose();
@@ -21,13 +21,12 @@ const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
     }, [isOpen, onClose, anchorEl]);
 
     if (!isOpen) return null;
-
     const rect = anchorEl?.getBoundingClientRect();
 
     return (
         <div
             ref={dropdownRef}
-            className="fixed bg-white rounded-lg shadow-lg border z-50"
+            className="fixed bg-white rounded-lg shadow-lg border-gray-200 border z-50"
             style={{
                 top: rect ? `${rect.bottom + window.scrollY + 5}px` : '0',
                 left: rect ? `${rect.right + window.scrollX - 20}px` : '0',
@@ -77,7 +76,6 @@ const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
                 Export as docx
             </button>
         </div>
-
     )
 }
 
