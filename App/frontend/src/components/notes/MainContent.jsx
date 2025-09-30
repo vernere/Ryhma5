@@ -3,39 +3,15 @@ import { CgNotes } from "react-icons/cg";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useEffect } from "react";
 import CollaborativeEditor from "@/components/notes/CollaborativeEditor";
+import { Tags } from "@/components/tags/Tags";
 
 const MainContent = () => {
-  const {
-    selectedNote,
-    selectedNoteId,
-    fetchNotes,
-    activeUsers,
-    updateNoteTitle,
-    deleteNote,
-  } = useNotesStore();
+  const { selectedNote, selectedNoteId, fetchNotes, activeUsers, updateNoteTitle, deleteNote } =
+    useNotesStore();
 
   useEffect(() => {
     fetchNotes();
   }, [fetchNotes]);
-
-  const getTagName = (note) => {
-    if (!note || !note.note_tags) return "No tag";
-    const tagObj = Array.isArray(note.note_tags)
-      ? note.note_tags[0]
-      : note.note_tags;
-    if (!tagObj) return "No tag";
-    const tagName =
-      tagObj.tags?.name ||
-      tagObj.tags?.[0]?.name ||
-      tagObj.tag_name ||
-      tagObj.name;
-    return tagName || "No tag";
-  };
-
-  const tagName = getTagName(selectedNote);
-
-
-
 
   return (
     <div className="flex-1 flex flex-col">
@@ -48,9 +24,7 @@ const MainContent = () => {
                   data-cy="noteTitle" 
                   className="text-xl font-semibold text-gray-900 truncate max-w-2xl border-b focus:outline-none"
                   value={selectedNote.title || ""}
-                  onChange={(e) =>
-                    updateNoteTitle(selectedNoteId, e.target.value)
-                  }
+                  onChange={(e) => updateNoteTitle(selectedNoteId, e.target.value)}
                   placeholder="Title…"
                 />
                 {activeUsers.map((user) => (
@@ -64,14 +38,12 @@ const MainContent = () => {
                 ))}
               </div>
               <div className="mt-1 flex items-center space-x-2">
-                <span data-cy="noteTag" className="inline-block bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded">
-                  {tagName}
-                </span>
                 <span data-cy="noteCreatedAt" className="text-xs text-gray-400">
                   {selectedNote.created_at
                     ? new Date(selectedNote.created_at).toLocaleString()
                     : ""}
                 </span>
+                <Tags note={selectedNote} />
               </div>
             </div>
           </div>
@@ -90,8 +62,6 @@ const MainContent = () => {
         <div className="flex items-center gap-2">
           {selectedNote && (
             <>
-
-
               <button
                 className="px-2 py-1 text-sm border rounded text-red-600 hover:bg-red-50"
                 onClick={() => deleteNote(selectedNoteId)}
@@ -112,9 +82,7 @@ const MainContent = () => {
           <div className="flex items-center justify-center h-full w-full pr-10">
             <div className="text-center">
               <CgNotes className="text-gray-300 text-4xl mx-auto mb-4" />
-              <div className="text-gray-400 text-lg">
-                Select a note to start editing
-              </div>
+              <div className="text-gray-400 text-lg">Select a note to start editing</div>
             </div>
           </div>
         )}

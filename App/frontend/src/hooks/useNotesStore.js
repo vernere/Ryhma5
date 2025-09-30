@@ -29,17 +29,17 @@ export const useNotesStore = create((set, get) => ({
 
   setFavs: (updater) =>
     set((state) => {
-      const next =
-        typeof updater === "function" ? updater(state.favs) : updater;
+      const next = typeof updater === "function" ? updater(state.favs) : updater;
       return { favs: next };
     }),
 
   fetchFavorites: async () => {
-    const { data, error } = await supabase
-      .from("favorites")
-      .select("note_id");
-    if (error) { set({ error: error.message }); return; }
-    set({ favs: new Set((data ?? []).map(r => r.note_id)) });
+    const { data, error } = await supabase.from("favorites").select("note_id");
+    if (error) {
+      set({ error: error.message });
+      return;
+    }
+    set({ favs: new Set((data ?? []).map((r) => r.note_id)) });
   },
 
   fetchNotes: async () => {
@@ -133,10 +133,7 @@ export const useNotesStore = create((set, get) => ({
   },
 
   deleteNote: async (noteId) => {
-    const { error } = await supabase
-      .from("notes")
-      .delete()
-      .eq("note_id", noteId);
+    const { error } = await supabase.from("notes").delete().eq("note_id", noteId);
 
     if (error) {
       set({ error: error.message });
@@ -166,9 +163,7 @@ export const useNotesStore = create((set, get) => ({
       return { favs: s };
     });
 
-    const { error } = await supabase
-      .from("favorites")
-      .insert({ user_id: uid, note_id: noteId });
+    const { error } = await supabase.from("favorites").insert({ user_id: uid, note_id: noteId });
 
     if (error) {
       set((state) => {
@@ -190,10 +185,7 @@ export const useNotesStore = create((set, get) => ({
       return { favs: s };
     });
 
-    const { error } = await supabase
-      .from("favorites")
-      .delete()
-      .eq("note_id", noteId);
+    const { error } = await supabase.from("favorites").delete().eq("note_id", noteId);
 
     if (error) {
       set((state) => {
@@ -255,55 +247,40 @@ export const useNotesStore = create((set, get) => ({
     const subscription = supabase
       .channel("notes-changes")
 
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "notes" },
-        (payload) => {
-          const inserted = payload.new;
-          set((state) => ({
-            notes: [inserted, ...state.notes],
-          }));
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "notes" }, (payload) => {
+        const inserted = payload.new;
+        set((state) => ({
+          notes: [inserted, ...state.notes],
+        }));
+      })
+
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "notes" }, (payload) => {
+        const updatedNote = payload.new;
+        const { selectedNoteId, currentUser } = get();
+
+        set((state) => ({
+          notes: state.notes.map((note) =>
+            note.note_id === updatedNote.note_id ? updatedNote : note
+          ),
+        }));
+
+        if (selectedNoteId === updatedNote.note_id && updatedNote.updated_by !== currentUser?.id) {
+          set({ selectedNote: updatedNote });
         }
-      )
+      })
 
-      .on(
-        "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "notes" },
-        (payload) => {
-          const updatedNote = payload.new;
-          const { selectedNoteId, currentUser } = get();
-
-          set((state) => ({
-            notes: state.notes.map((note) =>
-              note.note_id === updatedNote.note_id ? updatedNote : note
-            ),
-          }));
-
-          if (
-            selectedNoteId === updatedNote.note_id &&
-            updatedNote.updated_by !== currentUser?.id
-          ) {
-            set({ selectedNote: updatedNote });
-          }
-        }
-      )
-
-      .on(
-        "postgres_changes",
-        { event: "DELETE", schema: "public", table: "notes" },
-        (payload) => {
-          const deletedId = payload.old?.note_id;
-          set((state) => {
-            const next = state.notes.filter((note) => note.note_id !== deletedId);
-            const deletingSelected = state.selectedNoteId === deletedId;
-            return {
-              notes: next,
-              selectedNote: deletingSelected ? null : state.selectedNote,
-              selectedNoteId: deletingSelected ? null : state.selectedNoteId,
-            };
-          });
-        }
-      )
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "notes" }, (payload) => {
+        const deletedId = payload.old?.note_id;
+        set((state) => {
+          const next = state.notes.filter((note) => note.note_id !== deletedId);
+          const deletingSelected = state.selectedNoteId === deletedId;
+          return {
+            notes: next,
+            selectedNote: deletingSelected ? null : state.selectedNote,
+            selectedNoteId: deletingSelected ? null : state.selectedNoteId,
+          };
+        });
+      })
       .subscribe();
 
     set({ realtimeSubscription: subscription });
