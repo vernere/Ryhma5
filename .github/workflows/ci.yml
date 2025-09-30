@@ -5,7 +5,7 @@ on:
       - 'ccr'
     paths:
       - 'App/frontend/**'
-      - '.github/workflows/ci.yaml'
+      - '.github/workflows/ci.yml'
 
 jobs:
   test:
