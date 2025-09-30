@@ -1,18 +1,13 @@
 import { CgNotes } from "react-icons/cg";
 import { useNotesStore } from "@/hooks/useNotesStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CollaborativeEditor from "@/components/notes/CollaborativeEditor";
 import { Tags } from "@/components/tags/Tags";
-
-const MainContent = () => {
-  const { selectedNote, selectedNoteId, fetchNotes, activeUsers, updateNoteTitle, deleteNote } =
-    useNotesStore();
-import { useInvitationsStore } from "@/hooks/useInvitationsStore";
-import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { CollaborationPopup } from "./collaborationPopup/CollaborationPopup";
 import { CollaboratorBalls } from "./CollaboratorBalls";
 import { UserRoundPlus } from "lucide-react";
-import CollaborationPopup from "./collaborationPopup/CollaborationPopup";
-import { useAuth } from "@/hooks/useAuth";
+import { useInvitationsStore } from "@/hooks/useInvitationsStore";
 import { Toolbar } from "@/components/ui/toolbar";
 
 export const MainContent = () => {
@@ -33,27 +28,11 @@ export const MainContent = () => {
 
   useEffect(() => {
     fetchNotes();
-  }, [fetchNotes]);
-
-  const getTagName = (note) => {
-    if (!note || !note.note_tags) return "No tag";
-    const tagObj = Array.isArray(note.note_tags)
-      ? note.note_tags[0]
-      : note.note_tags;
-    if (!tagObj) return "No tag";
-    const tagName =
-      tagObj.tags?.name ||
-      tagObj.tags?.[0]?.name ||
-      tagObj.tag_name ||
-      tagObj.name;
-    return tagName || "No tag";
-  };
-
-  const tagName = getTagName(selectedNote);
-
-
-
-
+    if (!selectedNoteId || !user.id) return;
+    fetchNoteCollaborators(selectedNoteId);
+    getInvitesByNoteId(selectedNoteId, user.id);
+  }, [selectedNoteId, user.id]);
+  
   return (
     <div className="flex-1 flex flex-col">
       <div className="bg-white border-b border-gray-200 p-2 flex items-center justify-between">
@@ -102,22 +81,6 @@ export const MainContent = () => {
             </div>
           </div>
         )}
-
-        <div className="flex items-center gap-2">
-          {selectedNote && (
-            <>
-
-
-              <button
-                className="px-2 py-1 text-sm border rounded text-red-600 hover:bg-red-50"
-                onClick={() => deleteNote(selectedNoteId)}
-              >
-                Delete
-              </button>
-            </>
-          )}
-        </div>
-        <Toolbar />
       </div>
       <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
         {selectedNote ? (
@@ -146,4 +109,3 @@ export const MainContent = () => {
 };
 
 export default MainContent;
-
