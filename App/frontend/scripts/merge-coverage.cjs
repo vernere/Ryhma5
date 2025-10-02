@@ -7,25 +7,23 @@ async function mergeCoverage() {
     let unitMap = createCoverageMap({})
     let e2eMap = createCoverageMap({})
     const finalMap = createCoverageMap({})
-    
-    // Helper function to normalize file paths
+
     function normalizePath(filePath) {
-        // Remove absolute path prefix and normalize slashes
         const normalizedPath = filePath.replace(/\\/g, '/')
         const workspacePath = process.cwd().replace(/\\/g, '/')
-        return normalizedPath.includes(workspacePath) 
+        return normalizedPath.includes(workspacePath)
             ? normalizedPath.replace(`${workspacePath}/`, '')
             : normalizedPath
     }
 
-                let bunMap = createCoverageMap({})
+    let bunMap = createCoverageMap({})
     // Merge unit test coverage
     const unitCoveragePath = path.join(process.cwd(), 'coverage/unit')
-    
+
     if (fs.existsSync(unitCoveragePath)) {
         const files = fs.readdirSync(unitCoveragePath)
         console.log('Unit coverage directory contents:', files)
-        
+
         // Look for JSON files
         const jsonFiles = files.filter(f => f.endsWith('.json'))
         if (jsonFiles.length > 0) {
@@ -48,15 +46,15 @@ async function mergeCoverage() {
                                 return // Skip this file
                             }
                         }
-                        
+
                         // Remove 'all' property if it exists
                         if (fileCov.all) delete fileCov.all
-                        
+
                         // Normalize path - use the path from the key if path is missing
                         fileCov.path = fileCov.path || file
                         const normalizedPath = normalizePath(fileCov.path)
                         fileCov.path = normalizedPath
-                        
+
                         // Convert statement/branch/function count objects
                         if (fileCov.s) {
                             Object.keys(fileCov.s).forEach(key => {
@@ -73,7 +71,7 @@ async function mergeCoverage() {
                                 fileCov.f[key] = typeof fileCov.f[key] === 'boolean' ? (fileCov.f[key] ? 1 : 0) : fileCov.f[key]
                             })
                         }
-                        
+
                         try {
                             console.log('Adding coverage for file:', fileCov.path)
                             unitMap.addFileCoverage(fileCov)
@@ -103,10 +101,10 @@ async function mergeCoverage() {
             Object.entries(e2eCoverage).forEach(([file, fileCov]) => {
                 const normalizedPath = normalizePath(fileCov.path)
                 fileCov.path = normalizedPath
-                
+
                 // Remove 'all' property and convert counts like above
                 if (fileCov.all) delete fileCov.all
-                
+
                 if (fileCov.s) {
                     Object.keys(fileCov.s).forEach(key => {
                         fileCov.s[key] = typeof fileCov.s[key] === 'boolean' ? (fileCov.s[key] ? 1 : 0) : fileCov.s[key]
@@ -122,7 +120,7 @@ async function mergeCoverage() {
                         fileCov.f[key] = typeof fileCov.f[key] === 'boolean' ? (fileCov.f[key] ? 1 : 0) : fileCov.f[key]
                     })
                 }
-                
+
                 try {
                     console.log('Adding coverage for file:', fileCov.path)
                     e2eMap.addFileCoverage(fileCov)
@@ -153,127 +151,127 @@ async function mergeCoverage() {
             if (!finalMap.data[file]) {
                 finalMap.addFileCoverage(coverage)
             }
-                // Merge Bun LCOV coverage
-                const bunLcovPath = path.join(process.cwd(), 'coverage/lcov.info')
-                let bunLcovData = []
-                let bunLcovParseError = null;
-                let bunLcovExists = fs.existsSync(bunLcovPath);
-                let lcovParse;
-                if (bunLcovExists) {
-                    console.log('Reading Bun LCOV coverage from', bunLcovPath)
-                    lcovParse = require('lcov-parse');
-                }
+            // Merge Bun LCOV coverage
+            const bunLcovPath = path.join(process.cwd(), 'coverage/lcov.info')
+            let bunLcovData = []
+            let bunLcovParseError = null;
+            let bunLcovExists = fs.existsSync(bunLcovPath);
+            let lcovParse;
+            if (bunLcovExists) {
+                console.log('Reading Bun LCOV coverage from', bunLcovPath)
+                lcovParse = require('lcov-parse');
+            }
 
-                // Await lcov-parse at the top level of the async function
-                if (bunLcovExists) {
-                    lcovParse(bunLcovPath, (err, data) => {
-                        if (err) {
-                            bunLcovParseError = err;
-                            console.error('Error reading Bun LCOV:', err);
-                        } else {
-                            bunLcovData = data;
-                            console.log('Parsed Bun LCOV data');
-                            if (bunLcovData && bunLcovData.length > 0) {
-                                bunLcovData.forEach(entry => {
-                                    // lcov-parse returns entries with file, lines, functions, branches
-                                    // We'll create a minimal Istanbul coverage object
-                                    const fileCov = {
-                                        path: normalizePath(entry.file),
-                                        statementMap: {},
-                                        fnMap: {},
-                                        branchMap: {},
-                                        s: {},
-                                        f: {},
-                                        b: {}
+            // Await lcov-parse at the top level of the async function
+            if (bunLcovExists) {
+                lcovParse(bunLcovPath, (err, data) => {
+                    if (err) {
+                        bunLcovParseError = err;
+                        console.error('Error reading Bun LCOV:', err);
+                    } else {
+                        bunLcovData = data;
+                        console.log('Parsed Bun LCOV data');
+                        if (bunLcovData && bunLcovData.length > 0) {
+                            bunLcovData.forEach(entry => {
+                                // lcov-parse returns entries with file, lines, functions, branches
+                                // We'll create a minimal Istanbul coverage object
+                                const fileCov = {
+                                    path: normalizePath(entry.file),
+                                    statementMap: {},
+                                    fnMap: {},
+                                    branchMap: {},
+                                    s: {},
+                                    f: {},
+                                    b: {}
+                                }
+                                // Lines
+                                entry.lines.details.forEach((line, idx) => {
+                                    fileCov.statementMap[idx] = {
+                                        start: { line: line.line, column: 0 },
+                                        end: { line: line.line, column: 9999 }
                                     }
-                                    // Lines
-                                    entry.lines.details.forEach((line, idx) => {
-                                        fileCov.statementMap[idx] = {
-                                            start: { line: line.line, column: 0 },
-                                            end: { line: line.line, column: 9999 }
-                                        }
-                                        fileCov.s[idx] = line.hit
-                                    })
-                                    // Functions
-                                    entry.functions.details.forEach((fn, idx) => {
-                                        fileCov.fnMap[idx] = {
-                                            name: fn.name,
-                                            decl: { start: { line: fn.line, column: 0 } },
-                                            loc: { start: { line: fn.line, column: 0 }, end: { line: fn.line, column: 9999 } }
-                                        }
-                                        fileCov.f[idx] = fn.hit
-                                    })
-                                    // Branches
-                                    entry.branches.details.forEach((br, idx) => {
-                                        fileCov.branchMap[idx] = {
-                                            loc: { start: { line: br.line, column: 0 }, end: { line: br.line, column: 9999 } },
-                                            type: 'branch',
-                                            locations: [
-                                                { start: { line: br.line, column: 0 }, end: { line: br.line, column: 9999 } }
-                                            ]
-                                        }
-                                        fileCov.b[idx] = br.taken
-                                    })
-                                    try {
-                                        bunMap.addFileCoverage(fileCov)
-                                    } catch (err) {
-                                        console.error(`Error adding Bun LCOV coverage for ${entry.file}:`, err)
-                                    }
+                                    fileCov.s[idx] = line.hit
                                 })
-                                console.log('Merged Bun LCOV coverage');
-                            }
-                            // After Bun coverage is merged, continue with the rest of the merge logic
-                            finishMerge();
+                                // Functions
+                                entry.functions.details.forEach((fn, idx) => {
+                                    fileCov.fnMap[idx] = {
+                                        name: fn.name,
+                                        decl: { start: { line: fn.line, column: 0 } },
+                                        loc: { start: { line: fn.line, column: 0 }, end: { line: fn.line, column: 9999 } }
+                                    }
+                                    fileCov.f[idx] = fn.hit
+                                })
+                                // Branches
+                                entry.branches.details.forEach((br, idx) => {
+                                    fileCov.branchMap[idx] = {
+                                        loc: { start: { line: br.line, column: 0 }, end: { line: br.line, column: 9999 } },
+                                        type: 'branch',
+                                        locations: [
+                                            { start: { line: br.line, column: 0 }, end: { line: br.line, column: 9999 } }
+                                        ]
+                                    }
+                                    fileCov.b[idx] = br.taken
+                                })
+                                try {
+                                    bunMap.addFileCoverage(fileCov)
+                                } catch (err) {
+                                    console.error(`Error adding Bun LCOV coverage for ${entry.file}:`, err)
+                                }
+                            })
+                            console.log('Merged Bun LCOV coverage');
                         }
-                    });
-                } else {
-                    // If no Bun LCOV, continue with the rest of the merge logic
-                    finishMerge();
-                }
+                        // After Bun coverage is merged, continue with the rest of the merge logic
+                        finishMerge();
+                    }
+                });
+            } else {
+                // If no Bun LCOV, continue with the rest of the merge logic
+                finishMerge();
+            }
 
-                // Move the rest of the merge logic into a function
-                function finishMerge() {
-                    // Merge coverage data with priority: unit > bun > e2e
-                    Object.entries(unitMap.toJSON()).forEach(([file, coverage]) => {
+            // Move the rest of the merge logic into a function
+            function finishMerge() {
+                // Merge coverage data with priority: unit > bun > e2e
+                Object.entries(unitMap.toJSON()).forEach(([file, coverage]) => {
+                    finalMap.addFileCoverage(coverage)
+                })
+                Object.entries(bunMap.toJSON()).forEach(([file, coverage]) => {
+                    if (!finalMap.data[file]) {
                         finalMap.addFileCoverage(coverage)
-                    })
-                    Object.entries(bunMap.toJSON()).forEach(([file, coverage]) => {
+                    }
+                })
+                Object.entries(e2eMap.toJSON()).forEach(([file, coverage]) => {
+                    try {
                         if (!finalMap.data[file]) {
                             finalMap.addFileCoverage(coverage)
                         }
-                    })
-                    Object.entries(e2eMap.toJSON()).forEach(([file, coverage]) => {
-                        try {
-                            if (!finalMap.data[file]) {
-                                finalMap.addFileCoverage(coverage)
-                            }
-                        } catch (err) {
-                            console.warn(`Warning: Could not merge coverage for ${file}:`, err.message)
-                        }
-                    })
+                    } catch (err) {
+                        console.warn(`Warning: Could not merge coverage for ${file}:`, err.message)
+                    }
+                })
 
-                    // Write merged coverage data
-                    const mergedCoveragePath = path.join(mergedDir, 'coverage-final.json')
-                    fs.writeFileSync(mergedCoveragePath, JSON.stringify(finalMap.toJSON(), null, 2))
+                // Write merged coverage data
+                const mergedCoveragePath = path.join(mergedDir, 'coverage-final.json')
+                fs.writeFileSync(mergedCoveragePath, JSON.stringify(finalMap.toJSON(), null, 2))
 
-                    // Write LCOV format too
-                    const Reporter = require('istanbul-lib-report')
-                    const reports = require('istanbul-reports')
-                    const { createContext } = require('istanbul-lib-report')
+                // Write LCOV format too
+                const Reporter = require('istanbul-lib-report')
+                const reports = require('istanbul-reports')
+                const { createContext } = require('istanbul-lib-report')
 
-                    const context = createContext({
-                        dir: mergedDir,
-                        coverageMap: finalMap
-                    })
+                const context = createContext({
+                    dir: mergedDir,
+                    coverageMap: finalMap
+                })
 
-                    const lcovReport = reports.create('lcov', { dir: mergedDir })
-                    lcovReport.execute(context)
+                const lcovReport = reports.create('lcov', { dir: mergedDir })
+                lcovReport.execute(context)
 
-                    const htmlReport = reports.create('html', { dir: path.join(mergedDir, 'lcov-report') })
-                    htmlReport.execute(context)
+                const htmlReport = reports.create('html', { dir: path.join(mergedDir, 'lcov-report') })
+                htmlReport.execute(context)
 
-                    console.log('Merged coverage reports written to', mergedDir)
-                }
+                console.log('Merged coverage reports written to', mergedDir)
+            }
         } catch (err) {
             console.warn(`Warning: Could not merge coverage for ${file}:`, err.message)
         }
