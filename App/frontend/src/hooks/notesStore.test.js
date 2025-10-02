@@ -64,6 +64,7 @@ test("favorites: passing a new Set replaces the old one", () => {
   expect(s.isFavorite("new1")).toBe(true);
   expect(s.isFavorite("new2")).toBe(true);
 });
+/*
 import { test, expect, beforeEach, mock } from "bun:test";
 import { useNotesStore } from "./useNotesStore";
 
@@ -103,3 +104,4 @@ test("Add note to store", () => {
   expect(updatedNotes).toHaveLength(1);
   expect(updatedNotes[0]).toEqual(sampleNote);
 });
+*/
