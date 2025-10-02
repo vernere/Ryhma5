@@ -1,0 +1,7 @@
+{
+  "include": ["src/**/*.{js,jsx,ts,tsx}", "tests/**/*.{js,jsx,ts,tsx}"],
+  "exclude": ["node_modules", "dist", "coverage"],
+  "all": true,
+  "reporter": ["json"],
+  "report-dir": "./coverage/unit"
+}

@@ -60,7 +60,7 @@ const LoginPage = () => {
                             {" "}
                             Login{" "}
                         </Button>
-                        <Button variant="link" asChild>
+                        <Button variant="link" asChild data-cy="resetPasswordButton">
                             <Link to="/resetPassword">Forgot Password?</Link>
                         </Button>
                     </div>

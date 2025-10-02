@@ -33,18 +33,18 @@ describe('Authentication Tests', () => {
     cy.visit('/');
     cy.contains('Sign up').click();
     cy.url().should('include', '/register');
-  
+
     // Test 1: Empty email shows validation error
     cy.get('button').contains('Create account').click();
     cy.get('p').contains('Please enter a valid email address.').should('exist');
-  
+
     // Test 2: Valid email with existing user
     cy.get('[data-cy="register-email"]').type('test.test@notely.com');
     cy.get('[data-cy="register-password"]').type('Hello123');
     cy.get('[data-cy="register-confirm-password"]').type('Hello123');
     cy.get('button').contains('Create account').click();
     cy.get('p').contains('User already registered').should('exist');
-  
+
     // Test 3: Invalid email format shows validation error
     cy.get('[data-cy="register-email"]').clear().type('test.testnotely.com');
     cy.get('button').contains('Create account').click();
@@ -55,25 +55,25 @@ describe('Authentication Tests', () => {
     cy.visit('/');
     cy.contains('Sign up').click();
     cy.url().should('include', '/register');
-  
+
     const passwordError = 'Password must be at least 7 characters, contain an uppercase letter and a number.';
-    
+
     cy.get('[data-cy="register-email"]').type('test.test@notely.com');
-  
+
     // Test 1: Empty password
     cy.get('button').contains('Create account').click();
     cy.get('p').contains(passwordError).should('exist');
-  
+
     // Test 2: Too short password
     cy.get('[data-cy="register-password"]').type('hello');
     cy.get('button').contains('Create account').click();
     cy.get('p').contains(passwordError).should('exist');
-  
+
     // Test 3: Missing number
     cy.get('[data-cy="register-password"]').clear().type('Hello');
     cy.get('button').contains('Create account').click();
     cy.get('p').contains(passwordError).should('exist');
-  
+
     // Test 4: Missing length (6 characters)
     cy.get('[data-cy="register-password"]').clear().type('Hello7');
     cy.get('button').contains('Create account').click();
@@ -191,6 +191,24 @@ describe('Authentication Tests', () => {
     cy.contains('Logout').click()
 
     cy.url().should('include', '/')
+
+  });
+
+  it('Reset password tests', () => {
+    cy.visit('/');
+
+    cy.contains('Login').click()
+    cy.url().should('include', '/login')
+
+    cy.get('[data-cy="resetPasswordButton"]').click()
+    cy.url().should('include', '/resetPassword')
+
+    cy.get('[data-cy="resetPasswordEmail"]').type('notAnEmail')
+    cy.get('[data-cy="resetPasswordEmail"]').should('have.value', 'notAnEmail')
+
+    cy.get('[data-cy="sendResetPasswordLink"]').click()
+    cy.get('[data-cy="sendResetPassowrdLinkError"]').contains('Invalid email').should('exist')
+
 
   });
 })
