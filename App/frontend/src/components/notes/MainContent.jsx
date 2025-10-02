@@ -1,77 +1,72 @@
-import { Toolbar } from "@/components/ui/toolbar";
 import { CgNotes } from "react-icons/cg";
 import { useNotesStore } from "@/hooks/useNotesStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CollaborativeEditor from "@/components/notes/CollaborativeEditor";
+import { Tags } from "@/components/tags/Tags";
+import { useAuth } from "@/hooks/useAuth";
+import { CollaborationPopup } from "./collaborationPopup/CollaborationPopup";
+import { CollaboratorBalls } from "./CollaboratorBalls";
+import { UserRoundPlus } from "lucide-react";
+import { useInvitationsStore } from "@/hooks/useInvitationsStore";
+import { Toolbar } from "@/components/ui/toolbar";
 
-const MainContent = () => {
+export const MainContent = () => {
   const {
     selectedNote,
     selectedNoteId,
     fetchNotes,
-    activeUsers,
     updateNoteTitle,
-    deleteNote,
+    collaborators,
+    fetchNoteCollaborators,
+    role
   } = useNotesStore();
+  const { user } = useAuth();
+  const { getInvitesByNoteId } = useInvitationsStore();
+  
+  const [isCollaborationPopupOpen, setIsCollaborationPopupOpen] = useState(false);
+  const isOwner = role === "owner";
 
   useEffect(() => {
     fetchNotes();
-  }, [fetchNotes]);
-
-  const getTagName = (note) => {
-    if (!note || !note.note_tags) return "No tag";
-    const tagObj = Array.isArray(note.note_tags)
-      ? note.note_tags[0]
-      : note.note_tags;
-    if (!tagObj) return "No tag";
-    const tagName =
-      tagObj.tags?.name ||
-      tagObj.tags?.[0]?.name ||
-      tagObj.tag_name ||
-      tagObj.name;
-    return tagName || "No tag";
-  };
-
-  const tagName = getTagName(selectedNote);
-
-
-
-
+    if (!selectedNoteId || !user.id) return;
+    fetchNoteCollaborators(selectedNoteId);
+    getInvitesByNoteId(selectedNoteId, user.id);
+  }, [selectedNoteId, user.id]);
+  
   return (
     <div className="flex-1 flex flex-col">
       <div className="bg-white border-b border-gray-200 p-2 flex items-center justify-between">
         {selectedNote ? (
-          <div className="flex items-center space-x-4">
-            <div className="flex flex-col">
-              <div className="flex items-center gap-4">
+          <div className="flex items-center space-x-4 w-full">
+            <div className="flex flex-col w-full">
+              <div className="flex items-center gap-4 w-full">
                 <input
-                  data-cy="noteTitle" 
-                  className="text-xl font-semibold text-gray-900 truncate max-w-2xl border-b focus:outline-none"
+                  data-cy="noteTitle"
+                  className="text-lg focus:outline-none"
                   value={selectedNote.title || ""}
-                  onChange={(e) =>
-                    updateNoteTitle(selectedNoteId, e.target.value)
-                  }
+                  onChange={(e) => updateNoteTitle(selectedNoteId, e.target.value)}
                   placeholder="Title…"
                 />
-                {activeUsers.map((user) => (
-                  <span
-                    data-cy="userEmail"
-                    key={user.user_id}
-                    className="text-xs px-2 py-0.5 bg-gray-200 rounded-full"
-                  >
-                    {user.email}
-                  </span>
-                ))}
+
+                <div className="flex items-center ml-auto gap-3">
+                  <button onClick={() => setIsCollaborationPopupOpen(true)}>
+                    {isOwner && (<UserRoundPlus className="text-gray-400 hover:text-gray-600 size-5 cursor-pointer" />)}
+                  </button>
+
+                  <button 
+                    className="cursor-pointer"
+                    onClick={() => setIsCollaborationPopupOpen(true)}>
+                    <CollaboratorBalls users={collaborators} />
+                  </button>
+                </div>
               </div>
               <div className="mt-1 flex items-center space-x-2">
-                <span data-cy="noteTag" className="inline-block bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded">
-                  {tagName}
-                </span>
                 <span data-cy="noteCreatedAt" className="text-xs text-gray-400">
                   {selectedNote.created_at
                     ? new Date(selectedNote.created_at).toLocaleString()
                     : ""}
                 </span>
+                <Tags note={selectedNote} />
               </div>
             </div>
           </div>
@@ -86,22 +81,6 @@ const MainContent = () => {
             </div>
           </div>
         )}
-
-        <div className="flex items-center gap-2">
-          {selectedNote && (
-            <>
-
-
-              <button
-                className="px-2 py-1 text-sm border rounded text-red-600 hover:bg-red-50"
-                onClick={() => deleteNote(selectedNoteId)}
-              >
-                Delete
-              </button>
-            </>
-          )}
-        </div>
-        <Toolbar />
       </div>
       <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
         {selectedNote ? (
@@ -112,13 +91,19 @@ const MainContent = () => {
           <div className="flex items-center justify-center h-full w-full pr-10">
             <div className="text-center">
               <CgNotes className="text-gray-300 text-4xl mx-auto mb-4" />
-              <div className="text-gray-400 text-lg">
-                Select a note to start editing
-              </div>
+              <div className="text-gray-400 text-lg">Select a note to start editing</div>
             </div>
           </div>
         )}
+
+        <Toolbar />
       </div>
+
+      <CollaborationPopup
+        isOpen={isCollaborationPopupOpen}
+        onClose={() => setIsCollaborationPopupOpen(false)}
+        isLoading={false}
+      />
     </div>
   );
 };

@@ -21,6 +21,8 @@ export const AuthProvider = ({children}) => {
 
             if (_event === "PASSWORD_RECOVERY") {
                 setPasswordRecovery(true);
+            } else if (_event === "TOKEN_REFRESHED") {
+                console.log('Token refreshed, re-establishing subscriptions...');
             }
         });
 
@@ -28,6 +30,19 @@ export const AuthProvider = ({children}) => {
             listener.subscription.unsubscribe();
         };
     }, []);
+
+    const usernameToId = async (username) => {
+        const {data, error} = await supabase
+            .from('users')
+            .select('id')
+            .eq('username', username)
+            .single();
+        if (error) {
+            console.error('Error fetching user ID:', error);
+            return null;
+        }
+        return data?.id || null;
+    };
 
     const signUp = async (email, password) => {
         const {data, error} = await supabase.auth.signUp({email, password});
@@ -62,7 +77,7 @@ export const AuthProvider = ({children}) => {
     };
 
     return (<AuthContext.Provider value={{
-        user, loading, signUp, signIn, signOut, resetPassword, passwordRecovery, setPasswordRecovery, changePassword
+        user, loading, signUp, usernameToId, signIn, signOut, resetPassword, passwordRecovery, setPasswordRecovery, changePassword
     }}>
         {children}
     </AuthContext.Provider>);

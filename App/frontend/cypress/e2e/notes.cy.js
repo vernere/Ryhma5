@@ -2,9 +2,9 @@
 import { loginUser } from '../support/helpers';
 
 describe('Notes tests', () => {
-  beforeEach(() => {
-    loginUser();
-  });
+    beforeEach(() => {
+        loginUser();
+    });
 
   it('Test notes typing', () => {
     cy.get('[data-cy=noteSelect]').first().click()
@@ -82,13 +82,12 @@ describe('Notes tests', () => {
 })
 
 describe('Search tests', () => {
-  beforeEach(() => {
-    loginUser();
-  });
+    beforeEach(() => {
+        loginUser();
+    });
 
   it('Test search input and response', () => {
     cy.get('[data-cy=searchInput]').type('New test ntoe')
     cy.get('[data-cy=noteSelect]').should('not.exist')
   });
 })
-

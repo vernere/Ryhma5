@@ -1,5 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useNotesStore } from "@/hooks/useNotesStore";
+import { useRealtimeStore } from "@/hooks/useRealtimeStore";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useState } from "react";
@@ -13,18 +14,21 @@ export default function CollaborativeEditor() {
     const {
         selectedNote,
         selectedNoteId,
-        setupPresence,
-        cleanupPresence,
-        setupRealtimeSubscription,
-        cleanupRealtimeSubscription,
         setCurrentUser,
         isLocalChange,
         setIsLocalChange,
         handleContentChange,
     } = useNotesStore();
 
+    const {
+        setupPresence,
+        cleanupPresence,
+        setupRealtimeSubscription,
+        cleanupRealtimeSubscription,
+    } = useRealtimeStore();
+
     const { user } = useAuth();
-    const [_, setSaveStatus] = useState('saved');
+    const [_, setSaveStatus] = useState("saved");
 
     const editor = useEditor(
         {
@@ -52,17 +56,17 @@ export default function CollaborativeEditor() {
     useEffect(() => {
         setupRealtimeSubscription();
         return () => cleanupRealtimeSubscription();
-    }, [setupRealtimeSubscription, cleanupRealtimeSubscription]);
+    }, []);
 
     useEffect(() => {
-        if (editor && selectedNote?.content) {
-            editor.commands.setContent(selectedNote.content);
+        if (editor && selectedNote) {
+            editor.commands.setContent(selectedNote.content || '');
         }
-    }, [editor, selectedNoteId, selectedNote?.content]);
+    }, [editor, selectedNoteId, selectedNote]);
 
     useEffect(() => {
         if (user) setCurrentUser(user);
-    }, [user, setCurrentUser]);
+    }, [user]);
 
     useEffect(() => {
         if (selectedNoteId && user) {
@@ -74,7 +78,11 @@ export default function CollaborativeEditor() {
             });
         }
         return () => cleanupPresence();
-    }, [selectedNoteId, user, setupPresence, cleanupPresence, editor, setIsLocalChange]);
+    }, [
+        selectedNoteId,
+        user,
+        editor,
+    ]);
 
     useEffect(() => {
         if (!editor) return;
@@ -84,15 +92,15 @@ export default function CollaborativeEditor() {
                 setIsLocalChange(false);
                 return;
             }
-
+            
             setSaveStatus('saving');
             handleContentChange(editor.getHTML());
-            setTimeout(() => setSaveStatus('saved'), 2500);
+            setTimeout(() => setSaveStatus("saved"), 2500);
         };
 
         editor.on("update", onUpdate);
         return () => editor.off("update", onUpdate);
-    }, [editor, isLocalChange, handleContentChange, setIsLocalChange]);
+    }, [editor, isLocalChange]);
 
     if (!selectedNoteId) {
         return (
@@ -125,4 +133,4 @@ export default function CollaborativeEditor() {
             </div>
         </div>
     );
-}
+};
