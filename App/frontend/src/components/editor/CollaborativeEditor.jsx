@@ -9,6 +9,7 @@ import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import BulletList from '@tiptap/extension-bullet-list'
 import ListItem from '@tiptap/extension-list-item';
+import { ImageExtension } from '@/components/editor/ImageExtension';
 
 export default function CollaborativeEditor() {
     const {
@@ -43,6 +44,7 @@ export default function CollaborativeEditor() {
                 TextAlign.configure({
                     types: ['heading', 'paragraph', 'bulletList'],
                 }),
+                ImageExtension,
             ],
             editorProps: {
                 attributes: {
@@ -129,8 +131,7 @@ export default function CollaborativeEditor() {
                 style={{ minHeight: "90vh" }}
             >
                 <EditorContent editor={editor} />
-
             </div>
         </div>
     );
-};
+}

@@ -15,8 +15,9 @@ import {
     exportToMarkDown,
     exportToDocx,
 } from "@/utils/exportUtils";
-import Dropdown from "../ui/Dropdown";
+import Dropdown from "./Dropdown";
 import { useEffect, useState, useRef } from "react";
+import { ImageUploadButton } from "../editor/ImageUploadButton";
 
 const Toolbar = ({ editor, noteTitle = "Untitled note" }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -117,9 +118,7 @@ const Toolbar = ({ editor, noteTitle = "Untitled note" }) => {
             <button className="p-2 hover:bg-gray-100 rounded">
                 <CgAttachment className="w-4 h-4" />
             </button>
-            <button className="p-2 hover:bg-gray-100 rounded">
-                <CgImage className="w-4 h-4" />
-            </button>
+            <ImageUploadButton editor={editor} />
             <div className="h-5 w-px bg-gray-300"></div>
             <button
                 data-cy="exportButton"
@@ -134,9 +133,6 @@ const Toolbar = ({ editor, noteTitle = "Untitled note" }) => {
             </button>
 
             <div className="h-5 w-px bg-gray-300"></div>
-            <button className="p-2 hover:bg-gray-100 rounded">
-                <CgMoreAlt className="w-4 h-4" />
-            </button>
             <Dropdown
                 data-cy="dropdownMenu"
                 isOpen={isDropdownOpen}
