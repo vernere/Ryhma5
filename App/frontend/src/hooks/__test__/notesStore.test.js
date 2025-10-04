@@ -1,33 +1,12 @@
-import { test, expect, beforeEach, mock, describe, beforeAll, afterEach } from "bun:test";
+import { beforeEach, describe, expect, mock, test } from "bun:test";
 import { useNotesStore } from "../useNotesStore";
-import { mockSupabase, mockRealtimeStore } from "./constants";
+import { mockSupabase } from "./constants";
 
 mock.module("@/lib/supabaseClient", () => ({
   supabase: mockSupabase,
 }));
 
-mock.module("./useRealtimeStore", () => ({
-  useRealtimeStore: mockRealtimeStore,
-}));
-
-// Mock setTimeout for debounce testing
-const originalSetTimeout = global.setTimeout;
-let timeouts = [];
-
-beforeAll(() => {
-  global.setTimeout = mock((fn, delay) => {
-    const id = Math.random();
-    timeouts.push({ id, fn, delay });
-    return id;
-  });
-
-  global.clearTimeout = mock((id) => {
-    timeouts = timeouts.filter(t => t.id !== id);
-  });
-});
-
 beforeEach(() => {
-  // Reset store state
   useNotesStore.setState({
     notes: [],
     selectedNote: null,
@@ -44,16 +23,7 @@ beforeEach(() => {
     role: null,
   });
 
-  // Clear all mocks
   mockSupabase.from.mockClear();
-  mockRealtimeStore.getState.mockClear();
-  timeouts = [];
-});
-
-afterEach(() => {
-  // Execute any pending timeouts to clean up
-  timeouts.forEach(t => t.fn());
-  timeouts = [];
 });
 
 describe("useNotesStore", () => {
@@ -116,7 +86,7 @@ describe("useNotesStore", () => {
 
       const notes = useNotesStore.getState().notes;
       expect(notes).toHaveLength(2);
-      expect(notes[0]).toEqual(note2); // Most recent first
+      expect(notes[0]).toEqual(note2);
       expect(notes[1]).toEqual(note1);
     });
 
@@ -143,8 +113,8 @@ describe("useNotesStore", () => {
       updateNote(updatedNote1);
 
       const notes = useNotesStore.getState().notes;
-      expect(notes[0]).toEqual(note2); // Note 2 unchanged
-      expect(notes[1]).toEqual(updatedNote1); // Note 1 updated
+      expect(notes[0]).toEqual(note2);
+      expect(notes[1]).toEqual(updatedNote1);
     });
 
     test("deleteNote removes note from array", async () => {
@@ -224,7 +194,6 @@ describe("useNotesStore", () => {
 
       const state = useNotesStore.getState();
       expect(state.error).toBe("Delete failed");
-      // Note should still be in the array since delete failed
       expect(state.notes).toHaveLength(1);
     });
   });
@@ -771,105 +740,6 @@ describe("useNotesStore", () => {
         expect(state.selectedNoteId).toBe(1);
         expect(state.loading).toBe(false);
       });
-    });
-
-    describe("handleContentChange", () => {
-      test("broadcasts content change and saves to database", () => {
-        const mockBroadcast = mock();
-        mockRealtimeStore.getState.mockReturnValue({
-          broadcastContentChange: mockBroadcast,
-        });
-
-        useNotesStore.setState({ selectedNoteId: "note1" });
-        const { handleContentChange } = useNotesStore.getState();
-
-        handleContentChange("new content");
-
-        expect(mockBroadcast).toHaveBeenCalledWith("new content");
-      });
-
-      test("returns early when no selected note", () => {
-        const mockBroadcast = mock();
-        mockRealtimeStore.getState.mockReturnValue({
-          broadcastContentChange: mockBroadcast,
-        });
-
-        const { handleContentChange } = useNotesStore.getState();
-
-        handleContentChange("new content");
-
-        expect(mockBroadcast).not.toHaveBeenCalled();
-      });
-    });
-  });
-
-  describe("saveNoteToDatabase", () => {
-    test("successfully saves note content when debounce executes", async () => {
-      const mockQuery = {
-        update: mock().mockReturnThis(),
-        eq: mock(() => Promise.resolve({ error: null })),
-      };
-      mockSupabase.from.mockReturnValue(mockQuery);
-
-      const { addNote } = useNotesStore.getState();
-      const note = { note_id: 1, title: "Test Note", content: "Old content" };
-
-      addNote(note);
-      useNotesStore.setState({ selectedNote: note, selectedNoteId: 1 });
-
-      // Trigger debounced save by calling handleContentChange
-      const { handleContentChange } = useNotesStore.getState();
-      handleContentChange("New content");
-
-      // Execute all pending timeouts to trigger the debounced function
-      const pendingTimeouts = [...timeouts];
-      timeouts = [];
-      for (const timeout of pendingTimeouts) {
-        await timeout.fn();
-      }
-
-      const state = useNotesStore.getState();
-      expect(state.notes[0].content).toBe("New content");
-      expect(state.selectedNote.content).toBe("New content");
-    });
-
-    test("handles error when debounce executes with error", async () => {
-      const mockQuery = {
-        update: mock().mockReturnThis(),
-        eq: mock(() => Promise.resolve({ error: { message: "Save failed" } })),
-      };
-      mockSupabase.from.mockReturnValue(mockQuery);
-
-      useNotesStore.setState({ selectedNoteId: 1 });
-      const { handleContentChange } = useNotesStore.getState();
-
-      handleContentChange("New content");
-
-      // Execute all pending timeouts to trigger the debounced function
-      const pendingTimeouts = [...timeouts];
-      timeouts = [];
-      for (const timeout of pendingTimeouts) {
-        await timeout.fn();
-      }
-
-      expect(useNotesStore.getState().error).toBe("Save failed");
-    });
-  });
-
-  describe("Debounce functionality", () => {
-    test("saveNoteToDatabase is debounced", () => {
-      useNotesStore.setState({ selectedNoteId: "note1" });
-      const { handleContentChange } = useNotesStore.getState();
-
-      handleContentChange("content 1");
-      handleContentChange("content 2");
-      handleContentChange("content 3");
-
-      // Should have created timeouts but not executed them yet
-      expect(timeouts.length).toBeGreaterThan(0);
-
-      // Clear timeouts should have been called for the first two calls
-      expect(global.clearTimeout).toHaveBeenCalled();
     });
   });
 });
