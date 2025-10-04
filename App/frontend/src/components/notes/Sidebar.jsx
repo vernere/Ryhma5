@@ -69,7 +69,7 @@ const Sidebar = () => {
           className="pt-1 text-xl hover:text-gray-600"
           onClick={handleCreateNote}
         >
-          <CgAddR/>
+          <CgAddR />
         </button>
       </div>
 
