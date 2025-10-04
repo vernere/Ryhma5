@@ -3,7 +3,8 @@ import { Search } from "lucide-react";
 import { CgHeart, CgAddR } from "react-icons/cg";
 import { Navigation } from "@/components/ui/navigation";
 import { useNotesStore } from "@/hooks/useNotesStore";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth, useUserRow } from "@/hooks/useAuth";
+
 
 const Sidebar = () => {
   const {
@@ -21,6 +22,11 @@ const Sidebar = () => {
   } = useNotesStore();
 
   const { user } = useAuth();
+  const { userRow, loadingUserRow } = useUserRow();
+
+  const displayName = loadingUserRow
+    ? "…"
+    : (userRow?.username || user?.email || "");
 
   useEffect(() => {
     if (!user?.id) return;
@@ -58,12 +64,12 @@ const Sidebar = () => {
   return (
     <div className="w-60 bg-white border-r border-gray-200 flex flex-col">
       <div className="p-2 border-b border-gray-200 flex items-center justify-between">
-        <h1 className="text-lg font-semibold">{user?.email}</h1>
+        <h1 className="text-lg font-semibold">{displayName}</h1>
         <button
           className="pt-1 text-xl hover:text-gray-600"
           onClick={handleCreateNote}
         >
-          <CgAddR/>
+          <CgAddR />
         </button>
       </div>
 
@@ -124,7 +130,7 @@ const Sidebar = () => {
                   </span>
                 </div>
 
-                 
+
               </div>
             ))}
           </div>
