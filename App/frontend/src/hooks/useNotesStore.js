@@ -10,6 +10,28 @@ const debounce = (func, delay) => {
   };
 };
 
+const debouncedSave = debounce(async (noteId, content) => {
+  try {
+    const now = new Date().toISOString();
+
+    const { error } = await supabase
+      .from("notes")
+      .update({ content, updated_at: now })
+      .eq("note_id", noteId);
+
+    if (error) throw error;
+
+    useNotesStore.setState((state) => ({
+      notes: state.notes.map((note) =>
+        note.note_id === noteId ? { ...note, content, updated_at: now } : note
+      ),
+    }));
+  } catch (err) {
+    useNotesStore.setState({ error: err.message });
+    console.error("Failed to save note:", err);
+  }
+}, 1000);
+
 export const useNotesStore = create((set, get) => ({
   notes: [],
   selectedNoteId: null,
@@ -99,7 +121,6 @@ export const useNotesStore = create((set, get) => ({
   },
 
   setSelectedNote: async (noteId) => {
-    set({ selectedNoteId: noteId, loading: true, error: null });
     await get().fetchNoteById(noteId);
   },
 
@@ -265,37 +286,14 @@ export const useNotesStore = create((set, get) => ({
       collaborators: state.collaborators.filter((c) => c.user_id !== userId),
     }));
   },
-
-  saveNoteToDatabase: debounce(async (noteId, content) => {
-    try {
-      const now = new Date().toISOString();
-
-      const { error } = await supabase
-        .from("notes")
-        .update({ content, updated_at: now })
-        .eq("note_id", noteId);
-
-      if (error) throw error;
-
-      set((state) => ({
-        notes: state.notes.map((note) =>
-          note.note_id === noteId ? { ...note, content, updated_at: now } : note
-        ),
-        selectedNote:
-          state.selectedNote?.note_id === noteId
-            ? { ...state.selectedNote, content, updated_at: now }
-            : state.selectedNote,
-      }));
-    } catch (err) {
-      set({ error: err.message });
-      console.error("Failed to save note:", err);
-    }
-  }, 1000),
+  
+  saveNoteToDatabase: (noteId, content) => {
+    debouncedSave(noteId, content);
+  },
 
   handleContentChange: (newContent) => {
-    const { selectedNoteId, saveNoteToDatabase } = get();
+    const { selectedNoteId } = get();
     if (!selectedNoteId) return;
-    useRealtimeStore.getState().broadcastContentChange(newContent);
-    saveNoteToDatabase(selectedNoteId, newContent);
+    debouncedSave(selectedNoteId, newContent);
   },
 }));

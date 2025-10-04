@@ -1,121 +1,160 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useNotesStore } from "@/hooks/useNotesStore";
-import { useRealtimeStore } from "@/hooks/useRealtimeStore";
 import { EditorContent, useEditor } from "@tiptap/react";
+import { useEffect, useMemo, useRef, useCallback, useState } from "react";
+import { Toolbar } from "@/components/ui/toolbar";
+
 import StarterKit from "@tiptap/starter-kit";
-import { useEffect, useState } from "react";
-import { Toolbar } from "@/components/ui/toolbar"
-import Underline from '@tiptap/extension-underline'
-import TextAlign from '@tiptap/extension-text-align'
-import BulletList from '@tiptap/extension-bullet-list'
-import ListItem from '@tiptap/extension-list-item';
-import { ImageExtension } from '@/components/editor/ImageExtension';
+import TextAlign from "@tiptap/extension-text-align";
+import Collaboration from "@tiptap/extension-collaboration";
+import * as Y from "yjs";
+
+import { supabase } from "@/lib/supabaseClient";
+import { setupSupabaseProvider } from "@/lib/y-supabase";
+
+const editorExtensions = [
+    StarterKit.configure({
+        history: false,
+    }),
+    TextAlign.configure({ types: ["heading", "paragraph"] }),
+];
 
 export default function CollaborativeEditor() {
-    const {
-        selectedNote,
-        selectedNoteId,
-        setCurrentUser,
-        isLocalChange,
-        setIsLocalChange,
-        handleContentChange,
-    } = useNotesStore();
-
-    const {
-        setupPresence,
-        cleanupPresence,
-        setupRealtimeSubscription,
-        cleanupRealtimeSubscription,
-    } = useRealtimeStore();
-
+    const selectedNoteId = useNotesStore((state) => state.selectedNoteId);
+    const initialContent = useNotesStore((state) => state.selectedNote?.content);
+    const noteTitle = useNotesStore((state) => state.selectedNote?.title);
+    const saveNoteToDatabase = useNotesStore((state) => state.saveNoteToDatabase);
+    
     const { user } = useAuth();
-    const [_, setSaveStatus] = useState("saved");
+    const userId = user?.id;
 
-    const editor = useEditor(
-        {
-            extensions: [
-                StarterKit.configure({ 
-                    history: false,
-                    bulletList: false // disable the built-in bullet list to use our own
-                }),
-                Underline,
-                BulletList,
-                ListItem,
-                TextAlign.configure({
-                    types: ['heading', 'paragraph', 'bulletList'],
-                }),
-                ImageExtension,
-            ],
-            editorProps: {
-                attributes: {
-                    class: "prose max-w-none focus:outline-none min-h-[400px] p-4",
-                },
+    const renderCount = useRef(0);
+    renderCount.current++;
+
+    console.log("=== RENDER #", renderCount.current, "===");
+
+    const [collabState, setCollabState] = useState({ ydoc: null, provider: null });
+
+    useEffect(() => {
+        console.log("🔄 Setting up collaboration for note:", selectedNoteId);
+        
+        if (!selectedNoteId || !userId) {
+            console.log("No note or user, clearing collab state");
+            setCollabState({ ydoc: null, provider: null });
+            return;
+        }
+
+        console.log("📝 Creating new Yjs doc and provider for note:", selectedNoteId);
+        const doc = new Y.Doc();
+        
+        const channelName = `note-yjs-${selectedNoteId}`;
+        console.log("📡 Creating channel:", channelName);
+        
+        const channel = supabase.channel(channelName, {
+            config: {
+                broadcast: { self: true },
+                presence: { key: userId },
+            },
+        });
+        
+        const supProvider = setupSupabaseProvider(doc, channel);
+
+        doc.on("update", (update, origin) => {
+            console.log("🔥 Yjs doc update detected! Origin:", origin);
+        });
+
+        setCollabState({ ydoc: doc, provider: supProvider });
+
+        // Cleanup function
+        return () => {
+            console.log("🧹 Cleaning up collaboration for note:", selectedNoteId);
+            supProvider.destroy();
+            doc.destroy();
+        };
+    }, [selectedNoteId, userId]);
+
+    const editorConfig = useMemo(() => ({
+        enabled: !!collabState.ydoc && !!collabState.provider,
+        content: "",
+        extensions: [
+            ...editorExtensions,
+            ...(collabState.ydoc ? [Collaboration.configure({ document: collabState.ydoc })] : []),
+        ],
+        editorProps: {
+            attributes: {
+                class: "prose max-w-none focus:outline-none min-h-[400px] p-4",
             },
         },
-        [selectedNoteId]
-    );
+    }), [collabState.ydoc, collabState.provider]);
 
-    useEffect(() => {
-        setupRealtimeSubscription();
-        return () => cleanupRealtimeSubscription();
-    }, []);
+    const editor = useEditor(editorConfig, [collabState.ydoc, collabState.provider]);
 
+    const hasSetInitialContent = useRef(new Set());
+    
     useEffect(() => {
-        if (editor && selectedNote) {
-            editor.commands.setContent(selectedNote.content || '');
+        if (!editor || !collabState.ydoc || !initialContent || !selectedNoteId) {
+            return;
         }
-    }, [editor, selectedNoteId, selectedNote]);
+        
+        if (hasSetInitialContent.current.has(selectedNoteId)) {
+            console.log("📄 Initial content already set for this note");
+            return;
+        }
+        
+        const isDocEmpty = collabState.ydoc.getXmlFragment("default").length === 0;
+        console.log("📄 Checking if should set initial content. Doc empty:", isDocEmpty, "Content length:", initialContent?.length);
+        
+        if (initialContent && initialContent.trim()) {
+            console.log("📄 Setting initial content for note:", selectedNoteId);
+            editor.commands.setContent(initialContent);
+            hasSetInitialContent.current.add(selectedNoteId);
+        } else if (isDocEmpty && (!initialContent || !initialContent.trim())) {
+            console.log("📄 Note has empty content, skipping");
+            hasSetInitialContent.current.add(selectedNoteId);
+        }
+    }, [editor, collabState.ydoc, initialContent, selectedNoteId]);
 
     useEffect(() => {
-        if (user) setCurrentUser(user);
-    }, [user]);
-
-    useEffect(() => {
-        if (selectedNoteId && user) {
-            setupPresence(selectedNoteId, user, (content) => {
-                if (editor) {
-                    setIsLocalChange(true);
-                    editor.commands.setContent(content);
+        const currentNoteId = selectedNoteId;
+        return () => {
+            if (hasSetInitialContent.current.size > 10) {
+                const newSet = new Set();
+                if (currentNoteId) {
+                    newSet.add(currentNoteId);
                 }
-            });
-        }
-        return () => cleanupPresence();
-    }, [
-        selectedNoteId,
-        user,
-        editor,
-    ]);
+                hasSetInitialContent.current = newSet;
+            }
+        };
+    }, [selectedNoteId]);
+
+    const handleUpdate = useCallback(() => {
+        if (!editor || !selectedNoteId) return;
+        const content = editor.getHTML();
+        console.log("💾 Saving to database, content length:", content.length);
+        saveNoteToDatabase(selectedNoteId, content);
+    }, [editor, selectedNoteId, saveNoteToDatabase]);
 
     useEffect(() => {
         if (!editor) return;
 
-        const onUpdate = () => {
-            if (isLocalChange) {
-                setIsLocalChange(false);
-                return;
-            }
-            
-            setSaveStatus('saving');
-            handleContentChange(editor.getHTML());
-            setTimeout(() => setSaveStatus("saved"), 2500);
+        editor.on("update", handleUpdate);
+        return () => {
+            editor.off("update", handleUpdate);
         };
-
-        editor.on("update", onUpdate);
-        return () => editor.off("update", onUpdate);
-    }, [editor, isLocalChange]);
+    }, [editor, handleUpdate]);
 
     if (!selectedNoteId) {
         return (
-            <div className="border rounded-2xl shadow-sm p-4 text-center text-gray-500">
-                No note selected
+            <div className="p-4 text-center text-gray-500">
+                Select a note to begin.
             </div>
         );
     }
 
     if (!editor) {
         return (
-            <div className="border rounded-2xl shadow-sm p-4 text-center text-gray-500">
-                <div className="animate-pulse">Setting up editor...</div>
+            <div className="p-4 text-center text-gray-500 animate-pulse">
+                Loading Editor...
             </div>
         );
     }
@@ -123,11 +162,13 @@ export default function CollaborativeEditor() {
     return (
         <div className="rounded-2xl min-h-[400px]">
             <div className="sticky top-0 z-50 shadow">
-                <Toolbar editor={editor} noteTitle={selectedNote.title} />
+                <Toolbar
+                    editor={editor}
+                    noteTitle={noteTitle || ""}
+                />
             </div>
             <div
-                data-cy="noteContent"
-                className="prose max-w-none text-gray-800 bg-white rounded-b-lg shadow-sm p-6 [&_ul]:list-disc [&_ul]:pl-6"
+                className="prose max-w-none bg-white rounded-b-lg shadow-sm p-6"
                 style={{ minHeight: "90vh" }}
             >
                 <EditorContent editor={editor} />
