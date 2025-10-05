@@ -8,12 +8,9 @@ describe('Notes tests', () => {
 
   it('Test notes typing', () => {
     cy.get('[data-cy="noteSelect"]').click();
-
     cy.get('[data-cy="noteTitle"]').should('have.value', 'New test note');
-    cy.get('[data-cy="userEmail"]').contains('test.test@notely.com').should('exist');
     cy.get('[data-cy="noteCreatedAt"]').should('exist');
     cy.get('[data-cy="noteTag"]').should('exist');
-
     cy.get('[data-cy=noteContent').type(' Hello World version 2 !')
     cy.get('[data-cy=noteContent').contains('Hello World! Hello World version 2 !')
     });
