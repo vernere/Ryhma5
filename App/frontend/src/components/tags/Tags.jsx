@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { useTagStore } from "@/hooks/useTagStore";
 import { useNotesStore } from "@/hooks/useNotesStore";
 
-export const Tags = ({ note }) => {
-    const { allTags, fetchTags, addTag, removeTag } = useTagStore();
-    const { fetchNoteById } = useNotesStore();
+export const Tags = ({note}) => {
+    const {allTags, fetchTags, addTag, removeTag, getTags} = useTagStore();
+    const {fetchNoteById} = useNotesStore();
 
     useEffect(() => {
         fetchTags();
@@ -23,6 +23,7 @@ export const Tags = ({ note }) => {
             } else {
                 await addTag(note.note_id, tagId);
             }
+            getTags()
             await fetchNoteById(note.note_id);
         } catch (err) {
             console.error("Error updating tag:", err);

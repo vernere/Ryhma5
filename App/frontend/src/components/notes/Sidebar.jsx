@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Search, Bell, FilePlus2 } from "lucide-react";
 import { Navigation } from "@/components/ui/navigation";
 import { useNotesStore } from "@/hooks/useNotesStore";
+import { useTagStore } from "@/hooks/useTagStore";
 import { useAuth } from "@/hooks/useAuth";
 import { useInvitationsStore } from "@/hooks/useInvitationsStore";
 import { InvitePopup } from "./InvitePopup";
@@ -25,6 +26,11 @@ const Sidebar = () => {
   } = useNotesStore();
 
   const {
+      noteTags,
+      getTags
+  } = useTagStore();
+
+  const {
     inbox,
     getInvites
   } = useInvitationsStore();
@@ -46,7 +52,7 @@ const Sidebar = () => {
       fetchFavorites();
       fetchNotes();
       getInvites(user.id);
-
+      getTags();
       setupInvitesSubscription(user.id);
       setupNoteCollaboratorSubscription(user.id);
     }
@@ -57,9 +63,21 @@ const Sidebar = () => {
     };
   }, [user?.id]);
 
-  const filteredNotes = notes.filter((note) =>
-    (note.title || "").toLowerCase().includes((searchQuery || "").toLowerCase())
-  );
+
+  const filteredNotes = notes.filter((note) => {
+    const query = (searchQuery || "").toLowerCase();
+
+    const inTitle = (note.title || "").toLowerCase().includes(query);
+
+    const tagsForNote = noteTags
+        .filter(t => t.note_id === note.note_id)        // valitaan haluttu note_id
+        .map(t => t.tags?.name.toLowerCase());    // otetaan tagien nimet pienellä
+
+    const inTags = tagsForNote.some(name => name.includes(query.toLowerCase()));
+
+    return inTitle || inTags;
+  });
+
 
   const handleCreateNote = async () => {
     const n = await createNote();
