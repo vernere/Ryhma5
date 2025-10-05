@@ -22,26 +22,20 @@ const Sidebar = () => {
     fetchFavorites,
     fetchNotes,
     setCurrentUser,
-    deleteNote
+    deleteNote,
   } = useNotesStore();
 
-  const {
-      noteTags,
-      getTags
-  } = useTagStore();
+  const { noteTags, getTags } = useTagStore();
 
-  const {
-    inbox,
-    getInvites
-  } = useInvitationsStore();
+  const { inbox, getInvites } = useInvitationsStore();
 
   const {
     setupNoteCollaboratorSubscription,
     cleanupCollaboratorsSubscription,
     setupInvitesSubscription,
-    cleanupInvitesSubscription
-  }= useRealtimeStore();
-  
+    cleanupInvitesSubscription,
+  } = useRealtimeStore();
+
   const { user } = useAuth();
 
   const [isInvitePopupOpen, setIsInvitePopupOpen] = useState(false);
@@ -63,21 +57,21 @@ const Sidebar = () => {
     };
   }, [user?.id]);
 
-
   const filteredNotes = notes.filter((note) => {
     const query = (searchQuery || "").toLowerCase();
 
     const inTitle = (note.title || "").toLowerCase().includes(query);
 
     const tagsForNote = noteTags
-        .filter(t => t.note_id === note.note_id)
-        .map(t => t.tags?.name.toLowerCase());
+      .filter((t) => t.note_id === note.note_id)
+      .map((t) => t.tags?.name.toLowerCase());
 
-    const inTags = tagsForNote.some(name => name.includes(query.toLowerCase()));
+    const inTags = tagsForNote.some((name) =>
+      name.includes(query.toLowerCase()),
+    );
 
     return inTitle || inTags;
   });
-
 
   const handleCreateNote = async () => {
     const n = await createNote();
@@ -107,7 +101,9 @@ const Sidebar = () => {
     <>
       <div className="w-60 bg-white border-r border-gray-200 flex flex-col">
         <div className="p-2 border-b border-gray-200 flex items-center justify-between overflow-ellipsis">
-          <p data-cy="userEmail" className="text-md font-semibold">{user?.email}</p>
+          <p data-cy="userEmail" className="text-md font-semibold">
+            {user?.email}
+          </p>
           <button
             onClick={toggleInvitePopup}
             className="relative p-1 rounded-md hover:bg-gray-100 transition-colors cursor-pointer"
@@ -154,10 +150,7 @@ const Sidebar = () => {
         <Navigation />
       </div>
 
-      <InvitePopup
-        isOpen={isInvitePopupOpen}
-        onClose={toggleInvitePopup}
-      />
+      <InvitePopup isOpen={isInvitePopupOpen} onClose={toggleInvitePopup} />
     </>
   );
 };
