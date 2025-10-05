@@ -1,6 +1,6 @@
 import { CgNotes } from "react-icons/cg";
 import { useNotesStore } from "@/hooks/useNotesStore";
-import { useEffect, useState, useCallback, memo } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import CollaborativeEditor from "@/components/editor/CollaborativeEditor";
 import { Tags } from "@/components/tags/Tags";
 import { useAuth } from "@/hooks/useAuth";
@@ -12,30 +12,32 @@ import { useInvitationsStore } from "@/hooks/useInvitationsStore";
 export const MainContent = () => {
   const selectedNote = useNotesStore((state) => state.selectedNote);
   const selectedNoteId = useNotesStore((state) => state.selectedNoteId);
-  const fetchNotes = useNotesStore((state) => state.fetchNotes);
-  const updateNoteTitle = useNotesStore((state) => state.updateNoteTitle);
   const collaborators = useNotesStore((state) => state.collaborators);
-  const fetchNoteCollaborators = useNotesStore((state) => state.fetchNoteCollaborators);
   const role = useNotesStore((state) => state.role);
+  const updateNoteTitle = useNotesStore((state) => state.updateNoteTitle);
+  const fetchNoteCollaborators = useNotesStore((state) => state.fetchNoteCollaborators);
+  const getInvitesByNoteId = useInvitationsStore((state) => state.getInvitesByNoteId);
   
   const { user } = useAuth();
   const userId = user?.id;
-  const getInvitesByNoteId = useInvitationsStore((state) => state.getInvitesByNoteId);
   
   const [isCollaborationPopupOpen, setIsCollaborationPopupOpen] = useState(false);
   const isOwner = role === "owner";
 
-  useEffect(() => {
-    fetchNotes();
-  }, [fetchNotes]);
+  const lastFetchedNoteId = useRef(null);
 
   useEffect(() => {
     if (!selectedNoteId || !userId) return;
+    
+    if (lastFetchedNoteId.current === selectedNoteId) return;
+    lastFetchedNoteId.current = selectedNoteId;
+    
     fetchNoteCollaborators(selectedNoteId);
     getInvitesByNoteId(selectedNoteId, userId);
   }, [selectedNoteId, userId, fetchNoteCollaborators, getInvitesByNoteId]);
 
   const handleTitleChange = useCallback((e) => {
+    if (!selectedNoteId) return;
     updateNoteTitle(selectedNoteId, e.target.value);
   }, [selectedNoteId, updateNoteTitle]);
 
@@ -46,7 +48,7 @@ export const MainContent = () => {
   const handleClosePopup = useCallback(() => {
     setIsCollaborationPopupOpen(false);
   }, []);
-  
+
   return (
     <div className="flex-1 flex flex-col">
       <div className="bg-white border-b border-gray-200 p-2 flex items-center justify-between">
@@ -101,7 +103,7 @@ export const MainContent = () => {
       <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
         {selectedNote ? (
           <div className="max-w-4xl mx-auto w-full">
-            <CollaborativeEditor />
+            <CollaborativeEditor/>
           </div>
         ) : (
           <div className="flex items-center justify-center h-full w-full pr-10">

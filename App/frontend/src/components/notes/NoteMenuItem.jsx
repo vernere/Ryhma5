@@ -1,29 +1,34 @@
+import { memo, useCallback } from "react";
 import { CgHeart } from "react-icons/cg";
 import { Trash2 } from "lucide-react";
 
-const NoteMenuItem = ({
-  note,
+const NoteMenuItem = memo(({
+  noteId,
+  title,
   isActive,
   isNoteFavorite,
   onSelectNote,
   onToggleFavorite,
   onDeleteNote,
 }) => {
-  const handleToggleFavorite = (e) => {
+  const handleToggleFavorite = useCallback((e) => {
     e.stopPropagation();
-    onToggleFavorite(note.note_id);
-  };
+    onToggleFavorite(noteId);
+  }, [noteId, onToggleFavorite]);
 
-  const handleDeleteNote = (e) => {
+  const handleDeleteNote = useCallback((e) => {
     e.stopPropagation();
-    onDeleteNote(note.note_id);
-  };
+    onDeleteNote(noteId);
+  }, [noteId, onDeleteNote]);
+
+  const handleClick = useCallback(() => {
+    onSelectNote(noteId);
+  }, [noteId, onSelectNote]);
 
   return (
     <div
       data-cy="noteSelect"
-      key={note.note_id}
-      onClick={() => onSelectNote(note.note_id)}
+      onClick={handleClick}
       className={`px-4 py-3 cursor-pointer hover:bg-gray-50 flex flex-col space-y-1 border-b border-transparent group ${
         isActive ? "bg-indigo-50 border-indigo-500" : ""
       }`}
@@ -48,7 +53,7 @@ const NoteMenuItem = ({
               isActive ? "font-semibold text-indigo-700" : "text-gray-800"
             }`}
           >
-            {note.title}
+            {title}
           </div>
         </div>
 
@@ -66,6 +71,8 @@ const NoteMenuItem = ({
       </div>
     </div>
   );
-};
+});
+
+NoteMenuItem.displayName = "NoteMenuItem";
 
 export default NoteMenuItem;

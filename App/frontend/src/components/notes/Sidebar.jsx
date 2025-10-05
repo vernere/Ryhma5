@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { Search, Bell, FilePlus2 } from "lucide-react";
 import { Navigation } from "@/components/ui/navigation";
 import { useNotesStore } from "@/hooks/useNotesStore";
@@ -9,35 +9,28 @@ import NoteMenuItem from "./NoteMenuItem";
 import { useRealtimeStore } from "@/hooks/useRealtimeStore";
 
 const Sidebar = () => {
-  const {
-    notes,
-    searchQuery,
-    setSearchQuery,
-    setSelectedNote,
-    selectedNoteId,
-    isFavorite,
-    toggleFavorite,
-    createNote,
-    fetchFavorites,
-    fetchNotes,
-    setCurrentUser,
-    deleteNote
-  } = useNotesStore();
+  const notes = useNotesStore((state) => state.notes);
+  const searchQuery = useNotesStore((state) => state.searchQuery);
+  const selectedNoteId = useNotesStore((state) => state.selectedNoteId);
+  const favs = useNotesStore((state) => state.favs);
+  const setSearchQuery = useNotesStore((state) => state.setSearchQuery);
+  const setSelectedNote = useNotesStore((state) => state.setSelectedNote);
+  const toggleFavorite = useNotesStore((state) => state.toggleFavorite);
+  const createNote = useNotesStore((state) => state.createNote);
+  const fetchFavorites = useNotesStore((state) => state.fetchFavorites);
+  const fetchNotes = useNotesStore((state) => state.fetchNotes);
+  const setCurrentUser = useNotesStore((state) => state.setCurrentUser);
+  const deleteNote = useNotesStore((state) => state.deleteNote);
 
-  const {
-    inbox,
-    getInvites
-  } = useInvitationsStore();
+  const inbox = useInvitationsStore((state) => state.inbox);
+  const getInvites = useInvitationsStore((state) => state.getInvites);
 
-  const {
-    setupNoteCollaboratorSubscription,
-    cleanupCollaboratorsSubscription,
-    setupInvitesSubscription,
-    cleanupInvitesSubscription
-  }= useRealtimeStore();
+  const setupNoteCollaboratorSubscription = useRealtimeStore((state) => state.setupNoteCollaboratorSubscription);
+  const cleanupCollaboratorsSubscription = useRealtimeStore((state) => state.cleanupCollaboratorsSubscription);
+  const setupInvitesSubscription = useRealtimeStore((state) => state.setupInvitesSubscription);
+  const cleanupInvitesSubscription = useRealtimeStore((state) => state.cleanupInvitesSubscription);
   
   const { user } = useAuth();
-
   const [isInvitePopupOpen, setIsInvitePopupOpen] = useState(false);
 
   useEffect(() => {
@@ -57,33 +50,39 @@ const Sidebar = () => {
     };
   }, [user?.id]);
 
-  const filteredNotes = notes.filter((note) =>
-    (note.title || "").toLowerCase().includes((searchQuery || "").toLowerCase())
-  );
+  const filteredNotes = useMemo(() => {
+    return notes.filter((note) =>
+      (note.title || "").toLowerCase().includes((searchQuery || "").toLowerCase())
+    );
+  }, [notes, searchQuery]);
 
-  const handleCreateNote = async () => {
+  const handleCreateNote = useCallback(async () => {
     const n = await createNote();
     if (n) {
       setSelectedNote(n.note_id);
     }
-  };
+  }, [createNote, setSelectedNote]);
 
-  const handleSelectNote = async (noteId) => {
+  const handleSelectNote = useCallback(async (noteId) => {
     await setSelectedNote(noteId);
     setSearchQuery("");
-  };
+  }, [setSelectedNote, setSearchQuery]);
 
-  const handleToggleFavorite = (noteId) => {
+  const handleToggleFavorite = useCallback((noteId) => {
     toggleFavorite(noteId);
-  };
+  }, [toggleFavorite]);
 
-  const handleDeleteNote = (noteId) => {
+  const handleDeleteNote = useCallback((noteId) => {
     deleteNote(noteId);
-  };
+  }, [deleteNote]);
 
-  const toggleInvitePopup = () => {
+  const toggleInvitePopup = useCallback(() => {
     setIsInvitePopupOpen(!isInvitePopupOpen);
-  };
+  }, [isInvitePopupOpen]);
+  
+  const isFavorite = useCallback((noteId) => {
+    return favs.has(noteId);
+  }, [favs]);
 
   return (
     <>
@@ -124,7 +123,8 @@ const Sidebar = () => {
           {filteredNotes.map((note) => (
             <NoteMenuItem
               key={note.note_id}
-              note={note}
+              noteId={note.note_id}
+              title={note.title}
               isActive={selectedNoteId === note.note_id}
               isNoteFavorite={isFavorite(note.note_id)}
               onSelectNote={handleSelectNote}
