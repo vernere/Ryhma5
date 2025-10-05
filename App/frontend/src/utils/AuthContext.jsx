@@ -10,10 +10,17 @@ export const AuthProvider = ({children}) => {
 
     useEffect(() => {
         const getSession = async () => {
-            const {data} = await supabase.auth.getSession();
+            const { data } = await supabase.auth.getSession();
+            const { data: userData, error } = await supabase
+                .from("users")
+                .select("username")
+                .eq("id", data.session?.user?.id);
+
+            data.session.user.username = userData ? userData[0].username : null;
             setUser(data.session?.user ?? null);
             setLoading(false);
         };
+
         getSession();
 
         const {data: listener} = supabase.auth.onAuthStateChange((_event, session) => {

@@ -1,16 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useCallback, memo } from "react";
 import { useTagStore } from "@/hooks/useTagStore";
 import { useNotesStore } from "@/hooks/useNotesStore";
 
-export const Tags = ({ note }) => {
-    const { allTags, fetchTags, addTag, removeTag } = useTagStore();
-    const { fetchNoteById } = useNotesStore();
+export const Tags = memo(({ note }) => {
+    const allTags = useTagStore((state) => state.allTags);
+    const fetchTags = useTagStore((state) => state.fetchTags);
+    const addTag = useTagStore((state) => state.addTag);
+    const removeTag = useTagStore((state) => state.removeTag);
+    const fetchNoteById = useNotesStore((state) => state.fetchNoteById);
 
     useEffect(() => {
         fetchTags();
     }, [fetchTags]);
 
-    const handleSelectTag = async (tagId) => {
+    const handleSelectTag = useCallback(async (tagId) => {
         if (!note?.note_id) {
             return;
         }
@@ -27,7 +30,7 @@ export const Tags = ({ note }) => {
         } catch (err) {
             console.error("Error updating tag:", err);
         }
-    };
+    }, [note?.note_id, note?.note_tags, addTag, removeTag, fetchNoteById]);
 
     return (
         <div className="flex flex-wrap gap-2">
@@ -53,4 +56,6 @@ export const Tags = ({ note }) => {
             })}
         </div>
     );
-};
+});
+
+Tags.displayName = "Tags";

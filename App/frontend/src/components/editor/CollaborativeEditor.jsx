@@ -1,121 +1,91 @@
+import { Toolbar } from "@/components/ui/toolbar";
 import { useAuth } from "@/hooks/useAuth";
 import { useNotesStore } from "@/hooks/useNotesStore";
-import { useRealtimeStore } from "@/hooks/useRealtimeStore";
+import { supabase } from "@/lib/supabaseClient";
+import { SupabaseProvider } from "@/lib/y-supabase";
+import Collaboration from "@tiptap/extension-collaboration";
+import CollaborationCaret from "@tiptap/extension-collaboration-caret";
 import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import { useEffect, useState } from "react";
-import { Toolbar } from "@/components/ui/toolbar"
-import Underline from '@tiptap/extension-underline'
-import TextAlign from '@tiptap/extension-text-align'
-import BulletList from '@tiptap/extension-bullet-list'
-import ListItem from '@tiptap/extension-list-item';
-import { ImageExtension } from '@/components/editor/ImageExtension';
+import * as Y from "yjs";
+import { COLORS, EDITOR_EXTENSIONS } from "./constants";
 
 export default function CollaborativeEditor() {
-    const {
-        selectedNote,
-        selectedNoteId,
-        setCurrentUser,
-        isLocalChange,
-        setIsLocalChange,
-        handleContentChange,
-    } = useNotesStore();
-
-    const {
-        setupPresence,
-        cleanupPresence,
-        setupRealtimeSubscription,
-        cleanupRealtimeSubscription,
-    } = useRealtimeStore();
-
+    const selectedNoteId = useNotesStore((state) => state.selectedNoteId);
+    const initialContent = useNotesStore(
+        (state) => state.selectedNote?.content
+    );
+    const noteTitle = useNotesStore((state) => state.selectedNote?.title);
     const { user } = useAuth();
-    const [_, setSaveStatus] = useState("saved");
 
-    const editor = useEditor(
-        {
-            extensions: [
-                StarterKit.configure({ 
-                    history: false,
-                    bulletList: false // disable the built-in bullet list to use our own
-                }),
-                Underline,
-                BulletList,
-                ListItem,
-                TextAlign.configure({
-                    types: ['heading', 'paragraph', 'bulletList'],
-                }),
-                ImageExtension,
-            ],
-            editorProps: {
-                attributes: {
-                    class: "prose max-w-none focus:outline-none min-h-[400px] p-4",
-                },
+    const ydoc = new Y.Doc();
+    const channelName = `note-yjs-${selectedNoteId}`;
+    const provider = new SupabaseProvider(ydoc, supabase, {
+        channel: channelName,
+        id: selectedNoteId,
+        idName: "note_id",
+        tableName: "notes",
+        columnName: "content",
+    });
+
+    const editor = useEditor({
+        editorProps: {
+            attributes: {
+                class: "prose max-w-none focus:outline-none min-h-[400px] p-4",
             },
         },
-        [selectedNoteId]
-    );
-
-    useEffect(() => {
-        setupRealtimeSubscription();
-        return () => cleanupRealtimeSubscription();
-    }, []);
-
-    useEffect(() => {
-        if (editor && selectedNote) {
-            editor.commands.setContent(selectedNote.content || '');
-        }
-    }, [editor, selectedNoteId, selectedNote]);
-
-    useEffect(() => {
-        if (user) setCurrentUser(user);
-    }, [user]);
-
-    useEffect(() => {
-        if (selectedNoteId && user) {
-            setupPresence(selectedNoteId, user, (content) => {
-                if (editor) {
-                    setIsLocalChange(true);
-                    editor.commands.setContent(content);
+        content: initialContent,
+        autofocus: "end",
+        enableContentCheck: true,
+        onContentError: ({ disableCollaboration }) => {
+            disableCollaboration();
+        },
+        onCreate: ({ editor: currentEditor }) => {
+            provider.on("synced", () => {
+                if (currentEditor.isEmpty) {
+                    currentEditor.commands.setContent(initialContent);
                 }
             });
-        }
-        return () => cleanupPresence();
-    }, [
-        selectedNoteId,
-        user,
-        editor,
-    ]);
+        },
+        extensions: [
+            ...EDITOR_EXTENSIONS,
+            Collaboration.configure({
+                document: ydoc,
+            }),
+            CollaborationCaret.configure({
+                provider,
+                user: {
+                    name: user.username || "Unknown",
+                    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+                },
+                render: (user) => {
+                    const cursor = document.createElement('span')
+                    cursor.classList.add('collaboration-carets__caret')
+                    cursor.setAttribute('style', `border-color: ${user.color}`)
 
-    useEffect(() => {
-        if (!editor) return;
+                    const label = document.createElement('div')
+                    label.classList.add('collaboration-carets__label')
+                    label.setAttribute('style', `background-color: ${user.color}`)
+                    label.insertBefore(document.createTextNode(user.name), null)
 
-        const onUpdate = () => {
-            if (isLocalChange) {
-                setIsLocalChange(false);
-                return;
-            }
-            
-            setSaveStatus('saving');
-            handleContentChange(editor.getHTML());
-            setTimeout(() => setSaveStatus("saved"), 2500);
-        };
-
-        editor.on("update", onUpdate);
-        return () => editor.off("update", onUpdate);
-    }, [editor, isLocalChange]);
+                    cursor.insertBefore(label, null)
+                    return cursor
+                },
+            }),
+        ],
+    });
 
     if (!selectedNoteId) {
         return (
-            <div className="border rounded-2xl shadow-sm p-4 text-center text-gray-500">
-                No note selected
+            <div className="p-4 text-center text-gray-500">
+                Select a note to begin.
             </div>
         );
     }
 
     if (!editor) {
         return (
-            <div className="border rounded-2xl shadow-sm p-4 text-center text-gray-500">
-                <div className="animate-pulse">Setting up editor...</div>
+            <div className="p-4 text-center text-gray-500 animate-pulse">
+                Loading Editor...
             </div>
         );
     }
@@ -123,11 +93,10 @@ export default function CollaborativeEditor() {
     return (
         <div className="rounded-2xl min-h-[400px]">
             <div className="sticky top-0 z-50 shadow">
-                <Toolbar editor={editor} noteTitle={selectedNote.title} />
+                <Toolbar editor={editor} noteTitle={noteTitle || ""} />
             </div>
             <div
-                data-cy="noteContent"
-                className="prose max-w-none text-gray-800 bg-white rounded-b-lg shadow-sm p-6 [&_ul]:list-disc [&_ul]:pl-6"
+                className="prose max-w-none bg-white rounded-b-lg shadow-sm p-6"
                 style={{ minHeight: "90vh" }}
             >
                 <EditorContent editor={editor} />

@@ -1,6 +1,6 @@
 import { CgNotes } from "react-icons/cg";
 import { useNotesStore } from "@/hooks/useNotesStore";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import CollaborativeEditor from "@/components/editor/CollaborativeEditor";
 import { Tags } from "@/components/tags/Tags";
 import { useAuth } from "@/hooks/useAuth";
@@ -8,31 +8,47 @@ import { CollaborationPopup } from "./collaborationPopup/CollaborationPopup";
 import { CollaboratorBalls } from "./CollaboratorBalls";
 import { UserRoundPlus } from "lucide-react";
 import { useInvitationsStore } from "@/hooks/useInvitationsStore";
-import { Toolbar } from "@/components/ui/toolbar";
 
 export const MainContent = () => {
-  const {
-    selectedNote,
-    selectedNoteId,
-    fetchNotes,
-    updateNoteTitle,
-    collaborators,
-    fetchNoteCollaborators,
-    role
-  } = useNotesStore();
+  const selectedNote = useNotesStore((state) => state.selectedNote);
+  const selectedNoteId = useNotesStore((state) => state.selectedNoteId);
+  const collaborators = useNotesStore((state) => state.collaborators);
+  const role = useNotesStore((state) => state.role);
+  const updateNoteTitle = useNotesStore((state) => state.updateNoteTitle);
+  const fetchNoteCollaborators = useNotesStore((state) => state.fetchNoteCollaborators);
+  const getInvitesByNoteId = useInvitationsStore((state) => state.getInvitesByNoteId);
+  
   const { user } = useAuth();
-  const { getInvitesByNoteId } = useInvitationsStore();
+  const userId = user?.id;
   
   const [isCollaborationPopupOpen, setIsCollaborationPopupOpen] = useState(false);
   const isOwner = role === "owner";
 
+  const lastFetchedNoteId = useRef(null);
+
   useEffect(() => {
-    fetchNotes();
-    if (!selectedNoteId || !user.id) return;
+    if (!selectedNoteId || !userId) return;
+    
+    if (lastFetchedNoteId.current === selectedNoteId) return;
+    lastFetchedNoteId.current = selectedNoteId;
+    
     fetchNoteCollaborators(selectedNoteId);
-    getInvitesByNoteId(selectedNoteId, user.id);
-  }, [selectedNoteId, user.id]);
-  
+    getInvitesByNoteId(selectedNoteId, userId);
+  }, [selectedNoteId, userId, fetchNoteCollaborators, getInvitesByNoteId]);
+
+  const handleTitleChange = useCallback((e) => {
+    if (!selectedNoteId) return;
+    updateNoteTitle(selectedNoteId, e.target.value);
+  }, [selectedNoteId, updateNoteTitle]);
+
+  const handleOpenPopup = useCallback(() => {
+    setIsCollaborationPopupOpen(true);
+  }, []);
+
+  const handleClosePopup = useCallback(() => {
+    setIsCollaborationPopupOpen(false);
+  }, []);
+
   return (
     <div className="flex-1 flex flex-col">
       <div className="bg-white border-b border-gray-200 p-2 flex items-center justify-between">
@@ -44,18 +60,20 @@ export const MainContent = () => {
                   data-cy="noteTitle"
                   className="text-lg focus:outline-none"
                   value={selectedNote.title || ""}
-                  onChange={(e) => updateNoteTitle(selectedNoteId, e.target.value)}
+                  onChange={handleTitleChange}
                   placeholder="Title…"
                 />
 
                 <div className="flex items-center ml-auto gap-3">
-                  <button onClick={() => setIsCollaborationPopupOpen(true)}>
-                    {isOwner && (<UserRoundPlus className="text-gray-400 hover:text-gray-600 size-5 cursor-pointer" />)}
-                  </button>
+                  {isOwner && (
+                    <button onClick={handleOpenPopup}>
+                      <UserRoundPlus className="text-gray-400 hover:text-gray-600 size-5 cursor-pointer" />
+                    </button>
+                  )}
 
                   <button 
                     className="cursor-pointer"
-                    onClick={() => setIsCollaborationPopupOpen(true)}>
+                    onClick={handleOpenPopup}>
                     <CollaboratorBalls users={collaborators} />
                   </button>
                 </div>
@@ -85,7 +103,7 @@ export const MainContent = () => {
       <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
         {selectedNote ? (
           <div className="max-w-4xl mx-auto w-full">
-            <CollaborativeEditor Toolbar={Toolbar} />
+            <CollaborativeEditor/>
           </div>
         ) : (
           <div className="flex items-center justify-center h-full w-full pr-10">
@@ -95,13 +113,11 @@ export const MainContent = () => {
             </div>
           </div>
         )}
-
-        <Toolbar />
       </div>
 
       <CollaborationPopup
         isOpen={isCollaborationPopupOpen}
-        onClose={() => setIsCollaborationPopupOpen(false)}
+        onClose={handleClosePopup}
         isLoading={false}
       />
     </div>
