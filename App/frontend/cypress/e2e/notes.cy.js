@@ -2,9 +2,9 @@
 import { loginUser } from '../support/helpers';
 
 describe('Notes tests', () => {
-    beforeEach(() => {
-        loginUser();
-    });
+  beforeEach(() => {
+    loginUser();
+  });
 
   it('Test notes typing', () => {
     cy.get('[data-cy=noteSelect]').first().click()
@@ -82,9 +82,9 @@ describe('Notes tests', () => {
 })
 
 describe('Search tests', () => {
-    beforeEach(() => {
-        loginUser();
-    });
+  beforeEach(() => {
+    loginUser();
+  });
 
   it('Test search input and response', () => {
     cy.get('[data-cy=searchInput]').type('New test ntoe')
@@ -100,4 +100,13 @@ describe('Search tests', () => {
     cy.get('[data-cy=searchInput]').type('Coding')
     cy.get('[data-cy=noteSelect]').first().should('exist')
   });
+
+  it('Test note add tag and remove tag', () => {
+    cy.get('[data-cy=noteSelect]').first().click();
+    cy.get('[data-cy=noteTag]').first().should('have.class', 'bg-green-200')
+    cy.get('[data-cy=noteTag]').first().click();
+    cy.get('[data-cy=noteTag]').first().should('not.have.class', 'bg-green-200')
+    cy.get('[data-cy=noteTag]').first().click();
+  });
+
 })
