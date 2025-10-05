@@ -90,4 +90,14 @@ describe('Search tests', () => {
     cy.get('[data-cy=searchInput]').type('New test ntoe')
     cy.get('[data-cy=noteSelect]').should('not.exist')
   });
+
+  it('Test note search for name', () => {
+    cy.get('[data-cy=searchInput]').type('New test note')
+    cy.get('[data-cy=noteSelect]').first().should('exist')
+  });
+
+  it('Test note search by tag', () => {
+    cy.get('[data-cy=searchInput]').type('Coding')
+    cy.get('[data-cy=noteSelect]').first().should('exist')
+  });
 })
