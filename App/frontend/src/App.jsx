@@ -54,8 +54,6 @@ function App() {
                 path="/notes"
                 element={
                     <ProtectedRoute>
-                           {" "}
-                        <NotesPage />{" "}
                         <OnboardingGuard>
                             <NotesPage />
                         </OnboardingGuard>
