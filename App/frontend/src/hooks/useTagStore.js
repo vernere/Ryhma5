@@ -75,7 +75,6 @@ export const useTagStore = create((set, get) => ({
             const {data, error} = await supabase
                 .from("note_tags")
                 .select("*, tags(name, tag_id)")
-            //.eq("note_id", noteId);
             if (error) throw error;
             set({noteTags: data || [], loading: false});
         } catch (err) {

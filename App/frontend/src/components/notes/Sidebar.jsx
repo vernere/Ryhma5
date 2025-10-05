@@ -70,8 +70,8 @@ const Sidebar = () => {
     const inTitle = (note.title || "").toLowerCase().includes(query);
 
     const tagsForNote = noteTags
-        .filter(t => t.note_id === note.note_id)        // valitaan haluttu note_id
-        .map(t => t.tags?.name.toLowerCase());    // otetaan tagien nimet pienellä
+        .filter(t => t.note_id === note.note_id)
+        .map(t => t.tags?.name.toLowerCase());
 
     const inTags = tagsForNote.some(name => name.includes(query.toLowerCase()));
 
