@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { createCoverageMap } = require('istanbul-lib-coverage')
 const v8ToIstanbul = require('v8-to-istanbul')
-
+// Takes e2e and unit test coverage data, merges them and generates a final.json package and a html visual report.
 async function mergeCoverage() {
     let unitMap = createCoverageMap({})
     let e2eMap = createCoverageMap({})
