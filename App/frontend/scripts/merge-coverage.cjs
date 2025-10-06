@@ -43,7 +43,7 @@ async function mergeCoverage() {
                                 fileCov = converter.toIstanbul()
                             } catch (err) {
                                 console.error(`Error converting V8 coverage for ${file}:`, err)
-                                return // Skip this file
+                                return 
                             }
                         }
 
