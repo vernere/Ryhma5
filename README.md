@@ -58,6 +58,12 @@ The project is implemented in React using Bun and supports localization in Engli
 
 
 ## GitHub actions
+GitHub actions pipeline automatically runs :
+- Unit tests
+- Cypress e2e tests
+- Generates code coverage reports for both
+- Merges code coverage reports
+- Publishes code coverage report to Codecov
 
 ## Tests
 The project includes e2e tests for the frontend layer To run the tests, use the following command:
