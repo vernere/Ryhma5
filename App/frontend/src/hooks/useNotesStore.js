@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { supabase } from "@/lib/supabaseClient";
+import { useRealtimeStore } from "./useRealtimeStore";
 
 const debounce = (func, delay) => {
   let timeout;
@@ -20,26 +21,50 @@ export const useNotesStore = create((set, get) => ({
   presenceChannel: null,
   isLocalChange: false,
   currentUser: null,
-  realtimeSubscription: null,
   favs: new Set(),
+  collaborators: [],
+  role: null,
 
   setCurrentUser: (user) => set({ currentUser: user }),
   setIsLocalChange: (flag) => set({ isLocalChange: flag }),
   setSearchQuery: (q) => set({ searchQuery: q }),
+  
+  addNote: (note) =>
+    set((state) => ({
+      notes: [note, ...state.notes],
+    })),
+
+  updateNote: (updatedNote) =>
+    set((state) => ({
+      notes: state.notes.map((note) =>
+        note.note_id === updatedNote.note_id ? updatedNote : note
+      ),
+    })),
+
+  deleteNote: (deletedId) =>
+    set((state) => {
+      const nextNotes = state.notes.filter((note) => note.note_id !== deletedId);
+      const deletingSelected = state.selectedNoteId === deletedId;
+      return {
+        notes: nextNotes,
+        selectedNote: deletingSelected ? null : state.selectedNote,
+        selectedNoteId: deletingSelected ? null : state.selectedNoteId,
+      };
+    }),
 
   setFavs: (updater) =>
     set((state) => {
-      const next =
-        typeof updater === "function" ? updater(state.favs) : updater;
+      const next = typeof updater === "function" ? updater(state.favs) : updater;
       return { favs: next };
     }),
 
   fetchFavorites: async () => {
-    const { data, error } = await supabase
-      .from("favorites")
-      .select("note_id");
-    if (error) { set({ error: error.message }); return; }
-    set({ favs: new Set((data ?? []).map(r => r.note_id)) });
+    const { data, error } = await supabase.from("favorites").select("note_id");
+    if (error) {
+      set({ error: error.message });
+      return;
+    }
+    set({ favs: new Set((data ?? []).map((r) => r.note_id)) });
   },
 
   fetchNotes: async () => {
@@ -76,6 +101,25 @@ export const useNotesStore = create((set, get) => ({
   setSelectedNote: async (noteId) => {
     set({ selectedNoteId: noteId, loading: true, error: null });
     await get().fetchNoteById(noteId);
+  },
+
+  fetchNoteCollaborators: async (noteId) => {
+    if (!noteId) return;
+    set({ loading: true, error: null });
+    try {
+      const { data, error } = await supabase
+        .from("note_collaborators")
+        .select("role, users(id, username)")
+        .eq("note_id", noteId);
+      if (error) throw error;
+      const users = data?.map(nc => ({ user_id: nc.users.id, username: nc.users.username, role: nc.role })) || [];
+      const userRole = users.find(u => u.user_id === get().currentUser?.id)?.role || null;
+      set({ role: userRole });
+      set({ collaborators: users || [], loading: false });
+    } catch (err) {
+      set({ error: err.message, loading: false });
+      return [];
+    }
   },
 
   createNote: async (title = "Untitled note") => {
@@ -133,10 +177,7 @@ export const useNotesStore = create((set, get) => ({
   },
 
   deleteNote: async (noteId) => {
-    const { error } = await supabase
-      .from("notes")
-      .delete()
-      .eq("note_id", noteId);
+    const { error } = await supabase.from("notes").delete().eq("note_id", noteId);
 
     if (error) {
       set({ error: error.message });
@@ -166,9 +207,7 @@ export const useNotesStore = create((set, get) => ({
       return { favs: s };
     });
 
-    const { error } = await supabase
-      .from("favorites")
-      .insert({ user_id: uid, note_id: noteId });
+    const { error } = await supabase.from("favorites").insert({ user_id: uid, note_id: noteId });
 
     if (error) {
       set((state) => {
@@ -190,10 +229,7 @@ export const useNotesStore = create((set, get) => ({
       return { favs: s };
     });
 
-    const { error } = await supabase
-      .from("favorites")
-      .delete()
-      .eq("note_id", noteId);
+    const { error } = await supabase.from("favorites").delete().eq("note_id", noteId);
 
     if (error) {
       set((state) => {
@@ -211,130 +247,24 @@ export const useNotesStore = create((set, get) => ({
     else await addFavorite(noteId);
   },
 
-  setupPresence: async (noteId, user, onContentReceive) => {
-    if (!noteId || !user) return;
+  removeCollaborator: async (noteId, userId) => {
+    if (!(noteId && userId)) return;
 
-    const prev = get().presenceChannel;
-    if (prev) prev.unsubscribe();
+    const { error } = await supabase
+      .from("note_collaborators")
+      .delete()
+      .eq("note_id", noteId)
+      .eq("user_id", userId);
 
-    const channel = supabase.channel(`note-presence-${noteId}`, {
-      config: { presence: { key: user.id } },
-    });
-
-    channel.on("presence", { event: "sync" }, () => {
-      const state = channel.presenceState();
-      const users = Object.keys(state).map((key) => state[key][0]);
-      set({ activeUsers: users });
-    });
-
-    channel.on("broadcast", { event: "content_change" }, ({ payload }) => {
-      if (payload.user.id !== user.id) {
-        set({ isLocalChange: true });
-        if (onContentReceive) onContentReceive(payload.content);
-      }
-    });
-
-    await channel.subscribe((status) => {
-      if (status === "SUBSCRIBED") {
-        channel.track({ user_id: user.id, email: user.email });
-      }
-    });
-
-    set({ presenceChannel: channel });
-  },
-
-  cleanupPresence: () => {
-    const channel = get().presenceChannel;
-    if (channel) {
-      channel.unsubscribe();
-      set({ presenceChannel: null, activeUsers: [] });
-    }
-  },
-
-  setupRealtimeSubscription: () => {
-    const subscription = supabase
-      .channel("notes-changes")
-
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "notes" },
-        (payload) => {
-          const inserted = payload.new;
-          set((state) => ({
-            notes: [inserted, ...state.notes],
-          }));
-        }
-      )
-
-      .on(
-        "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "notes" },
-        (payload) => {
-          const updatedNote = payload.new;
-          const { selectedNoteId, currentUser } = get();
-
-          set((state) => ({
-            notes: state.notes.map((note) =>
-              note.note_id === updatedNote.note_id ? updatedNote : note
-            ),
-          }));
-
-          if (
-            selectedNoteId === updatedNote.note_id &&
-            updatedNote.updated_by !== currentUser?.id
-          ) {
-            set({ selectedNote: updatedNote });
-          }
-        }
-      )
-
-      .on(
-        "postgres_changes",
-        { event: "DELETE", schema: "public", table: "notes" },
-        (payload) => {
-          const deletedId = payload.old?.note_id;
-          set((state) => {
-            const next = state.notes.filter((note) => note.note_id !== deletedId);
-            const deletingSelected = state.selectedNoteId === deletedId;
-            return {
-              notes: next,
-              selectedNote: deletingSelected ? null : state.selectedNote,
-              selectedNoteId: deletingSelected ? null : state.selectedNoteId,
-            };
-          });
-        }
-      )
-      .subscribe();
-
-    set({ realtimeSubscription: subscription });
-  },
-
-  cleanupRealtimeSubscription: () => {
-    const { realtimeSubscription } = get();
-    if (realtimeSubscription) {
-      realtimeSubscription.unsubscribe();
-    }
-    set({ realtimeSubscription: null });
-  },
-
-  broadcastContentChange: debounce(async (newContent) => {
-    const { presenceChannel, isLocalChange, currentUser } = get();
-    if (!presenceChannel || !currentUser) return;
-
-    if (isLocalChange) {
-      set({ isLocalChange: false });
+    if (error) {
+      set({ error: error.message });
       return;
     }
 
-    await presenceChannel.send({
-      type: "broadcast",
-      event: "content_change",
-      payload: {
-        user: { id: currentUser.id, email: currentUser.email },
-        content: newContent,
-      },
-    });
-  }, 100),
+    set((state) => ({
+      collaborators: state.collaborators.filter((c) => c.user_id !== userId),
+    }));
+  },
 
   saveNoteToDatabase: debounce(async (noteId, content) => {
     try {
@@ -363,9 +293,9 @@ export const useNotesStore = create((set, get) => ({
   }, 1000),
 
   handleContentChange: (newContent) => {
-    const { selectedNoteId, broadcastContentChange, saveNoteToDatabase } = get();
+    const { selectedNoteId, saveNoteToDatabase } = get();
     if (!selectedNoteId) return;
-    broadcastContentChange(newContent);
+    useRealtimeStore.getState().broadcastContentChange(newContent);
     saveNoteToDatabase(selectedNoteId, newContent);
   },
 }));

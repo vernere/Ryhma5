@@ -1,29 +1,34 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useNotesStore } from "@/hooks/useNotesStore";
+import { useRealtimeStore } from "@/hooks/useRealtimeStore";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEffect, useState } from "react";
+import { Toolbar } from "@/components/ui/toolbar"
 import Underline from '@tiptap/extension-underline'
 import TextAlign from '@tiptap/extension-text-align'
 import BulletList from '@tiptap/extension-bullet-list'
 import ListItem from '@tiptap/extension-list-item';
 
-export default function CollaborativeEditor({ Toolbar }) {
+export default function CollaborativeEditor() {
     const {
         selectedNote,
         selectedNoteId,
-        setupPresence,
-        cleanupPresence,
-        setupRealtimeSubscription,
-        cleanupRealtimeSubscription,
         setCurrentUser,
         isLocalChange,
         setIsLocalChange,
         handleContentChange,
     } = useNotesStore();
 
+    const {
+        setupPresence,
+        cleanupPresence,
+        setupRealtimeSubscription,
+        cleanupRealtimeSubscription,
+    } = useRealtimeStore();
+
     const { user } = useAuth();
-    const [_, setSaveStatus] = useState('saved');
+    const [_, setSaveStatus] = useState("saved");
 
     const editor = useEditor(
         {
@@ -51,17 +56,17 @@ export default function CollaborativeEditor({ Toolbar }) {
     useEffect(() => {
         setupRealtimeSubscription();
         return () => cleanupRealtimeSubscription();
-    }, [setupRealtimeSubscription, cleanupRealtimeSubscription]);
+    }, []);
 
     useEffect(() => {
-        if (editor && selectedNote?.content) {
-            editor.commands.setContent(selectedNote.content);
+        if (editor && selectedNote) {
+            editor.commands.setContent(selectedNote.content || '');
         }
-    }, [editor, selectedNoteId, selectedNote?.content]);
+    }, [editor, selectedNoteId, selectedNote]);
 
     useEffect(() => {
         if (user) setCurrentUser(user);
-    }, [user, setCurrentUser]);
+    }, [user]);
 
     useEffect(() => {
         if (selectedNoteId && user) {
@@ -73,7 +78,11 @@ export default function CollaborativeEditor({ Toolbar }) {
             });
         }
         return () => cleanupPresence();
-    }, [selectedNoteId, user, setupPresence, cleanupPresence, editor, setIsLocalChange]);
+    }, [
+        selectedNoteId,
+        user,
+        editor,
+    ]);
 
     useEffect(() => {
         if (!editor) return;
@@ -83,15 +92,15 @@ export default function CollaborativeEditor({ Toolbar }) {
                 setIsLocalChange(false);
                 return;
             }
-
+            
             setSaveStatus('saving');
             handleContentChange(editor.getHTML());
-            setTimeout(() => setSaveStatus('saved'), 2500);
+            setTimeout(() => setSaveStatus("saved"), 2500);
         };
 
         editor.on("update", onUpdate);
         return () => editor.off("update", onUpdate);
-    }, [editor, isLocalChange, handleContentChange, setIsLocalChange]);
+    }, [editor, isLocalChange]);
 
     if (!selectedNoteId) {
         return (
@@ -110,20 +119,18 @@ export default function CollaborativeEditor({ Toolbar }) {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="rounded-2xl min-h-[400px]">
             <div className="sticky top-0 z-50 shadow">
-                <Toolbar editor={editor} />
+                <Toolbar editor={editor} noteTitle={selectedNote.title} />
             </div>
-            <div className="rounded-2xl min-h-[400px]">
-                <div
-                    data-cy="noteContent"
-                    className="prose max-w-none text-gray-800 bg-white rounded-b-lg shadow-sm p-6 [&_ul]:list-disc [&_ul]:pl-6"
-                    style={{ minHeight: "90vh" }}
-                >
-                    <EditorContent editor={editor} />
-                </div>
+            <div
+                data-cy="noteContent"
+                className="prose max-w-none text-gray-800 bg-white rounded-b-lg shadow-sm p-6 [&_ul]:list-disc [&_ul]:pl-6"
+                style={{ minHeight: "90vh" }}
+            >
+                <EditorContent editor={editor} />
+
             </div>
         </div>
-
     );
-}
+};
