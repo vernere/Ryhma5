@@ -55,9 +55,25 @@ export const AuthProvider = ({ children }) => {
         getSession();
 
         const { data: listener } = supabase.auth.onAuthStateChange(
-            (_event, session) => {
-                setUser(session?.user ?? null);
-                if (_event === "PASSWORD_RECOVERY") setPasswordRecovery(true);
+            async (_event, session) => {
+                if (session?.user) {
+                    const { data: userData } = await supabase
+                        .from("users")
+                        .select("username, is_onboarded")
+                        .eq("id", session.user.id)
+                        .single();
+
+                    const fullUser = { ...session.user, ...userData };
+                    setUser(fullUser);
+                } else {
+                    setUser(null);
+                }
+
+                if (_event === "PASSWORD_RECOVERY") {
+                    setPasswordRecovery(true);
+                } else {
+                    setPasswordRecovery(false);
+                }
             }
         );
 
