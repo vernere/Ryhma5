@@ -10,6 +10,8 @@
     "coverage/**",
     "node_modules/**",
     "dist/**",
+    "**/__test__/**",
+    "**/__tests__/**",
     "**/*.config.js",
     "**/vite.config.js",
     "**/cypress.config.js"
