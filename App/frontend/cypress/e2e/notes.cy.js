@@ -114,7 +114,7 @@ describe('Search tests', () => {
   });
 
   it('Test note add tag and remove tag', () => {
-    const note = cy.get('[data-cy=noteSelect]').first().click();
+    cy.get('[data-cy=noteSelect]').first().click();
     const firstTag = cy.get('[data-cy=noteTag]').first();
     firstTag.click();
     firstTag.should('have.class', 'bg-green-200')
