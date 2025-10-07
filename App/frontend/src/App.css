@@ -22,3 +22,20 @@
     user-select: none;
     white-space: nowrap;
 }
+
+.prose pre {
+    background-color: #eeeeee;
+    border-radius: 0.4rem;
+    color: black;
+    font-size: 0.85rem;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+.prose pre code {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+}

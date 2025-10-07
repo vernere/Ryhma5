@@ -77,6 +77,9 @@ describe('Notes tests', () => {
 
     cy.get('[data-cy=listButton]').click()
     cy.get('[data-cy=noteContent]').find('ul').should('exist')
+
+    cy.get('[data-cy=codeButton]').click()
+    cy.get('pre').should('exist')
   });
 
 })

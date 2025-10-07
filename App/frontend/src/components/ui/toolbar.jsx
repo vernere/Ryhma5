@@ -3,7 +3,7 @@ import {
     CgFormatItalic,
     CgFormatUnderline,
     CgList,
-    CgAttachment,
+    CgCode,
     CgImage,
     CgMoreAlt,
     CgExport,
@@ -68,6 +68,8 @@ const Toolbar = ({ editor, noteTitle = "Untitled note" }) => {
             case "list":
                 editor.chain().focus().toggleBulletList().run();
                 break;
+            case "code":
+                editor.chain().focus().toggleCodeBlock().run();
             default:
                 break;
         }
@@ -81,42 +83,43 @@ const Toolbar = ({ editor, noteTitle = "Untitled note" }) => {
             <button
                 data-cy="boldButton"
                 onClick={() => handleClick("bold")}
-                className={`p-2 hover:bg-gray-100 rounded ${
-                    editor.isActive("bold") ? "bg-gray-200" : ""
-                }`}
+                className={`p-2 hover:bg-gray-100 rounded ${editor.isActive("bold") ? "bg-gray-200" : ""
+                    }`}
             >
                 <CgFormatBold className="w-4 h-4" />
             </button>
             <button
                 data-cy="italicButton"
                 onClick={() => handleClick("italic")}
-                className={`p-2 hover:bg-gray-100 rounded ${
-                    editor.isActive("italic") ? "bg-gray-200" : ""
-                }`}
+                className={`p-2 hover:bg-gray-100 rounded ${editor.isActive("italic") ? "bg-gray-200" : ""
+                    }`}
             >
                 <CgFormatItalic className="w-4 h-4" />
             </button>
             <button
                 data-cy="underlineButton"
                 onClick={() => handleClick("underline")}
-                className={`p-2 hover:bg-gray-100 rounded ${
-                    editor.isActive("Underline") ? "bg-gray-200" : ""
-                }`}
+                className={`p-2 hover:bg-gray-100 rounded ${editor.isActive("Underline") ? "bg-gray-200" : ""
+                    }`}
             >
                 <CgFormatUnderline className="w-4 h-4" />
             </button>
             <button
                 data-cy="listButton"
                 onClick={() => handleClick("list")}
-                className={`p-2 hover:bg-gray-100 rounded ${
-                    editor.isActive("bulletList") ? "bg-gray-200" : ""
-                }`}
+                className={`p-2 hover:bg-gray-100 rounded ${editor.isActive("bulletList") ? "bg-gray-200" : ""
+                    }`}
             >
                 <CgList className="w-4 h-4" />
             </button>
             <div className="h-5 w-px bg-gray-300"></div>
-            <button className="p-2 hover:bg-gray-100 rounded">
-                <CgAttachment className="w-4 h-4" />
+            <button
+                data-cy='codeButton'
+                onClick={() => handleClick('code')}
+                className={`p-2 hover:bg-gray-100 rounded ${editor.isActive("codeBlock") ? "bg-gray-200" : ""
+                    }`}
+            >
+                <CgCode className="w-4 h-4" />
             </button>
             <ImageUploadButton editor={editor} />
             <div className="h-5 w-px bg-gray-300"></div>
