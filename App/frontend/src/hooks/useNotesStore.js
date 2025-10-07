@@ -10,7 +10,6 @@ const debounce = (func, delay) => {
 };
 
 export const useNotesStore = create((set, get) => {
-  // Move debounced save inside the store to access get() properly
   const debouncedSave = debounce(async (noteId, content) => {
     try {
       const now = new Date().toISOString();
@@ -21,7 +20,6 @@ export const useNotesStore = create((set, get) => {
 
       if (error) throw error;
 
-      // Update state after successful save
       set((state) => ({
         notes: state.notes.map((note) =>
           note.note_id === noteId ? { ...note, content, updated_at: now } : note
@@ -70,9 +68,6 @@ export const useNotesStore = create((set, get) => {
           : state.selectedNote
       })),
 
-    // REMOVED DUPLICATE - Keep only the async version below
-    // deleteNote: (deletedId) => { ... }
-
     setFavs: (updater) =>
       set((state) => {
         const next = typeof updater === "function" ? updater(state.favs) : updater;
@@ -111,17 +106,19 @@ export const useNotesStore = create((set, get) => {
           .select("*, note_tags(*, tags(name))")
           .eq("note_id", noteId)
           .single();
+
         if (error) throw error;
 
         set({ selectedNote: data, selectedNoteId: noteId, loading: false });
       } catch (err) {
+        console.error(err);
         set({ error: err.message, loading: false });
       }
     },
 
     setSelectedNote: async (noteId) => {
       const state = get();
-      if (state.selectedNoteId === noteId) return; // Prevent redundant fetches
+      if (state.selectedNoteId === noteId) return;
       await state.fetchNoteById(noteId);
     },
 

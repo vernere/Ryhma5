@@ -5,11 +5,13 @@ import Collaboration from "@tiptap/extension-collaboration";
 import CollaborationCaret from "@tiptap/extension-collaboration-caret";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { COLORS, EDITOR_EXTENSIONS } from "./constants";
+import { useEffect } from "react";
+import { useProfile } from "@/utils/ProfileContext";
 
 export default function CollaborativeEditor({ ydoc, provider }) {
     const selectedNoteId = useNotesStore((state) => state.selectedNoteId);
     const noteTitle = useNotesStore((state) => state.selectedNote?.title);
-    const { user } = useAuth();
+    const { profile } = useProfile();
 
     const editor = useEditor(
         {
@@ -31,7 +33,7 @@ export default function CollaborativeEditor({ ydoc, provider }) {
                 CollaborationCaret.configure({
                     provider,
                     user: {
-                        name: user?.username || "Unknown",
+                        name: profile?.username || "Unknown",
                         color: COLORS[
                             Math.floor(Math.random() * COLORS.length)
                         ],
@@ -64,6 +66,14 @@ export default function CollaborativeEditor({ ydoc, provider }) {
         [selectedNoteId]
     );
 
+    useEffect(() => {
+        return () => {
+            if (editor) {
+                editor.destroy();
+            }
+        };
+    }, [editor]);
+
     if (!selectedNoteId) {
         return (
             <div className="p-4 text-center text-gray-500">
@@ -82,14 +92,13 @@ export default function CollaborativeEditor({ ydoc, provider }) {
 
     return (
         <div className="rounded-2xl min-h-[400px]">
-            <div className="sticky top-0 z-50 shadow">
+            <div className="sticky top-0 z-50">
                 <Toolbar editor={editor} noteTitle={noteTitle || ""} />
             </div>
             <div
-                className="prose max-w-none bg-white rounded-b-lg shadow-sm p-6"
-                style={{ minHeight: "90vh" }}
+                className="prose max-w-none bg-white rounded-lg shadow-sm p-6 min-h-96"
             >
-                <EditorContent editor={editor} data-cy="noteContent"/>
+                <EditorContent editor={editor} data-cy="noteContent" />
             </div>
         </div>
     );

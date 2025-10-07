@@ -12,6 +12,7 @@ import { useMemo } from "react";
 import * as Y from "yjs";
 import { supabase } from "@/lib/supabaseClient";
 import { SupabaseProvider } from "@/lib/y-supabase";
+import { Toolbar } from "../ui/toolbar";
 
 export const MainContent = () => {
   const selectedNote = useNotesStore((state) => state.selectedNote);
@@ -24,11 +25,11 @@ export const MainContent = () => {
   
   const { user } = useAuth();
   const userId = user?.id;
-  
-  const [isCollaborationPopupOpen, setIsCollaborationPopupOpen] = useState(false);
   const isOwner = role === "owner";
-
+  
   const lastFetchedNoteId = useRef(null);
+  const [isCollaborationPopupOpen, setIsCollaborationPopupOpen] = useState(false);
+  const [isProviderReady, setIsProviderReady] = useState(false);
 
   useEffect(() => {
     if (!selectedNoteId || !userId) return;
@@ -74,17 +75,39 @@ export const MainContent = () => {
   }, [selectedNoteId]);
 
   useEffect(() => {
-      return () => {
-          if (provider) {
-              provider.disconnect();
-              console.log("🛑 Provider disconnected");
-          }
-          if (ydoc) {
-              ydoc.destroy();
-              console.log("🗑️ Y.Doc destroyed");
-          }
-      };
-  }, [provider, ydoc]);
+    if (!provider) return;
+
+    const handleSynced = () => {
+      console.log("✅ Supabase provider synced");
+      setIsProviderReady(true);
+    };
+
+    const handleError = (error) => {
+      console.error("❌ Supabase provider error:", error);
+    };
+
+    provider.on("synced", handleSynced);
+    provider.on("error", handleError);
+
+    return () => {
+      provider.off("synced", handleSynced);
+      provider.off("error", handleError);
+      setIsProviderReady(false);
+    };
+  }, [provider]);
+
+  useEffect(() => {
+    return () => {
+      if (provider) {
+        console.log("🧹 Cleaning up provider");
+        provider.destroy();
+      }
+      if (ydoc) {
+        console.log("🧹 Destroying Y.Doc");
+        ydoc.destroy();
+      }
+    };
+  }, [selectedNoteId]);
 
   return (
     <div className="flex-1 flex flex-col">
@@ -95,13 +118,14 @@ export const MainContent = () => {
               <div className="flex items-center gap-4 w-full">
                 <input
                   data-cy="noteTitle"
-                  className="text-lg focus:outline-none"
+                  className="text-lg focus:outline-none max-w-fit w-25 overflow-ellipsis"
                   value={selectedNote.title || ""}
                   onChange={handleTitleChange}
                   placeholder="Title…"
                 />
-
+                
                 <div className="flex items-center ml-auto gap-3">
+                <Tags note={selectedNote} />
                   {isOwner && (
                     <button onClick={handleOpenPopup}>
                       <UserRoundPlus className="text-gray-400 hover:text-gray-600 size-5 cursor-pointer" />
@@ -115,14 +139,7 @@ export const MainContent = () => {
                   </button>
                 </div>
               </div>
-              <div className="mt-1 flex items-center space-x-2">
-                <span data-cy="noteCreatedAt" className="text-xs text-gray-400">
-                  {selectedNote.created_at
-                    ? new Date(selectedNote.created_at).toLocaleString()
-                    : ""}
-                </span>
-                <Tags note={selectedNote} />
-              </div>
+              <Toolbar />
             </div>
           </div>
         ) : (
@@ -140,7 +157,11 @@ export const MainContent = () => {
       <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
         {selectedNote ? (
           <div className="max-w-4xl mx-auto w-full">
-            <CollaborativeEditor provider={provider} ydoc={ydoc}/>
+            {isProviderReady ? (
+              <CollaborativeEditor provider={provider} ydoc={ydoc} />
+            ) : (
+              <div className="p-4 text-gray-500">Connecting...</div>
+            )}
           </div>
         ) : (
           <div className="flex items-center justify-center h-full w-full pr-10">

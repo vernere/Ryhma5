@@ -36,13 +36,19 @@ class SupabaseProvider extends EventEmitter {
       }
       this.logger(`setting resync interval to every ${(this.config.resyncInterval || 5000) / 1000} seconds`);
       this.resyncInterval = setInterval(() => {
+        const update = Array.from(Y.encodeStateAsUpdate(this.doc));
+        if (update.length < 3) return;
         this.emit('message', Y.encodeStateAsUpdate(this.doc));
         if (this.channel) {
-          this.channel.send({
-            type: 'broadcast',
-            event: 'message',
-            payload: Array.from(Y.encodeStateAsUpdate(this.doc)),
-          });
+          try {
+            this.channel.send({
+              type: 'broadcast',
+              event: 'message',
+              payload: update,
+            });
+          } catch (error) {
+            this.logger('error sending resync message', error);
+          }
         }
       }, this.config.resyncInterval || 5000);
     }
@@ -55,21 +61,30 @@ class SupabaseProvider extends EventEmitter {
 
     this.on('awareness', (update) => {
       if (this.channel) {
-        this.channel.send({
-          type: 'broadcast',
-          event: 'awareness',
-          payload: Array.from(update),
-        });
+        try {
+          this.channel.send({
+            type: 'broadcast',
+            event: 'awareness',
+            payload: Array.from(update),
+          });
+        } catch (error) {
+          this.logger('error sending awareness message', error);
+        }
       }
     });
 
     this.on('message', (update) => {
-      if (this.channel) {
-        this.channel.send({
-          type: 'broadcast',
-          event: 'message',
-          payload: Array.from(update),
-        });
+      if (!update || update.length < 3) return;
+      if (this._channel && this._channel.state === 'joined') {
+        try {
+          this._channel.send({
+            type: 'broadcast',
+            event: 'message',
+            payload: Array.from(update),
+          });
+        } catch (error) {
+          this.logger('error sending message', error);
+        }
       }
     });
 
@@ -85,10 +100,14 @@ class SupabaseProvider extends EventEmitter {
   }
 
   onDocumentUpdate(update, origin) {
+    if (!this.isOnline() || !this.channel) return;
     if (origin !== this) {
       this.logger('document updated locally, broadcasting update to peers', this.isOnline());
       this.emit('message', update);
-      this.save();
+      this.save().catch((error) => {
+        this.logger('error saving document update', error);
+        this.emit('error', error);
+      });
     }
   }
 
@@ -103,18 +122,25 @@ class SupabaseProvider extends EventEmitter {
   }
 
   async save() {
-    const content = Array.from(Y.encodeStateAsUpdate(this.doc));
+    try {
+      const content = Array.from(Y.encodeStateAsUpdate(this.doc));
 
-    const { error } = await this.supabase
-      .from(this.config.tableName)
-      .update({ [this.config.columnName]: content })
-      .eq(this.config.idName || 'id', this.config.id);
+      const { error } = await this.supabase
+        .from(this.config.tableName)
+        .update({ [this.config.columnName]: content })
+        .eq(this.config.idName || 'id', this.config.id);
 
-    if (error) {
-      throw error;
+      if (error) {
+        this.logger('error saving document', error);
+        this.emit('error', error);
+        return;
+      }
+
+      this.emit('save', this.version);
+    } catch (error) {
+      this.logger('error in save method', error);
+      this.emit('error', error);
     }
-
-    this.emit('save', this.version);
   }
 
   onSynced() {
@@ -124,38 +150,53 @@ class SupabaseProvider extends EventEmitter {
   async onConnect() {
     this.logger('connected');
 
-    const { data, error, status } = await this.supabase
-      .from(this.config.tableName)
-      .select(`${this.config.columnName}`)
-      .eq(this.config.idName || 'id', this.config.id)
-      .single();
+    try {
+      const { data, error, status } = await this.supabase
+        .from(this.config.tableName)
+        .select(`${this.config.columnName}`)
+        .eq(this.config.idName || 'id', this.config.id)
+        .single();
 
-    if (data && data[this.config.columnName]) {
-      this.logger('applying update to yjs');
-      try {
-        let update;
-
-        if (typeof data.content === 'string') {
-          const contentArray = JSON.parse(data.content);
-          update = new Uint8Array(contentArray);
-        }
-        else if (Array.isArray(data.content)) {
-          update = new Uint8Array(data.content);
-        }
-        else if (data.content instanceof Uint8Array) {
-          update = data.content;
-        }
-        else if (Buffer.isBuffer(data.content)) {
-          update = new Uint8Array(data.content);
-        }
-
-        Y.applyUpdate(this.doc, update);
-      } catch (error) {
-        this.logger(error);
+      if (error) {
+        this.logger('error fetching initial content', error);
+        this.emit('error', error);
+        return;
       }
-    }
-    this.isOnline(true);
 
+      const col = this.config.columnName || 'content';
+
+      if (data && data[col]) {
+        this.logger('applying update to yjs');
+        try {
+          let update;
+
+          if (typeof data.content === 'string') {
+            const contentArray = JSON.parse(data.content);
+            update = new Uint8Array(contentArray);
+          }
+          else if (Array.isArray(data.content)) {
+            update = new Uint8Array(data.content);
+          }
+          else if (data.content instanceof Uint8Array) {
+            update = data.content;
+          }
+          else if (Buffer.isBuffer(data.content)) {
+            update = new Uint8Array(data.content);
+          }
+
+          Y.applyUpdate(this.doc, update);
+        } catch (error) {
+          this.logger('error applying update', error);
+          this.emit('error', error);
+        }
+      }
+    } catch (error) {
+      this.logger('error in onConnect', error);
+      this.emit('error', error);
+      return;
+    }
+
+    this.isOnline(true);
     this.emit('status', [{ status: 'connected' }]);
 
     if (this.awareness.getLocalState() !== null) {
@@ -168,9 +209,7 @@ class SupabaseProvider extends EventEmitter {
 
   applyUpdate(update, origin) {
     this.version++;
-    console.log("Before applyUpdate:", Y.encodeStateAsUpdate(this.doc));
     Y.applyUpdate(this.doc, update, origin);
-    console.log("After applyUpdate:", Y.encodeStateAsUpdate(this.doc));
   }
 
   disconnect() {
@@ -182,6 +221,7 @@ class SupabaseProvider extends EventEmitter {
 
   connect() {
     this.channel = this.supabase.channel(this.config.channel);
+
     if (this.channel) {
       this.channel
         .on(REALTIME_LISTEN_TYPES.BROADCAST, { event: 'message' }, ({ payload }) => {
@@ -254,7 +294,12 @@ class SupabaseProvider extends EventEmitter {
   }
 
   onAwareness(message) {
-    awarenessProtocol.applyAwarenessUpdate(this.awareness, message, this);
+    try {
+      awarenessProtocol.applyAwarenessUpdate(this.awareness, message, this);
+    } catch (error) {
+      this.logger('error applying awareness update', error);
+      this.emit('error', error);
+    }
   }
 
   onAuth(message) {
@@ -266,9 +311,10 @@ class SupabaseProvider extends EventEmitter {
 
   destroy() {
     this.logger('destroying');
-    
+
     if (this.resyncInterval) {
       clearInterval(this.resyncInterval);
+      this.resyncInterval = undefined;
     }
 
     if (typeof window !== 'undefined') {
@@ -277,10 +323,15 @@ class SupabaseProvider extends EventEmitter {
       process.off('exit', () => this.removeSelfFromAwarenessOnUnload);
     }
 
+    this.removeAllListeners('message');
+    this.removeAllListeners('awareness');
+
     this.awareness.off('update', this.onAwarenessUpdate);
     this.doc.off('update', this.onDocumentUpdate);
 
     if (this.channel) this.disconnect();
+
+    this.logger('destroyed');
   }
 }
 

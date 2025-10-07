@@ -36,18 +36,18 @@ export const Tags = memo(({ note }) => {
       {allTags.map((tag) => {
         const isSelected = note.note_tags?.some((t) => t.tag_id === tag.tag_id);
           return (
-              <span
-                key={tag.tag_id}
-                data-cy="noteTag"
-                className={`cursor-pointer inline-block text-xs px-2 py-1 rounded ${
-                    isSelected
-                        ? "bg-green-200 text-green-800"
-                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                }`}
-                onClick={() => handleSelectTag(tag.tag_id)}
-              >
-                {tag.name}
-              </span>
+            <span
+              key={tag.tag_id}
+              data-cy="noteTag"
+              className={`cursor-pointer inline-block text-xs px-3 py-1 rounded-full ${
+                isSelected
+                  ? "bg-green-200 text-green-800"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+              onClick={() => handleSelectTag(tag.tag_id)}
+            >
+              {tag.name}
+            </span>
           );
       })}
     </div>
