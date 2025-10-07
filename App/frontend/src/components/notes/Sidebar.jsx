@@ -110,7 +110,7 @@ const Sidebar = () => {
     <>
       <div className="w-60 bg-white border-r border-gray-200 flex flex-col">
         <div className="p-2 border-b border-gray-200 flex items-center justify-between overflow-ellipsis">
-          <p data-cy="username" className="text-md font-semibold">
+          <p data-cy="username" className="text-lg font-semibold">
             {username}
           </p>
           <button
@@ -125,6 +125,7 @@ const Sidebar = () => {
             )}
           </button>
         </div>
+
         <div className="p-2 flex gap-3">
           <div className="flex justify-center items-center border border-gray-300 rounded-lg gap-2">
             <Search className="size-4 ml-2 text-gray-400" />

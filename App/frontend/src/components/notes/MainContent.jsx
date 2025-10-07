@@ -12,6 +12,7 @@ import { useMemo } from "react";
 import * as Y from "yjs";
 import { supabase } from "@/lib/supabaseClient";
 import { SupabaseProvider } from "@/lib/y-supabase";
+import { Toolbar } from "../ui/toolbar";
 
 export const MainContent = () => {
   const selectedNote = useNotesStore((state) => state.selectedNote);
@@ -74,16 +75,14 @@ export const MainContent = () => {
   }, [selectedNoteId]);
 
   useEffect(() => {
-      return () => {
-          if (provider) {
-              provider.disconnect();
-              console.log("🛑 Provider disconnected");
-          }
-          if (ydoc) {
-              ydoc.destroy();
-              console.log("🗑️ Y.Doc destroyed");
-          }
-      };
+    return () => {
+      if (provider) {
+        provider.disconnect();
+      }
+      if (ydoc) {
+        ydoc.destroy();
+      }
+    };
   }, [provider, ydoc]);
 
   return (
@@ -100,8 +99,9 @@ export const MainContent = () => {
                   onChange={handleTitleChange}
                   placeholder="Title…"
                 />
-
+                
                 <div className="flex items-center ml-auto gap-3">
+                <Tags note={selectedNote} />
                   {isOwner && (
                     <button onClick={handleOpenPopup}>
                       <UserRoundPlus className="text-gray-400 hover:text-gray-600 size-5 cursor-pointer" />
@@ -115,14 +115,7 @@ export const MainContent = () => {
                   </button>
                 </div>
               </div>
-              <div className="mt-1 flex items-center space-x-2">
-                <span data-cy="noteCreatedAt" className="text-xs text-gray-400">
-                  {selectedNote.created_at
-                    ? new Date(selectedNote.created_at).toLocaleString()
-                    : ""}
-                </span>
-                <Tags note={selectedNote} />
-              </div>
+              <Toolbar />
             </div>
           </div>
         ) : (

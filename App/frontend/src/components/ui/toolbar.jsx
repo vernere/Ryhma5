@@ -79,70 +79,75 @@ const Toolbar = ({ editor, noteTitle = "Untitled note" }) => {
         return null;
     }
     return (
-        <div className="flex items-center mt-4 bg-white">
-            <button
-                data-cy="boldButton"
-                onClick={() => handleClick("bold")}
-                className={`p-2 hover:bg-gray-100 rounded ${editor.isActive("bold") ? "bg-gray-200" : ""
+        <div className="flex justify-end mt-4 bg-transparent">
+            <div className="flex items-center bg-white px-4 py-0 shadow-sm rounded-full gap-2">
+                <button
+                    data-cy="boldButton"
+                    onClick={() => handleClick("bold")}
+                    className={`p-1 hover:bg-gray-100 rounded ${
+                        editor.isActive("bold") ? "bg-gray-200" : ""
                     }`}
-            >
-                <CgFormatBold className="w-4 h-4" />
-            </button>
-            <button
-                data-cy="italicButton"
-                onClick={() => handleClick("italic")}
-                className={`p-2 hover:bg-gray-100 rounded ${editor.isActive("italic") ? "bg-gray-200" : ""
+                >
+                    <CgFormatBold className="w-4 h-4" />
+                </button>
+                <button
+                    data-cy="italicButton"
+                    onClick={() => handleClick("italic")}
+                    className={`p-1 hover:bg-gray-100 rounded ${
+                        editor.isActive("italic") ? "bg-gray-200" : ""
                     }`}
-            >
-                <CgFormatItalic className="w-4 h-4" />
-            </button>
-            <button
-                data-cy="underlineButton"
-                onClick={() => handleClick("underline")}
-                className={`p-2 hover:bg-gray-100 rounded ${editor.isActive("Underline") ? "bg-gray-200" : ""
+                >
+                    <CgFormatItalic className="w-4 h-4" />
+                </button>
+                <button
+                    data-cy="underlineButton"
+                    onClick={() => handleClick("underline")}
+                    className={`p-1 hover:bg-gray-100 rounded ${
+                        editor.isActive("Underline") ? "bg-gray-200" : ""
                     }`}
-            >
-                <CgFormatUnderline className="w-4 h-4" />
-            </button>
-            <button
-                data-cy="listButton"
-                onClick={() => handleClick("list")}
-                className={`p-2 hover:bg-gray-100 rounded ${editor.isActive("bulletList") ? "bg-gray-200" : ""
+                >
+                    <CgFormatUnderline className="w-4 h-4" />
+                </button>
+                <button
+                    data-cy="listButton"
+                    onClick={() => handleClick("list")}
+                    className={`p-1 hover:bg-gray-100 rounded ${
+                        editor.isActive("bulletList") ? "bg-gray-200" : ""
                     }`}
-            >
-                <CgList className="w-4 h-4" />
-            </button>
-            <div className="h-5 w-px bg-gray-300"></div>
-            <button
-                data-cy='codeButton'
-                onClick={() => handleClick('code')}
-                className={`p-2 hover:bg-gray-100 rounded ${editor.isActive("codeBlock") ? "bg-gray-200" : ""
+                >
+                    <CgList className="w-4 h-4" />
+                </button>
+                <div className="h-5 w-px bg-gray-300"></div>
+                <button
+                    data-cy="codeButton"
+                    onClick={() => handleClick("code")}
+                    className={`p-1 hover:bg-gray-100 rounded ${
+                        editor.isActive("codeBlock") ? "bg-gray-200" : ""
                     }`}
-            >
-                <CgCode className="w-4 h-4" />
-            </button>
-            <ImageUploadButton editor={editor} />
-            <div className="h-5 w-px bg-gray-300"></div>
-            <button
-                data-cy="exportButton"
-                ref={buttonRef}
-                onClick={(e) => {
-                    setAnchorEl(buttonRef.current);
-                    setIsDropdownOpen(!isDropdownOpen);
-                }}
-                className="p-2 hover:bg-gray-100 rounded"
-            >
-                <CgExport className="w-4 h-4" />
-            </button>
-
-            <div className="h-5 w-px bg-gray-300"></div>
-            <Dropdown
-                data-cy="dropdownMenu"
-                isOpen={isDropdownOpen}
-                anchorEl={anchorEl}
-                onExport={handleExport}
-                onClose={() => setIsDropdownOpen(false)}
-            ></Dropdown>
+                >
+                    <CgCode className="w-4 h-4" />
+                </button>
+                <ImageUploadButton editor={editor} />
+                <div className="h-5 w-px bg-gray-300"></div>
+                <button
+                    data-cy="exportButton"
+                    ref={buttonRef}
+                    onClick={(e) => {
+                        setAnchorEl(buttonRef.current);
+                        setIsDropdownOpen(!isDropdownOpen);
+                    }}
+                    className="p-1 hover:bg-gray-100 rounded"
+                >
+                    <CgExport className="w-4 h-4" />
+                </button>
+                <Dropdown
+                    data-cy="dropdownMenu"
+                    isOpen={isDropdownOpen}
+                    anchorEl={anchorEl}
+                    onExport={handleExport}
+                    onClose={() => setIsDropdownOpen(false)}
+                ></Dropdown>
+            </div>
         </div>
     );
 };

@@ -82,7 +82,7 @@ export default function CollaborativeEditor({ ydoc, provider }) {
 
     return (
         <div className="rounded-2xl min-h-[400px]">
-            <div className="sticky top-0 z-50 shadow">
+            <div className="sticky top-0 z-50">
                 <Toolbar editor={editor} noteTitle={noteTitle || ""} />
             </div>
             <div

@@ -1,13 +1,12 @@
 import { Navigate, useLocation } from "react-router-dom";
-import { useUserRow } from "../../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function OnboardingGuard({ children }) {
-  const { userRow, loadingUserRow } = useUserRow();
+  const { user } = useAuth();
   const location = useLocation();
+  if (!user || user === undefined) return null;
 
-  if (loadingUserRow) return null; 
-
-  if (userRow && userRow.is_onboarded === false) {
+  if (user.is_onboarded === false) {
     return <Navigate to="/onboarding" state={{ from: location }} replace />;
   }
 
