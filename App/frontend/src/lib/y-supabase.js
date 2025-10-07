@@ -38,11 +38,15 @@ class SupabaseProvider extends EventEmitter {
       this.resyncInterval = setInterval(() => {
         this.emit('message', Y.encodeStateAsUpdate(this.doc));
         if (this.channel) {
-          this.channel.send({
-            type: 'broadcast',
-            event: 'message',
-            payload: Array.from(Y.encodeStateAsUpdate(this.doc)),
-          });
+          try {
+            this.channel.send({
+              type: 'broadcast',
+              event: 'message',
+              payload: Array.from(Y.encodeStateAsUpdate(this.doc)),
+            });
+          } catch (error) {
+            this.logger('error sending resync message', error);
+          }
         }
       }, this.config.resyncInterval || 5000);
     }
@@ -55,11 +59,15 @@ class SupabaseProvider extends EventEmitter {
 
     this.on('awareness', (update) => {
       if (this.channel) {
-        this.channel.send({
-          type: 'broadcast',
-          event: 'awareness',
-          payload: Array.from(update),
-        });
+        try {
+          this.channel.send({
+            type: 'broadcast',
+            event: 'awareness',
+            payload: Array.from(update),
+          });
+        } catch (error) {
+          this.logger('error sending awareness message', error);
+        }
       }
     });
 
@@ -76,6 +84,14 @@ class SupabaseProvider extends EventEmitter {
     this.connect();
     this.doc.on('update', this.onDocumentUpdate.bind(this));
     this.awareness.on('update', this.onAwarenessUpdate.bind(this));
+  }
+
+  async send(message) {
+    if (!this._channel || this._channel.state !== 'joined') {
+      console.warn('⚠️ Tried to send before channel was ready');
+      return;
+    }
+    return this._channel.send(message);
   }
 
   isOnline(online) {
