@@ -8,6 +8,10 @@ import { CollaborationPopup } from "./collaborationPopup/CollaborationPopup";
 import { CollaboratorBalls } from "./CollaboratorBalls";
 import { UserRoundPlus } from "lucide-react";
 import { useInvitationsStore } from "@/hooks/useInvitationsStore";
+import { useMemo } from "react";
+import * as Y from "yjs";
+import { supabase } from "@/lib/supabaseClient";
+import { SupabaseProvider } from "@/lib/y-supabase";
 
 export const MainContent = () => {
   const selectedNote = useNotesStore((state) => state.selectedNote);
@@ -48,6 +52,39 @@ export const MainContent = () => {
   const handleClosePopup = useCallback(() => {
     setIsCollaborationPopupOpen(false);
   }, []);
+
+  const { ydoc, provider } = useMemo(() => {
+    if (!selectedNoteId) return { ydoc: null, provider: null };
+
+    const doc = new Y.Doc();
+    const channelName = `note-yjs-${selectedNoteId}`;
+    const prov = new SupabaseProvider(doc, supabase, {
+      channel: channelName,
+      id: selectedNoteId,
+      idName: "note_id",
+      tableName: "notes",
+      columnName: "content",
+    });
+
+    prov.on("synced", () => {
+      console.log("🔄 Provider synced, ready to create editor");
+    });
+
+    return { ydoc: doc, provider: prov };
+  }, [selectedNoteId]);
+
+  useEffect(() => {
+      return () => {
+          if (provider) {
+              provider.disconnect();
+              console.log("🛑 Provider disconnected");
+          }
+          if (ydoc) {
+              ydoc.destroy();
+              console.log("🗑️ Y.Doc destroyed");
+          }
+      };
+  }, [provider, ydoc]);
 
   return (
     <div className="flex-1 flex flex-col">
@@ -103,7 +140,7 @@ export const MainContent = () => {
       <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
         {selectedNote ? (
           <div className="max-w-4xl mx-auto w-full">
-            <CollaborativeEditor/>
+            <CollaborativeEditor provider={provider} ydoc={ydoc}/>
           </div>
         ) : (
           <div className="flex items-center justify-center h-full w-full pr-10">
