@@ -9,16 +9,16 @@ export const Tags = memo(({ note }) => {
     const removeTag = useTagStore((state) => state.removeTag);
     const fetchNoteById = useNotesStore((state) => state.fetchNoteById);
 
-    useEffect(() => {
-        fetchTags();
-    }, [fetchTags]);
+  useEffect(() => {
+    fetchTags();
+  }, [fetchTags]);
 
     const handleSelectTag = useCallback(async (tagId) => {
         if (!note?.note_id) {
             return;
         }
 
-        const alreadyHasTag = note.note_tags?.some((t) => t.tag_id === tagId);
+    const alreadyHasTag = note.note_tags?.some((t) => t.tag_id === tagId);
 
         try {
             if (alreadyHasTag) {
@@ -32,29 +32,26 @@ export const Tags = memo(({ note }) => {
         }
     }, [note?.note_id, note?.note_tags, addTag, removeTag, fetchNoteById]);
 
-    return (
-        <div className="flex flex-wrap gap-2">
-            {allTags.map((tag) => {
-                const isSelected = note.note_tags?.some(
-                    (t) => t.tag_id === tag.tag_id
-                );
-
-                return (
-                    <span
-                        key={tag.tag_id}
-                        data-cy="noteTag"
-                        className={`cursor-pointer inline-block text-xs px-2 py-1 rounded ${
-                            isSelected
-                                ? "bg-green-200 text-green-800"
-                                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                        }`}
-                        onClick={() => handleSelectTag(tag.tag_id)}
-                    >
-                        {tag.name}
-                    </span>
-                );
-            })}
-        </div>
+  return (
+    <div className="flex flex-wrap gap-2">
+      {allTags.map((tag) => {
+        const isSelected = note.note_tags?.some((t) => t.tag_id === tag.tag_id);
+          return (
+              <span
+                  key={tag.tag_id}
+                  data-cy="noteTag"
+                  className={`cursor-pointer inline-block text-xs px-2 py-1 rounded ${
+                      isSelected
+                          ? "bg-green-200 text-green-800"
+                          : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                  onClick={() => handleSelectTag(tag.tag_id)}
+              >
+                  {tag.name}
+              </span>
+          );
+      })}
+      </div>
     );
 });
 

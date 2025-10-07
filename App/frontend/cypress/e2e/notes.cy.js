@@ -2,9 +2,9 @@
 import { loginUser } from '../support/helpers';
 
 describe('Notes tests', () => {
-    beforeEach(() => {
-        loginUser();
-    });
+  beforeEach(() => {
+    loginUser();
+  });
 
   it('Test notes typing', () => {
     cy.get('[data-cy=noteSelect]').first().click()
@@ -82,12 +82,31 @@ describe('Notes tests', () => {
 })
 
 describe('Search tests', () => {
-    beforeEach(() => {
-        loginUser();
-    });
+  beforeEach(() => {
+    loginUser();
+  });
 
   it('Test search input and response', () => {
     cy.get('[data-cy=searchInput]').type('New test ntoe')
     cy.get('[data-cy=noteSelect]').should('not.exist')
   });
+
+  it('Test note search for name', () => {
+    cy.get('[data-cy=searchInput]').type('New test note')
+    cy.get('[data-cy=noteSelect]').first().should('exist')
+  });
+
+  it('Test note search by tag', () => {
+    cy.get('[data-cy=searchInput]').type('Coding')
+    cy.get('[data-cy=noteSelect]').first().should('exist')
+  });
+
+  it('Test note add tag and remove tag', () => {
+    cy.get('[data-cy=noteSelect]').first().click();
+    cy.get('[data-cy=noteTag]').first().should('have.class', 'bg-green-200')
+    cy.get('[data-cy=noteTag]').first().click();
+    cy.get('[data-cy=noteTag]').first().should('not.have.class', 'bg-green-200')
+    cy.get('[data-cy=noteTag]').first().click();
+  });
+
 })
