@@ -34,7 +34,7 @@ export default function CollaborativeEditor({ ydoc, provider }) {
                 CollaborationCaret.configure({
                     provider,
                     user: {
-                        name: user.username || "Unknown",
+                        name: user?.username || "Unknown",
                         color: COLORS[
                             Math.floor(Math.random() * COLORS.length)
                         ],
@@ -64,7 +64,7 @@ export default function CollaborativeEditor({ ydoc, provider }) {
                 }),
             ],
         },
-        [selectedNoteId, user]
+        [selectedNoteId]
     );
 
     if (!selectedNoteId) {
@@ -92,7 +92,7 @@ export default function CollaborativeEditor({ ydoc, provider }) {
                 className="prose max-w-none bg-white rounded-b-lg shadow-sm p-6"
                 style={{ minHeight: "90vh" }}
             >
-                <EditorContent editor={editor} />
+                <EditorContent editor={editor} data-cy="noteContent"/>
             </div>
         </div>
     );

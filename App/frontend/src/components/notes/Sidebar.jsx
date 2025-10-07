@@ -33,8 +33,10 @@ const Sidebar = () => {
 
   const getTags = useTagStore((state) => state.getTags);
   const noteTags = useTagStore((state) => state.noteTags);
-  
+
   const { user } = useAuth();
+  const [username, setUsername] = useState("");
+
   const [isInvitePopupOpen, setIsInvitePopupOpen] = useState(false);
 
   useEffect(() => {
@@ -98,12 +100,18 @@ const Sidebar = () => {
     return favs.has(noteId);
   }, [favs]);
 
+  useEffect(() => {
+    if (user?.username) {
+      setUsername(user.username);
+    }
+  }, [user?.username]);
+
   return (
     <>
       <div className="w-60 bg-white border-r border-gray-200 flex flex-col">
         <div className="p-2 border-b border-gray-200 flex items-center justify-between overflow-ellipsis">
-          <p data-cy="userEmail" className="text-md font-semibold">
-            {user?.email}
+          <p data-cy="username" className="text-md font-semibold">
+            {username}
           </p>
           <button
             onClick={toggleInvitePopup}
@@ -151,7 +159,7 @@ const Sidebar = () => {
         </div>
         <Navigation />
       </div>
-
+      
       <InvitePopup isOpen={isInvitePopupOpen} onClose={toggleInvitePopup} />
     </>
   );
