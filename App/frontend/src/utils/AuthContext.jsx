@@ -11,6 +11,12 @@ export const AuthProvider = ({children}) => {
     useEffect(() => {
         const getSession = async () => {
             const { data } = await supabase.auth.getSession();
+
+            if (data.session === null) {
+                setLoading(false);
+                return;
+            }
+            
             const { data: userData, error } = await supabase
                 .from("users")
                 .select("username")
