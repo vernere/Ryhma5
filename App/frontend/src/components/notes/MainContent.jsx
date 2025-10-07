@@ -25,11 +25,12 @@ export const MainContent = () => {
   
   const { user } = useAuth();
   const userId = user?.id;
-  
-  const [isCollaborationPopupOpen, setIsCollaborationPopupOpen] = useState(false);
   const isOwner = role === "owner";
-
+  
   const lastFetchedNoteId = useRef(null);
+  const [isCollaborationPopupOpen, setIsCollaborationPopupOpen] = useState(false);
+  const [isProviderReady, setIsProviderReady] = useState(false);
+
 
   useEffect(() => {
     if (!selectedNoteId || !userId) return;
@@ -75,9 +76,25 @@ export const MainContent = () => {
   }, [selectedNoteId]);
 
   useEffect(() => {
+    if (!provider) return;
+
+    const handleSynced = () => {
+      console.log("✅ Supabase provider synced");
+      setIsProviderReady(true);
+    };
+
+    provider.on("synced", handleSynced);
+
+    return () => {
+      provider.off("synced", handleSynced);
+      setIsProviderReady(false);
+    };
+  }, [provider]);
+
+  useEffect(() => {
     return () => {
       if (provider) {
-        provider.disconnect();
+        provider.destroy();
       }
       if (ydoc) {
         ydoc.destroy();
@@ -133,7 +150,11 @@ export const MainContent = () => {
       <div className="flex-1 p-6 overflow-y-auto bg-gray-50">
         {selectedNote ? (
           <div className="max-w-4xl mx-auto w-full">
-            <CollaborativeEditor provider={provider} ydoc={ydoc}/>
+            {isProviderReady ? (
+              <CollaborativeEditor provider={provider} ydoc={ydoc} />
+            ) : (
+              <div className="p-4 text-gray-500">Connecting...</div>
+            )}
           </div>
         ) : (
           <div className="flex items-center justify-center h-full w-full pr-10">
