@@ -90,8 +90,6 @@ const Sidebar = () => {
     setIsInvitePopupOpen(!isInvitePopupOpen);
   };
 
-
-
   return (
     <>
       <div className="w-60 bg-white border-r border-gray-200 flex flex-col">
