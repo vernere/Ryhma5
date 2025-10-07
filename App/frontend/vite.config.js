@@ -11,7 +11,23 @@ export default defineConfig({
     tailwindcss(),
     istanbul({
       include: 'src/**/*.{js,jsx,ts,tsx}',
-      exclude: ['node_modules', 'cypress', 'tests', 'coverage', 'dist'],
+      exclude: [
+        'node_modules',
+        'cypress',
+        'tests',
+        'coverage',
+        'dist',
+        '**/*.test.js',
+        '**/*.test.jsx',
+        '**/*.spec.js',
+        '**/*.spec.jsx',
+        '**/__test__/**',
+        '**/__tests__/**',
+        'src/**/*.test.js',
+        'src/**/*.test.jsx',
+        'src/**/__test__/**',
+        'src/**/__tests__/**'
+      ],
       extension: ['.js', '.jsx', '.ts', '.tsx'],
       cypress: true,
       requireEnv: false
