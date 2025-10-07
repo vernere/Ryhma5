@@ -31,7 +31,6 @@ export const MainContent = () => {
   const [isCollaborationPopupOpen, setIsCollaborationPopupOpen] = useState(false);
   const [isProviderReady, setIsProviderReady] = useState(false);
 
-
   useEffect(() => {
     if (!selectedNoteId || !userId) return;
     
@@ -94,9 +93,11 @@ export const MainContent = () => {
   useEffect(() => {
     return () => {
       if (provider) {
+        console.log("🧹 Cleaning up provider");
         provider.destroy();
       }
       if (ydoc) {
+        console.log("🧹 Destroying Y.Doc");
         ydoc.destroy();
       }
     };
