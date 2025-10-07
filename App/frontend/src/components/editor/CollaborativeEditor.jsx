@@ -23,9 +23,6 @@ export default function CollaborativeEditor({ ydoc, provider }) {
             onContentError: ({ disableCollaboration }) => {
                 disableCollaboration();
             },
-            onCreate: ({ editor: currentEditor }) => {
-                console.log("📝 Editor is ready");
-            },
             extensions: [
                 ...EDITOR_EXTENSIONS,
                 Collaboration.configure({
