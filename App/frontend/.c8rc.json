@@ -1,6 +1,19 @@
 {
-  "include": ["src/**/*.{js,jsx,ts,tsx}", "tests/**/*.{js,jsx,ts,tsx}"],
-  "exclude": ["node_modules", "dist", "coverage"],
+  "include": ["src/**/*.{js,jsx,ts,tsx}"],
+  "exclude": [
+    "**/*.test.js",
+    "**/*.test.jsx",
+    "**/*.spec.js",
+    "**/*.spec.jsx",
+    "tests/**",
+    "cypress/**",
+    "coverage/**",
+    "node_modules/**",
+    "dist/**",
+    "**/*.config.js",
+    "**/vite.config.js",
+    "**/cypress.config.js"
+  ],
   "all": true,
   "reporter": ["json"],
   "report-dir": "./coverage/unit"
