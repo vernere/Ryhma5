@@ -1,13 +1,13 @@
-import { useEffect, useState, useRef, useCallback, useMemo } from "react";
-import { Search, Bell, FilePlus2 } from "lucide-react";
 import { Navigation } from "@/components/ui/navigation";
-import { useNotesStore } from "@/hooks/useNotesStore";
-import { useTagStore } from "@/hooks/useTagStore";
 import { useAuth } from "@/hooks/useAuth";
 import { useInvitationsStore } from "@/hooks/useInvitationsStore";
+import { useNotesStore } from "@/hooks/useNotesStore";
+import { useRealtimeStore } from "@/hooks/useRealtimeStore";
+import { useTagStore } from "@/hooks/useTagStore";
+import { Bell, FilePlus2, Search } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { InvitePopup } from "./InvitePopup";
 import NoteMenuItem from "./NoteMenuItem";
-import { useRealtimeStore } from "@/hooks/useRealtimeStore";
 
 const Sidebar = () => {
   const notes = useNotesStore((state) => state.notes);
