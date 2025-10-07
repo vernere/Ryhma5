@@ -96,8 +96,7 @@ export default function CollaborativeEditor({ ydoc, provider }) {
                 <Toolbar editor={editor} noteTitle={noteTitle || ""} />
             </div>
             <div
-                className="prose max-w-none bg-white rounded-b-lg shadow-sm p-6"
-                style={{ minHeight: "90vh" }}
+                className="prose max-w-none bg-white rounded-lg shadow-sm p-6 min-h-96"
             >
                 <EditorContent editor={editor} data-cy="noteContent" />
             </div>
