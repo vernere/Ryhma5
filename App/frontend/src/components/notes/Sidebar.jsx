@@ -8,6 +8,7 @@ import { Bell, FilePlus2, Search } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { InvitePopup } from "./InvitePopup";
 import NoteMenuItem from "./NoteMenuItem";
+import { useProfile } from "@/utils/ProfileContext";
 
 const Sidebar = () => {
   const notes = useNotesStore((state) => state.notes);
@@ -34,6 +35,7 @@ const Sidebar = () => {
   const getTags = useTagStore((state) => state.getTags);
   const noteTags = useTagStore((state) => state.noteTags);
 
+  const { profile } = useProfile();
   const { user } = useAuth();
   const [username, setUsername] = useState("");
 
@@ -101,10 +103,10 @@ const Sidebar = () => {
   }, [favs]);
 
   useEffect(() => {
-    if (user?.username) {
-      setUsername(user.username);
+    if (profile?.username) {
+      setUsername(profile.username);
     }
-  }, [user?.username]);
+  }, [profile?.username]);
 
   return (
     <>

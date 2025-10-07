@@ -11,8 +11,9 @@ import PasswordChanged from "@/pages/passwordChanged.jsx";
 import RegistrationSuccess from "./pages/registrationSuccess.jsx";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import PasswordRecoveryRoute from "./components/routes/PasswordRecoveryRoute";
-import OnboardingGuard from "./components/routes/OnboardingGuard"; 
-import OnboardingPage from "./pages/onboardingPage";              
+import OnboardingGuard from "./components/routes/OnboardingGuard";
+import OnboardingPage from "./pages/onboardingPage";
+import { ProfileProvider } from "./utils/ProfileContext";
 
 function App() {
     const { user, passwordRecovery, loading } = useAuth();
@@ -39,7 +40,7 @@ function App() {
                         <ChangePassword />{" "}
                     </PasswordRecoveryRoute>
                 }
-            />  
+            />
 
             <Route
                 path="/onboarding"
@@ -49,14 +50,16 @@ function App() {
                     </ProtectedRoute>
                 }
             />
-            
+
             <Route
                 path="/notes"
                 element={
                     <ProtectedRoute>
-                        <OnboardingGuard>
-                            <NotesPage />
-                        </OnboardingGuard>
+                        <ProfileProvider>
+                            <OnboardingGuard>
+                                <NotesPage />
+                            </OnboardingGuard>
+                        </ProfileProvider>
                     </ProtectedRoute>
                 }
             />

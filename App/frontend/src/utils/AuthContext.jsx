@@ -9,9 +9,6 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        let userId = null;
-        let userSubscription = null;
-
         const getSession = async () => {
             const { data } = await supabase.auth.getSession();
 
@@ -20,66 +17,28 @@ export const AuthProvider = ({ children }) => {
                 return;
             }
 
-            userId = data.session.user.id;
-
-            const { data: userData } = await supabase
-                .from("users")
-                .select("username, is_onboarded")
-                .eq("id", userId);
-
-            data.session.user = { ...data.session.user, ...userData?.[0] };
-            setUser(data.session.user ?? null);
+            setUser(data.session.user);
             setLoading(false);
-            
-            userSubscription = supabase
-                .channel(`user-updates-${userId}`)
-                .on(
-                    "postgres_changes",
-                    {
-                        event: "*",
-                        schema: "public",
-                        table: "users",
-                        filter: `id=eq.${userId}`,
-                    },
-                    (payload) => {
-                        console.log("User updated:", payload);
-                        setUser((prevUser) => ({
-                            ...prevUser,
-                            ...payload.new,
-                        }));
-                    }
-                )
-                .subscribe();
         };
 
         getSession();
 
         const { data: listener } = supabase.auth.onAuthStateChange(
-            async (_event, session) => {
-                if (session?.user) {
-                    const { data: userData } = await supabase
-                        .from("users")
-                        .select("username, is_onboarded")
-                        .eq("id", session.user.id)
-                        .single();
-
-                    const fullUser = { ...session.user, ...userData };
-                    setUser(fullUser);
-                } else {
-                    setUser(null);
-                }
+            (_event, session) => {
+                setUser(session?.user ?? null);
 
                 if (_event === "PASSWORD_RECOVERY") {
                     setPasswordRecovery(true);
-                } else {
-                    setPasswordRecovery(false);
+                } else if (_event === "TOKEN_REFRESHED") {
+                    console.log(
+                        "Token refreshed, re-establishing subscriptions..."
+                    );
                 }
             }
         );
 
         return () => {
             listener.subscription.unsubscribe();
-            if (userSubscription) supabase.removeChannel(userSubscription);
         };
     }, []);
 
@@ -134,21 +93,21 @@ export const AuthProvider = ({ children }) => {
         return data;
     };
 
+    const value = {
+        user,
+        loading,
+        signUp,
+        usernameToId,
+        signIn,
+        signOut,
+        resetPassword,
+        passwordRecovery,
+        setPasswordRecovery,
+        changePassword,
+    };
+
     return (
-        <AuthContext.Provider
-            value={{
-                user,
-                loading,
-                signUp,
-                usernameToId,
-                signIn,
-                signOut,
-                resetPassword,
-                passwordRecovery,
-                setPasswordRecovery,
-                changePassword,
-            }}
-        >
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );
