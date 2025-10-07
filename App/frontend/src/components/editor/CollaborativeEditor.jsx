@@ -1,5 +1,4 @@
 import { Toolbar } from "@/components/ui/toolbar";
-import { useAuth } from "@/hooks/useAuth";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import Collaboration from "@tiptap/extension-collaboration";
 import CollaborationCaret from "@tiptap/extension-collaboration-caret";
@@ -95,9 +94,7 @@ export default function CollaborativeEditor({ ydoc, provider }) {
             <div className="sticky top-0 z-50">
                 <Toolbar editor={editor} noteTitle={noteTitle || ""} />
             </div>
-            <div
-                className="prose max-w-none bg-white rounded-lg shadow-sm p-6 min-h-96"
-            >
+            <div className="prose max-w-none bg-white rounded-lg shadow-sm p-6 min-h-96">
                 <EditorContent editor={editor} data-cy="noteContent" />
             </div>
         </div>
