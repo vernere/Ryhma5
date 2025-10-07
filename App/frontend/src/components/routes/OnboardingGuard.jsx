@@ -1,15 +1,15 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { useProfile } from "@/utils/ProfileContext";
 
 export default function OnboardingGuard({ children }) {
-  const { user } = useAuth();
+  const { profile } = useProfile();
   const location = useLocation();
-  if (!user || user === undefined) {
-    console.error("User is not defined in OnboardingGuard");
+  if (!profile || profile === undefined) {
     return null;
   } 
 
-  if (user.is_onboarded === false) {
+  if (profile.is_onboarded === false) {
     return <Navigate to="/onboarding" state={{ from: location }} replace />;
   }
 
