@@ -1,4 +1,4 @@
-import { test, expect, beforeEach, mock, describe } from "bun:test";
+import { test, expect, beforeEach, mock, describe, spyOn } from "bun:test";
 import { useImagesStore } from "../useImagesStore";
 import { mockSupabase } from "./constants";
 
@@ -10,6 +10,9 @@ global.crypto = {
   randomUUID: mock(() => "test-uuid-123"),
 };
 
+// Mock console.error to suppress error logs during tests
+const consoleErrorSpy = spyOn(console, "error").mockImplementation(() => {});
+
 beforeEach(() => {
   useImagesStore.setState({
     uploading: false,
@@ -18,6 +21,7 @@ beforeEach(() => {
 
   mockSupabase.storage.from.mockClear();
   global.crypto.randomUUID.mockClear();
+  consoleErrorSpy.mockClear();
 });
 
 describe("useImagesStore", () => {

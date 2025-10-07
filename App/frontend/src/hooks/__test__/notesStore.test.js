@@ -499,10 +499,14 @@ describe("useNotesStore", () => {
     describe("removeFavorite", () => {
       test("successfully removes favorite", async () => {
         const mockUser = { id: "user123" };
+        const mockEq2 = {
+          eq: mock(() => Promise.resolve({ error: null })),
+        };
+        const mockEq1 = {
+          eq: mock(() => mockEq2),
+        };
         const mockQuery = {
-          delete: mock(() => ({
-            eq: mock(() => Promise.resolve({ error: null })),
-          })),
+          delete: mock(() => mockEq1),
         };
         mockSupabase.from.mockReturnValue(mockQuery);
 
@@ -520,10 +524,14 @@ describe("useNotesStore", () => {
 
       test("reverts state on error", async () => {
         const mockUser = { id: "user123" };
+        const mockEq2 = {
+          eq: mock(() => Promise.resolve({ error: new Error("Delete failed") })),
+        };
+        const mockEq1 = {
+          eq: mock(() => mockEq2),
+        };
         const mockQuery = {
-          delete: mock(() => ({
-            eq: mock(() => Promise.resolve({ error: new Error("Delete failed") })),
-          })),
+          delete: mock(() => mockEq1),
         };
         mockSupabase.from.mockReturnValue(mockQuery);
 
@@ -562,10 +570,14 @@ describe("useNotesStore", () => {
 
       test("removes favorite when already favorited", async () => {
         const mockUser = { id: "user123" };
+        const mockEq2 = {
+          eq: mock(() => Promise.resolve({ error: null })),
+        };
+        const mockEq1 = {
+          eq: mock(() => mockEq2),
+        };
         const mockQuery = {
-          delete: mock(() => ({
-            eq: mock(() => Promise.resolve({ error: null })),
-          })),
+          delete: mock(() => mockEq1),
         };
         mockSupabase.from.mockReturnValue(mockQuery);
 
