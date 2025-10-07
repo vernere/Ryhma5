@@ -16,6 +16,24 @@ async function mergeCoverage() {
             : normalizedPath
     }
 
+    function shouldExcludeFile(filePath) {
+        const excludePatterns = [
+            /\.test\.jsx?$/,
+            /\.spec\.jsx?$/,
+            /\/__test__\//,
+            /\/__tests__\//,
+            /\/tests\//,
+            /\/cypress\//,
+            /\/coverage\//,
+            /\/node_modules\//,
+            /\/dist\//,
+            /\.config\.js$/,
+            /vite\.config\.js$/,
+            /cypress\.config\.js$/
+        ]
+        return excludePatterns.some(pattern => pattern.test(filePath))
+    }
+
     let bunMap = createCoverageMap({})
     // Merge unit test coverage
     const unitCoveragePath = path.join(process.cwd(), 'coverage/unit')
@@ -33,6 +51,11 @@ async function mergeCoverage() {
                 try {
                     const coverage = JSON.parse(fs.readFileSync(fullPath, 'utf-8'))
                     Object.entries(coverage).forEach(([file, fileCov]) => {
+                        // Skip test files
+                        if (shouldExcludeFile(file)) {
+                            console.log('Excluding test file:', file)
+                            return
+                        }
                         // Convert V8 format to Istanbul format if needed
                         if ('scriptId' in fileCov || ('functions' in fileCov && Array.isArray(fileCov.functions))) {
                             // This looks like V8 format, convert it
@@ -99,6 +122,11 @@ async function mergeCoverage() {
         try {
             const e2eCoverage = JSON.parse(fs.readFileSync(e2eCoveragePath, 'utf-8'))
             Object.entries(e2eCoverage).forEach(([file, fileCov]) => {
+                // Skip test files
+                if (shouldExcludeFile(file)) {
+                    console.log('Excluding test file:', file)
+                    return
+                }
                 const normalizedPath = normalizePath(fileCov.path)
                 fileCov.path = normalizedPath
 
@@ -173,6 +201,11 @@ async function mergeCoverage() {
                         console.log('Parsed Bun LCOV data');
                         if (bunLcovData && bunLcovData.length > 0) {
                             bunLcovData.forEach(entry => {
+                                // Skip test files
+                                if (shouldExcludeFile(entry.file)) {
+                                    console.log('Excluding test file:', entry.file)
+                                    return
+                                }
                                 // lcov-parse returns entries with file, lines, functions, branches
                                 // We'll create a minimal Istanbul coverage object
                                 const fileCov = {
@@ -233,17 +266,26 @@ async function mergeCoverage() {
             function finishMerge() {
                 // Merge coverage data with priority: unit > bun > e2e
                 Object.entries(unitMap.toJSON()).forEach(([file, coverage]) => {
-                    finalMap.addFileCoverage(coverage)
+                    // Double-check exclusion before adding to final map
+                    if (!shouldExcludeFile(file)) {
+                        finalMap.addFileCoverage(coverage)
+                    } else {
+                        console.log('Excluding from final map:', file)
+                    }
                 })
                 Object.entries(bunMap.toJSON()).forEach(([file, coverage]) => {
-                    if (!finalMap.data[file]) {
+                    if (!finalMap.data[file] && !shouldExcludeFile(file)) {
                         finalMap.addFileCoverage(coverage)
+                    } else if (shouldExcludeFile(file)) {
+                        console.log('Excluding from final map:', file)
                     }
                 })
                 Object.entries(e2eMap.toJSON()).forEach(([file, coverage]) => {
                     try {
-                        if (!finalMap.data[file]) {
+                        if (!finalMap.data[file] && !shouldExcludeFile(file)) {
                             finalMap.addFileCoverage(coverage)
+                        } else if (shouldExcludeFile(file)) {
+                            console.log('Excluding from final map:', file)
                         }
                     } catch (err) {
                         console.warn(`Warning: Could not merge coverage for ${file}:`, err.message)

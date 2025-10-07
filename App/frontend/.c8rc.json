@@ -1,10 +1,12 @@
 {
   "include": ["src/**/*.{js,jsx,ts,tsx}"],
   "exclude": [
-    "src/**/*.test.js",
-    "src/**/*.test.jsx",
-    "src/**/*.spec.js",
-    "src/**/*.spec.jsx",
+    "**/*.test.js",
+    "**/*.test.jsx",
+    "**/*.spec.js",
+    "**/*.spec.jsx",
+    "**/__test__/**",
+    "**/__tests__/**",
     "src/**/__test__/**",
     "src/**/__tests__/**",
     "tests/**",
