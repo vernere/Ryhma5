@@ -82,10 +82,16 @@ export const MainContent = () => {
       setIsProviderReady(true);
     };
 
+    const handleError = (error) => {
+      console.error("❌ Supabase provider error:", error);
+    };
+
     provider.on("synced", handleSynced);
+    provider.on("error", handleError);
 
     return () => {
       provider.off("synced", handleSynced);
+      provider.off("error", handleError);
       setIsProviderReady(false);
     };
   }, [provider]);
@@ -101,7 +107,7 @@ export const MainContent = () => {
         ydoc.destroy();
       }
     };
-  }, [provider, ydoc]);
+  }, [selectedNoteId]);
 
   return (
     <div className="flex-1 flex flex-col">
@@ -112,7 +118,7 @@ export const MainContent = () => {
               <div className="flex items-center gap-4 w-full">
                 <input
                   data-cy="noteTitle"
-                  className="text-lg focus:outline-none"
+                  className="text-lg focus:outline-none max-w-fit w-25 overflow-ellipsis"
                   value={selectedNote.title || ""}
                   onChange={handleTitleChange}
                   placeholder="Title…"
