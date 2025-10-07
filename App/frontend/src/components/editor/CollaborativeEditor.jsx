@@ -5,6 +5,7 @@ import Collaboration from "@tiptap/extension-collaboration";
 import CollaborationCaret from "@tiptap/extension-collaboration-caret";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { COLORS, EDITOR_EXTENSIONS } from "./constants";
+import { useEffect } from "react";
 
 export default function CollaborativeEditor({ ydoc, provider }) {
     const selectedNoteId = useNotesStore((state) => state.selectedNoteId);
@@ -64,6 +65,14 @@ export default function CollaborativeEditor({ ydoc, provider }) {
         [selectedNoteId]
     );
 
+    useEffect(() => {
+        return () => {
+            if (editor) {
+                editor.destroy();
+            }
+        };
+    }, [editor]);
+
     if (!selectedNoteId) {
         return (
             <div className="p-4 text-center text-gray-500">
@@ -89,7 +98,7 @@ export default function CollaborativeEditor({ ydoc, provider }) {
                 className="prose max-w-none bg-white rounded-b-lg shadow-sm p-6"
                 style={{ minHeight: "90vh" }}
             >
-                <EditorContent editor={editor} data-cy="noteContent"/>
+                <EditorContent editor={editor} data-cy="noteContent" />
             </div>
         </div>
     );
