@@ -1,42 +1,41 @@
-import { useEffect, useState } from "react";
-import { Search, Bell, FilePlus2 } from "lucide-react";
 import { Navigation } from "@/components/ui/navigation";
-import { useNotesStore } from "@/hooks/useNotesStore";
-import { useTagStore } from "@/hooks/useTagStore";
 import { useAuth } from "@/hooks/useAuth";
 import { useInvitationsStore } from "@/hooks/useInvitationsStore";
+import { useNotesStore } from "@/hooks/useNotesStore";
+import { useRealtimeStore } from "@/hooks/useRealtimeStore";
+import { useTagStore } from "@/hooks/useTagStore";
+import { Bell, FilePlus2, Search } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { InvitePopup } from "./InvitePopup";
 import NoteMenuItem from "./NoteMenuItem";
-import { useRealtimeStore } from "@/hooks/useRealtimeStore";
 
 const Sidebar = () => {
-  const {
-    notes,
-    searchQuery,
-    setSearchQuery,
-    setSelectedNote,
-    selectedNoteId,
-    isFavorite,
-    toggleFavorite,
-    createNote,
-    fetchFavorites,
-    fetchNotes,
-    setCurrentUser,
-    deleteNote,
-  } = useNotesStore();
+  const notes = useNotesStore((state) => state.notes);
+  const searchQuery = useNotesStore((state) => state.searchQuery);
+  const selectedNoteId = useNotesStore((state) => state.selectedNoteId);
+  const favs = useNotesStore((state) => state.favs);
+  const setSearchQuery = useNotesStore((state) => state.setSearchQuery);
+  const setSelectedNote = useNotesStore((state) => state.setSelectedNote);
+  const toggleFavorite = useNotesStore((state) => state.toggleFavorite);
+  const createNote = useNotesStore((state) => state.createNote);
+  const fetchFavorites = useNotesStore((state) => state.fetchFavorites);
+  const fetchNotes = useNotesStore((state) => state.fetchNotes);
+  const setCurrentUser = useNotesStore((state) => state.setCurrentUser);
+  const deleteNote = useNotesStore((state) => state.deleteNote);
 
-  const { noteTags, getTags } = useTagStore();
+  const inbox = useInvitationsStore((state) => state.inbox);
+  const getInvites = useInvitationsStore((state) => state.getInvites);
 
-  const { inbox, getInvites } = useInvitationsStore();
+  const setupNoteCollaboratorSubscription = useRealtimeStore((state) => state.setupNoteCollaboratorSubscription);
+  const cleanupCollaboratorsSubscription = useRealtimeStore((state) => state.cleanupCollaboratorsSubscription);
+  const setupInvitesSubscription = useRealtimeStore((state) => state.setupInvitesSubscription);
+  const cleanupInvitesSubscription = useRealtimeStore((state) => state.cleanupInvitesSubscription);
 
-  const {
-    setupNoteCollaboratorSubscription,
-    cleanupCollaboratorsSubscription,
-    setupInvitesSubscription,
-    cleanupInvitesSubscription,
-  } = useRealtimeStore();
+  const getTags = useTagStore((state) => state.getTags);
+  const noteTags = useTagStore((state) => state.noteTags);
 
   const { user } = useAuth();
+  const [username, setUsername] = useState("");
 
   const [isInvitePopupOpen, setIsInvitePopupOpen] = useState(false);
 
@@ -73,36 +72,46 @@ const Sidebar = () => {
     return inTitle || inTags;
   });
 
-  const handleCreateNote = async () => {
+  const handleCreateNote = useCallback(async () => {
     const n = await createNote();
     if (n) {
       setSelectedNote(n.note_id);
     }
-  };
+  }, [createNote, setSelectedNote]);
 
-  const handleSelectNote = async (noteId) => {
+  const handleSelectNote = useCallback(async (noteId) => {
     await setSelectedNote(noteId);
     setSearchQuery("");
-  };
+  }, [setSelectedNote, setSearchQuery]);
 
-  const handleToggleFavorite = (noteId) => {
+  const handleToggleFavorite = useCallback((noteId) => {
     toggleFavorite(noteId);
-  };
+  }, [toggleFavorite]);
 
-  const handleDeleteNote = (noteId) => {
+  const handleDeleteNote = useCallback((noteId) => {
     deleteNote(noteId);
-  };
+  }, [deleteNote]);
 
-  const toggleInvitePopup = () => {
+  const toggleInvitePopup = useCallback(() => {
     setIsInvitePopupOpen(!isInvitePopupOpen);
-  };
+  }, [isInvitePopupOpen]);
+  
+  const isFavorite = useCallback((noteId) => {
+    return favs.has(noteId);
+  }, [favs]);
+
+  useEffect(() => {
+    if (user?.username) {
+      setUsername(user.username);
+    }
+  }, [user?.username]);
 
   return (
     <>
       <div className="w-60 bg-white border-r border-gray-200 flex flex-col">
         <div className="p-2 border-b border-gray-200 flex items-center justify-between overflow-ellipsis">
-          <p data-cy="userEmail" className="text-md font-semibold">
-            {user?.email}
+          <p data-cy="username" className="text-md font-semibold">
+            {username}
           </p>
           <button
             onClick={toggleInvitePopup}
@@ -138,7 +147,8 @@ const Sidebar = () => {
           {filteredNotes.map((note) => (
             <NoteMenuItem
               key={note.note_id}
-              note={note}
+              noteId={note.note_id}
+              title={note.title}
               isActive={selectedNoteId === note.note_id}
               isNoteFavorite={isFavorite(note.note_id)}
               onSelectNote={handleSelectNote}
@@ -149,7 +159,7 @@ const Sidebar = () => {
         </div>
         <Navigation />
       </div>
-
+      
       <InvitePopup isOpen={isInvitePopupOpen} onClose={toggleInvitePopup} />
     </>
   );
