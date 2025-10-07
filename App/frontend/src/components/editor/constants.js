@@ -1,11 +1,13 @@
 import TextAlign from "@tiptap/extension-text-align";
 import StarterKit from "@tiptap/starter-kit";
+import { ImageExtension } from "./ImageExtension";
 
 export const EDITOR_EXTENSIONS = [
     StarterKit.configure({
         history: false,
     }),
     TextAlign.configure({ types: ["heading", "paragraph"] }),
+    ImageExtension,
 ];
 
 export const COLORS = [

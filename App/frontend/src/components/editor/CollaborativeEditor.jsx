@@ -64,7 +64,7 @@ export default function CollaborativeEditor({ ydoc, provider }) {
                 }),
             ],
         },
-        [selectedNoteId, ydoc, provider]
+        [selectedNoteId, user]
     );
 
     if (!selectedNoteId) {
