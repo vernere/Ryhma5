@@ -25,6 +25,7 @@ class SupabaseProvider extends EventEmitter {
 
     this.on('connect', this.onConnect);
     this.on('disconnect', this.onDisconnect);
+    this.on('synced', this.onSynced);
 
     this.logger('constructor initializing');
     this.logger('connecting to Supabase Realtime', doc.guid);
@@ -35,7 +36,6 @@ class SupabaseProvider extends EventEmitter {
       }
       this.logger(`setting resync interval to every ${(this.config.resyncInterval || 5000) / 1000} seconds`);
       this.resyncInterval = setInterval(() => {
-        this.logger('resyncing (resync interval elapsed)');
         this.emit('message', Y.encodeStateAsUpdate(this.doc));
         if (this.channel) {
           this.channel.send({
@@ -117,6 +117,10 @@ class SupabaseProvider extends EventEmitter {
     this.emit('save', this.version);
   }
 
+  onSynced() {
+    this.logger('synced');
+  }
+
   async onConnect() {
     this.logger('connected');
 
@@ -126,18 +130,30 @@ class SupabaseProvider extends EventEmitter {
       .eq(this.config.idName || 'id', this.config.id)
       .single();
 
-    this.logger('retrieved data from supabase', status);
-
     if (data && data[this.config.columnName]) {
       this.logger('applying update to yjs');
       try {
-        this.applyUpdate(Uint8Array.from(data[this.config.columnName]));
+        let update;
+
+        if (typeof data.content === 'string') {
+          const contentArray = JSON.parse(data.content);
+          update = new Uint8Array(contentArray);
+        }
+        else if (Array.isArray(data.content)) {
+          update = new Uint8Array(data.content);
+        }
+        else if (data.content instanceof Uint8Array) {
+          update = data.content;
+        }
+        else if (Buffer.isBuffer(data.content)) {
+          update = new Uint8Array(data.content);
+        }
+
+        Y.applyUpdate(this.doc, update);
       } catch (error) {
         this.logger(error);
       }
     }
-
-    this.logger('setting connected flag to true');
     this.isOnline(true);
 
     this.emit('status', [{ status: 'connected' }]);
@@ -146,11 +162,15 @@ class SupabaseProvider extends EventEmitter {
       const awarenessUpdate = awarenessProtocol.encodeAwarenessUpdate(this.awareness, [this.doc.clientID]);
       this.emit('awareness', awarenessUpdate);
     }
+
+    this.synced = true;
   }
 
   applyUpdate(update, origin) {
     this.version++;
+    console.log("Before applyUpdate:", Y.encodeStateAsUpdate(this.doc));
     Y.applyUpdate(this.doc, update, origin);
+    console.log("After applyUpdate:", Y.encodeStateAsUpdate(this.doc));
   }
 
   disconnect() {
@@ -197,7 +217,6 @@ class SupabaseProvider extends EventEmitter {
 
   set synced(state) {
     if (this._synced !== state) {
-      this.logger('setting sync state to ' + state);
       this._synced = state;
       this.emit('synced', [state]);
       this.emit('sync', [state]);
@@ -213,10 +232,8 @@ class SupabaseProvider extends EventEmitter {
 
   onDisconnect() {
     this.logger('disconnected');
-
     this.synced = false;
     this.isOnline(false);
-    this.logger('set connected flag to false');
     if (this.isOnline()) {
       this.emit('status', [{ status: 'disconnected' }]);
     }
@@ -241,8 +258,6 @@ class SupabaseProvider extends EventEmitter {
   }
 
   onAuth(message) {
-    this.logger(`received ${message.byteLength} bytes from peer: ${message}`);
-
     if (!message) {
       this.logger(`Permission denied to channel`);
     }
@@ -251,7 +266,7 @@ class SupabaseProvider extends EventEmitter {
 
   destroy() {
     this.logger('destroying');
-
+    
     if (this.resyncInterval) {
       clearInterval(this.resyncInterval);
     }
