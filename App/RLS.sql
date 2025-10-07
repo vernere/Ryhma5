@@ -1,6 +1,9 @@
 alter table public.notes enable row level security;
 alter table public.note_collaborators enable row level security;
 alter table public.users enable row level security;
+alter table public.note_tags enable row level security;
+
+-- NOTES
 
 drop policy if exists "Users can view notes they own or collaborate on" on public.notes;
 create policy "Users can view notes they own or collaborate on"
@@ -42,6 +45,8 @@ create policy "Users can create their own notes"
 on public.notes
 for insert
 with check (creator_id = auth.uid());
+
+-- NOTE_COLLABORATORS
 
 drop policy if exists "Users can view their own collaborations" on public.note_collaborators;
 create policy "Users can view their own collaborations"
@@ -96,3 +101,69 @@ using (
       and n.creator_id = auth.uid()
   )
 );
+
+-- NOTE_TAGS
+
+create policy "Collaborators can view note tags"
+on public.note_tags
+for select
+using (
+  exists (
+    select 1
+    from public.note_collaborators nc
+    where nc.note_id = note_tags.note_id
+      and nc.user_id = auth.uid()
+  )
+);
+
+create policy "Collaborators can insert note tags"
+on public.note_tags
+for insert
+with check (
+  exists (
+    select 1
+    from public.note_collaborators nc
+    where nc.note_id = note_tags.note_id
+      and nc.user_id = auth.uid()
+  )
+);
+
+create policy "Collaborators can delete note tags"
+on public.note_tags
+for delete
+using (
+  exists (
+    select 1
+    from public.note_collaborators nc
+    where nc.note_id = note_tags.note_id
+      and nc.user_id = auth.uid()
+  )
+);
+
+-- USERS
+
+create policy "Public rows are viewable by everyone." on users to authenticated
+  for select using (true);
+  
+create policy "Users can insert their own row." on users to authenticated
+  for insert with check ((select auth.uid()) = id);
+  
+create policy "Users can update own row." on users to authenticated
+  for update using ((select auth.uid()) = id);
+
+-- FAVOURITES
+
+create policy fav_select_own on public.favorites
+  for select using (auth.uid() = user_id);
+
+create policy fav_insert_own on public.favorites
+  for insert with check (auth.uid() = user_id);
+
+create policy fav_delete_own on public.favorites
+  for delete using (auth.uid() = user_id);
+
+-- TAGS
+
+create policy "Anyone can view tags" on public.tags to authenticated
+  for select using (true);
+

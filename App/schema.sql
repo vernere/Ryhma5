@@ -47,10 +47,13 @@ CREATE TABLE public.tags (
   CONSTRAINT tags_pkey PRIMARY KEY (tag_id)
 );
 
-CREATE TABLE public.users (
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
-  username text DEFAULT 'New user'::text,
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  CONSTRAINT users_pkey PRIMARY KEY (id),
-  CONSTRAINT users_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id)
-);
+create table public.users (
+  id uuid not null default gen_random_uuid (),
+  username text not null default gen_random_uuid (),
+  created_at timestamp with time zone not null default now(),
+  is_onboarded boolean not null default false,
+  constraint users_pkey primary key (id),
+  constraint users_username_unique unique (username),
+  constraint users_id_fkey foreign KEY (id) references auth.users (id) on update CASCADE on delete CASCADE,
+  constraint users_username_min_length check ((char_length(username) >= 3))
+) TABLESPACE pg_default;
