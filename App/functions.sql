@@ -8,13 +8,8 @@ BEGIN
     VALUES (NEW.note_id, NEW.recipient_id, NEW.role, now())
     ON CONFLICT (note_id, user_id) DO NOTHING;
 
-    DELETE FROM public.collaboration_invites
-    WHERE invitation_id = NEW.invitation_id;
-
     RETURN NULL;
   ELSIF NEW.status = 'declined' AND OLD.status IS DISTINCT FROM 'declined' THEN
-    DELETE FROM public.collaboration_invites
-    WHERE invitation_id = NEW.invitation_id;
 
     RETURN NULL;
   END IF;
