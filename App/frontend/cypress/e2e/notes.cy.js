@@ -126,5 +126,6 @@ describe('Search tests', () => {
     firstTag.click();
     firstTag.should('not.have.class', 'bg-green-200');
     firstTag.click();
+    cy.get('[data-cy="noteContent"]').type('{selectall}{backspace}');
   });
 })
