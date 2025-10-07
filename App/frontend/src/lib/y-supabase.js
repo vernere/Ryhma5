@@ -86,14 +86,6 @@ class SupabaseProvider extends EventEmitter {
     this.awareness.on('update', this.onAwarenessUpdate.bind(this));
   }
 
-  async send(message) {
-    if (!this._channel || this._channel.state !== 'joined') {
-      console.warn('⚠️ Tried to send before channel was ready');
-      return;
-    }
-    return this._channel.send(message);
-  }
-
   isOnline(online) {
     if (online === undefined) return this.connected;
     this.connected = online;
@@ -145,8 +137,14 @@ class SupabaseProvider extends EventEmitter {
       .select(`${this.config.columnName}`)
       .eq(this.config.idName || 'id', this.config.id)
       .single();
+    
+    if (error) {
+      this.logger('error fetching initial content', error);
+    }
 
-    if (data && data[this.config.columnName]) {
+    const col = this.config.columnName || 'content';
+
+    if (data && data[col]) {
       this.logger('applying update to yjs');
       try {
         let update;
@@ -170,8 +168,8 @@ class SupabaseProvider extends EventEmitter {
         this.logger(error);
       }
     }
-    this.isOnline(true);
 
+    this.isOnline(true);
     this.emit('status', [{ status: 'connected' }]);
 
     if (this.awareness.getLocalState() !== null) {
@@ -184,9 +182,7 @@ class SupabaseProvider extends EventEmitter {
 
   applyUpdate(update, origin) {
     this.version++;
-    console.log("Before applyUpdate:", Y.encodeStateAsUpdate(this.doc));
     Y.applyUpdate(this.doc, update, origin);
-    console.log("After applyUpdate:", Y.encodeStateAsUpdate(this.doc));
   }
 
   disconnect() {
@@ -198,6 +194,7 @@ class SupabaseProvider extends EventEmitter {
 
   connect() {
     this.channel = this.supabase.channel(this.config.channel);
+
     if (this.channel) {
       this.channel
         .on(REALTIME_LISTEN_TYPES.BROADCAST, { event: 'message' }, ({ payload }) => {
