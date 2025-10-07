@@ -2,85 +2,85 @@ import { create } from "zustand";
 import { supabase } from "@/lib/supabaseClient";
 
 export const useTagStore = create((set, get) => ({
-    allTags: [],
-    loading: false,
-    error: null,
+  allTags: [],
+  noteTags: [],
+  loading: false,
+  error: null,
 
-    fetchTags: async () => {
-        set({ loading: true, error: null });
-        try {
-            const { data, error } = await supabase
-                .from("tags")
-                .select("*")
-                .order("name", { ascending: true });
+  fetchTags: async () => {
+    set({ loading: true, error: null });
+    try {
+      const { data, error } = await supabase
+        .from("tags")
+        .select("*")
+        .order("name", { ascending: true });
 
-            if (error) throw error;
-            set({ allTags: data || [], loading: false });
-        } catch (err) {
-            set({ error: err.message, loading: false });
-        }
-    },
+      if (error) throw error;
+      set({ allTags: data || [], loading: false });
+    } catch (err) {
+      set({ error: err.message, loading: false });
+    }
+  },
 
-    addTag: async (noteId, tagId) => {
-        if (!noteId || !tagId) return;
+  addTag: async (noteId, tagId) => {
+    if (!noteId || !tagId) return;
 
-        try {
-            const { data: existingNoteTags, error: fetchError } = await supabase
-                .from("note_tags")
-                .select("*")
-                .eq("note_id", noteId);
+    try {
+      const { data: existingNoteTags, error: fetchError } = await supabase
+        .from("note_tags")
+        .select("*")
+        .eq("note_id", noteId);
 
-            if (fetchError) throw fetchError;
+      if (fetchError) throw fetchError;
 
-            if (existingNoteTags.some((t) => t.tag_id === tagId)) {
-                return null;
-            }
+      if (existingNoteTags.some((t) => t.tag_id === tagId)) {
+        return null;
+      }
 
-            const { data, error } = await supabase
-                .from("note_tags")
-                .insert({
-                    note_id: noteId, tag_id: tagId,
-                })
-                .select();
+      const { data, error } = await supabase
+        .from("note_tags")
+        .insert({
+          note_id: noteId,
+          tag_id: tagId,
+        })
+        .select();
 
-            if (error) throw error;
-            return data;
-        } catch (error) {
-            set({ error: error.message });
-            throw error;
-        }
-    },
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      set({ error: error.message });
+      throw error;
+    }
+  },
 
-    removeTag: async (noteId, tagId) => {
-        if (!noteId || !tagId) return;
+  removeTag: async (noteId, tagId) => {
+    if (!noteId || !tagId) return;
 
-        try {
-            const { error } = await supabase
-                .from("note_tags")
-                .delete()
-                .eq("note_id", noteId)
-                .eq("tag_id", tagId);
+    try {
+      const { error } = await supabase
+        .from("note_tags")
+        .delete()
+        .eq("note_id", noteId)
+        .eq("tag_id", tagId);
 
-            if (error) throw error;
-            return true;
-        } catch (error) {
-            set({ error: error.message });
-            throw error;
-        }
-    },
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      set({ error: error.message });
+      throw error;
+    }
+  },
 
-    getTags: async (noteId) => {
-        if (!noteId) return [];
-        try {
-            const { data, error } = await supabase
-                .from("note_tags")
-                .select("tag_id")
-                .eq("note_id", noteId);
-            if (error) throw error;
-            return (data || []).map(nt => get().allTags.find(t => t.id === nt.tag_id)).filter(Boolean);
-        } catch (err) {
-            set({ error: err.message });
-            return [];
-        }
-    },
+  getTags: async () => {
+    try {
+      const { data, error } = await supabase
+        .from("note_tags")
+        .select("*, tags(name, tag_id)");
+      if (error) throw error;
+      set({ noteTags: data || [], loading: false });
+    } catch (err) {
+      set({ error: err.message });
+      return [];
+    }
+  },
 }));
