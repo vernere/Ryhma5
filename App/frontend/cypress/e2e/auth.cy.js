@@ -49,6 +49,14 @@ describe('Authentication Tests', () => {
     cy.get('[data-cy="register-email"]').clear().type('test.testnotely.com');
     cy.get('button').contains('Create account').click();
     cy.get('p').contains('Please enter a valid email address.').should('exist');
+
+    // Test 4: Password do not match
+    cy.get('[data-cy="register-email"]').clear().type('test1.testn@otely.com');
+    cy.get('[data-cy="register-password"]').clear().type('FakePassword123');
+    cy.get('[data-cy="register-confirm-password"]').clear().type('FakePassowrd1234');
+    cy.get('button').contains('Create account').click();
+    cy.get('p').contains('Passwords do not match.').should('exist');
+
   });
 
   it('Password validation', () => {
@@ -211,4 +219,6 @@ describe('Authentication Tests', () => {
 
 
   });
+
+
 })
