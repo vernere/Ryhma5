@@ -6,11 +6,12 @@ import CollaborationCaret from "@tiptap/extension-collaboration-caret";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { COLORS, EDITOR_EXTENSIONS } from "./constants";
 import { useEffect } from "react";
+import { useProfile } from "@/utils/ProfileContext";
 
 export default function CollaborativeEditor({ ydoc, provider }) {
     const selectedNoteId = useNotesStore((state) => state.selectedNoteId);
     const noteTitle = useNotesStore((state) => state.selectedNote?.title);
-    const { user } = useAuth();
+    const { profile } = useProfile();
 
     const editor = useEditor(
         {
@@ -32,7 +33,7 @@ export default function CollaborativeEditor({ ydoc, provider }) {
                 CollaborationCaret.configure({
                     provider,
                     user: {
-                        name: user?.username || "Unknown",
+                        name: profile?.username || "Unknown",
                         color: COLORS[
                             Math.floor(Math.random() * COLORS.length)
                         ],
