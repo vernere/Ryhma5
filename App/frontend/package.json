@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,9 +10,7 @@
     "preview": "vite preview",
     "cypress:open": "cypress open",
     "cypress:component": "cypress run --component",
-    "cypress:e2e": "cypress run",
     "cypress:coverage": "nyc cypress run",
-    "test": "bun test --coverage",
     "test:coverage": "bun test --coverage",
     "test:e2e": "cypress run",
     "test:e2e:coverage": "cypress run && nyc --all report --report-dir=coverage/e2e --reporter=json",
