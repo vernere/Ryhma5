@@ -39,7 +39,7 @@ The project is implemented in React using Bun and supports localization in Engli
 ## Use case diagram
 
 ## DB Schema
-![alt text](/resources/image.png)
+![alt text](/resources/image.jpg)
 ## Plugins
 
 ### Bun
