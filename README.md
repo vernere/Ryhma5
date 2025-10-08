@@ -112,6 +112,9 @@ Add the following code to the .env file:
 
 **Docker Hub**
    
+   ```sh
+      docker pull vernere/ryhma5:latest
+   ```
 
 ## Data persistance
 
