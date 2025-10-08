@@ -117,6 +117,7 @@ const Sidebar = () => {
           </p>
           <button
             onClick={toggleInvitePopup}
+            data-cy="inboxButton"
             className="relative p-1 rounded-md hover:bg-gray-100 transition-colors cursor-pointer"
           >
             <Bell className="size-5 text-gray-400 hover:text-gray-600" />

@@ -127,13 +127,16 @@ export const MainContent = () => {
                 <div className="flex items-center ml-auto gap-3">
                 <Tags note={selectedNote} />
                   {isOwner && (
-                    <button onClick={handleOpenPopup}>
+                    <button 
+                    onClick={handleOpenPopup}
+                    >
                       <UserRoundPlus className="text-gray-400 hover:text-gray-600 size-5 cursor-pointer" />
                     </button>
                   )}
 
                   <button 
                     className="cursor-pointer"
+                    data-cy="openCollaborationPopup"
                     onClick={handleOpenPopup}>
                     <CollaboratorBalls users={collaborators} />
                   </button>

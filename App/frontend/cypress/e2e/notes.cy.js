@@ -129,3 +129,96 @@ describe('Search tests', () => {
     cy.get('[data-cy="noteContent"]').type('{selectall}{backspace}');
   });
 })
+
+
+describe('Collaboration invite tests', () => {
+  it('Should invite user to collaborate', () => {
+    loginUser();
+
+    const noteSelect = cy.get('[data-cy=noteSelect]').contains('Collaboration');
+
+    noteSelect.first().click();
+    cy.get('[data-cy=openCollaborationPopup]').click();
+    cy.get('[data-cy=addCollaboratorInput]').type('Test2');
+    cy.get('[data-cy=sendInvite]').click();
+    cy.wait(1000);
+
+    cy.get('[data-cy=invitationItem]').contains('Test2').should('exist');
+
+    cy.get('[data-cy=closeCollaborationPopup]').click();
+  });
+
+  it('Should fail to invite an already invited user', () => {
+    loginUser();
+
+    const noteSelect = cy.get('[data-cy=noteSelect]').contains('Collaboration');
+
+    noteSelect.first().click();
+    cy.get('[data-cy=openCollaborationPopup]').click();
+    cy.get('[data-cy=addCollaboratorInput]').type('Test2');
+    cy.get('[data-cy=addCollaboratorInput]').should('have.value', 'Test2');
+    cy.get('[data-cy=sendInvite]').click();
+    cy.wait(1000);
+
+    cy.get('[data-cy=inviteError]').contains('An invitation has already been sent to Test2').should('exist');
+
+    cy.get('[data-cy=closeCollaborationPopup]').click();
+  });
+
+  it('Should accept collaboration invite', () => {
+    loginUser('test.test2@notely.com', 'Hello123');
+
+    const acceptInvite = () => cy.get('[data-cy=acceptInvite]');
+
+    cy.get('[data-cy=inboxButton]').click();
+
+    const invitationCard = cy.get('[data-cy=invitationCard]').should('exist');
+    invitationCard.get('[data-cy=invitationMessage]').contains('Test invited you to a note').should('exist');
+
+    invitationCard.get('[data-cy=acceptInvite]').should('exist');
+    invitationCard.get('[data-cy=declineInvite]').should('exist');
+
+    acceptInvite().click();
+    cy.wait(500);
+
+    invitationCard.should('not.exist');
+    cy.get('[data-cy=closeInvitePopup]').click();
+
+    cy.get('[data-cy=noteSelect]').contains('Collaboration').should('exist');
+  });
+
+  it('Should fail to invite an already collaborating user', () => {
+    loginUser();
+
+    const noteSelect = cy.get('[data-cy=noteSelect]').contains('Collaboration');
+
+    noteSelect.first().click();
+    cy.get('[data-cy=openCollaborationPopup]').click();
+    cy.get('[data-cy=addCollaboratorInput]').type('Test2');
+    cy.get('[data-cy=addCollaboratorInput]').should('have.value', 'Test2');
+    cy.get('[data-cy=sendInvite]').click();
+    cy.wait(1000);
+
+    cy.get('[data-cy=inviteError]').contains('Test2 is already a collaborator on this note').should('exist');
+
+    cy.get('[data-cy=closeCollaborationPopup]').click();
+  });
+
+  it('Should remove collaborator', () => {
+    loginUser();
+
+    const noteSelect = cy.get('[data-cy=noteSelect]').contains('Collaboration');
+    noteSelect.first().click();
+    cy.get('[data-cy=openCollaborationPopup]').click();
+
+    
+    const collaborator = cy.get('[data-cy=collaboratorUsername]').contains('Test2').parent().parent().parent();
+    collaborator.should('exist');
+    collaborator.find('[data-cy=removeCollaborator]').click();
+
+    cy.wait(500);
+    collaborator.should('not.exist');
+
+    cy.get('[data-cy=closeCollaborationPopup]').click();
+  });
+});

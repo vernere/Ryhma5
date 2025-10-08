@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
-import { X, UserRoundPlus } from "lucide-react";
+import { useNotesStore } from "@/hooks/useNotesStore";
+import { UserRoundPlus, X } from "lucide-react";
 import CollaboratorForm from "./CollaboratorForm";
 import CollaboratorsList from "./CollaboratorsList";
-import { useNotesStore } from "@/hooks/useNotesStore";
 import { useInvitationsStore } from "@/hooks/useInvitationsStore";
+import { useAuth } from "@/hooks/useAuth";
+import { useState } from "react";
 
 export const CollaborationPopup = ({ 
   isOpen, 
@@ -11,7 +12,10 @@ export const CollaborationPopup = ({
   isLoading = false 
 }) => {
   const { role } = useNotesStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const isOwner = role === "owner";
+  const { collaborators } = useNotesStore();
+  const { invitations } = useInvitationsStore();
 
   if (!isOpen) return null;
 
@@ -27,6 +31,7 @@ export const CollaborationPopup = ({
           </h3>
           <button
             onClick={onClose}
+            data-cy="closeCollaborationPopup"
             className="text-gray-400 hover:text-gray-600 transition-colors"
           >
             <X className="size-5" />
@@ -42,7 +47,9 @@ export const CollaborationPopup = ({
             <h4 className="text-sm font-medium text-gray-700 mb-3">
               Current Collaborators
             </h4>
-            <CollaboratorsList 
+            <CollaboratorsList
+              collaborators={collaborators}
+              invitations={invitations}
               isLoading={isLoading}
             />
           </div>
