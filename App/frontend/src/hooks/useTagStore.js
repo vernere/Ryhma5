@@ -71,15 +71,22 @@ export const useTagStore = create((set, get) => ({
     }
   },
 
-  getTags: async () => {
+  getTags: async (noteId) => {
+    set({ loading: true, error: null });
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from("note_tags")
         .select("*, tags(name, tag_id)");
+      
+      if (noteId) {
+        query = query.eq("note_id", noteId);
+      }
+
+      const { data, error } = await query;
       if (error) throw error;
       set({ noteTags: data || [], loading: false });
     } catch (err) {
-      set({ error: err.message });
+      set({ error: err.message, noteTags: [], loading: false });
       return [];
     }
   },

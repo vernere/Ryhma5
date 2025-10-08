@@ -1,11 +1,15 @@
-module.exports = (on, config) => {
-  require('@cypress/code-coverage/task')(on, config)
-  on('file:preprocessor', require('@cypress/code-coverage/use-babelrc'))
-  return config
-}
-
-const {downloadFile} = require('cypress-downloadfile/lib/addPlugin');
+const { defineConfig } = require('cypress');
+const codeCoverage = require('@cypress/code-coverage/task');
+const { downloadFile } = require('cypress-downloadfile/lib/addPlugin');
 
 module.exports = (on, config) => {
-  on('task', {downloadFile});
+  on('task', {
+    downloadFile,
+    coverageReport: () => {
+      return null; // Disable automatic report generation
+    }
+  });
+
+  codeCoverage(on, config);
+  return config;
 }

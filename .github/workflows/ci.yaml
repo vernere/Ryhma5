@@ -1,0 +1,103 @@
+name: CI
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - 'App/frontend/**'
+      - '.github/workflows/ci.yaml'
+
+jobs:
+  test:
+    env:
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for Codecov
+
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+          cache-dependency-path: ./App/frontend/bun.lock
+
+      - name: Install dependencies
+        working-directory: ./App/frontend
+        run: bun install --frozen-lockfile
+        
+      - name: Create .nyc_output directory
+        working-directory: ./App/frontend
+        run: mkdir -p .nyc_output
+
+      - name: Create coverage directories
+        working-directory: ./App/frontend
+        run: mkdir -p coverage/{unit,e2e,merged}
+
+      - name: Run unit tests with coverage
+        working-directory: ./App/frontend
+        run: |
+          echo "Running unit tests with coverage..."
+          bun run test:coverage
+          echo "Unit test coverage generated"
+          ls -la coverage/unit/
+
+      - name: Start dev server for E2E tests
+        working-directory: ./App/frontend
+        run: |
+          echo "Starting dev server..."
+          bun run dev &
+          sleep 15
+          echo "Development server should be ready..."
+
+      - name: Run Cypress e2e tests with coverage
+        working-directory: ./App/frontend
+        env:
+          NODE_ENV: test
+        run: |
+          echo "Running Cypress tests with coverage..."
+          COVERAGE=true bun run test:e2e:coverage
+          ls -la coverage/e2e/
+          
+      - name: Stop dev server
+        working-directory: ./App/frontend
+        run: pkill -f "bun run dev" || true
+
+      - name: Debug coverage files
+        working-directory: ./App/frontend
+        run: |
+          echo "Unit test coverage files:"
+          ls -la coverage/unit/
+          echo "E2E test coverage files:"
+          ls -la coverage/e2e/
+          
+      - name: Merge coverage reports
+        working-directory: ./App/frontend
+        run: |
+          echo "Merging coverage reports..."
+          bun run coverage:merge
+          
+          echo "Coverage directory structure:"
+          find coverage -type f -exec ls -l {} \;
+          
+          echo "Content of merged coverage file:"
+          cat coverage/merged/coverage-final.json || echo "Merged coverage file not found"
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./App/frontend/coverage/merged/lcov.info
+          flags: merged
+          name: merged-coverage
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true
+          disable_search: true
+          override_commit: ${{ github.sha }}
+          override_branch: ${{ github.ref_name }}
+          override_pr: ${{ github.event.pull_request.number }}
+          

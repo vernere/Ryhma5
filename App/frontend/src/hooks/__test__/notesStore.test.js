@@ -1,10 +1,11 @@
 import { beforeEach, describe, expect, mock, test } from "bun:test";
-import { useNotesStore } from "../useNotesStore";
 import { mockSupabase } from "./constants";
 
 mock.module("@/lib/supabaseClient", () => ({
   supabase: mockSupabase,
 }));
+
+import { useNotesStore } from "../useNotesStore";
 
 beforeEach(() => {
   useNotesStore.setState({

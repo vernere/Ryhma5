@@ -6,15 +6,16 @@ export const useInvitationsStore = create((set, get) => ({
     invitations: [],
     loading: false,
     error: null,
+    currentUser: null,
 
     addInvite: (invite) =>
         set((state) => ({
-            invites: [...state.invites, invite],
+            invitations: [...state.invitations, invite],
         })),
 
     updateInvite: (updatedInvite) =>
         set((state) => ({
-            invites: state.invites.map((inv) =>
+            invitations: state.invitations.map((inv) =>
                 inv.invitation_id === updatedInvite.invitation_id ? updatedInvite : inv
             ),
         })),
@@ -117,5 +118,13 @@ export const useInvitationsStore = create((set, get) => ({
                 inv.invitation_id === id ? { ...inv, status, responded_at: new Date().toISOString() } : inv
             ),
         });
+    },
+
+    setCurrentUser: (user) => {
+        set({ currentUser: user });
+    },
+
+    clearError: () => {
+        set({ error: null });
     }
 }));

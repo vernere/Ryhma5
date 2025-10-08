@@ -1,3 +1,25 @@
 {
-  "plugins": ["istanbul"]
+  "presets": [
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    ["istanbul", {
+      "exclude": [
+        "**/*.test.js",
+        "**/*.test.jsx",
+        "**/*.spec.js",
+        "**/*.spec.jsx",
+        "**/tests/**",
+        "**/cypress/**",
+        "**/coverage/**",
+        "**/node_modules/**",
+        "**/dist/**",
+        "**/__test__/**",
+        "**/__tests__/**",
+        "**/*.config.js",
+        "**/vite.config.js",
+        "**/cypress.config.js"
+      ]
+    }]
+  ]
 }

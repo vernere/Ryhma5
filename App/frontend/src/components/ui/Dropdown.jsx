@@ -29,7 +29,7 @@ const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
             className="fixed bg-white rounded-lg shadow-lg border-gray-200 border z-50"
             style={{
                 top: rect ? `${rect.bottom + window.scrollY + 5}px` : '0',
-                left: rect ? `${rect.right + window.scrollX - 20}px` : '0',
+                left: rect ? `${rect.right + window.scrollX - 160}px` : '0',
             }}
         >
             <button

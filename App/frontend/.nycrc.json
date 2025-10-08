@@ -1,0 +1,24 @@
+{
+	"extends": "@istanbuljs/nyc-config-babel",
+	"all": false,
+	"reporter": ["lcov", "text"],
+	"include": ["src/**/*.{js,jsx}"],
+	"exclude": [
+		"**/*.test.js",
+		"**/*.test.jsx",
+		"**/*.spec.js",
+		"**/*.spec.jsx",
+		"**/__test__/**",
+		"**/__tests__/**",
+		"src/**/__test__/**",
+		"src/**/__tests__/**",
+		"tests/**",
+		"cypress/**",
+		"coverage/**",
+		"node_modules/**",
+		"dist/**",
+		"**/*.config.js",
+		"**/vite.config.js",
+		"**/cypress.config.js"
+	]
+}

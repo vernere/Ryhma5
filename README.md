@@ -30,6 +30,11 @@ The project is implemented in React using Bun and supports localization in Engli
 - Tiptap
 - docx
 - file-saver
+- clsx
+- html-to-text
+- html2pdf
+- turndown
+- v8-to-istanbul
 
 ## Use case diagram
 
@@ -45,22 +50,35 @@ The project is implemented in React using Bun and supports localization in Engli
 - /App: Contains the main application code.
 - /App/frontend: Contains the configuration files.
 - /App/frontend/cypress/e2e: Contains the frontend e2e testing code.
+- /App/schema.sql: DB schema.
+- .github/ci.yaml: GitHub actions pipeline.
+- /App/frontend/.env: contains environment variables for application.
 - /App/frontend/coverage: contains coverage code reports and data
-- /App/schema.sql: DB schema
-- /App/frontennd/dockerfile: Docker
+- /App/frontend/dockerfile: Docker
+
 
 ## GitHub actions
+GitHub actions pipeline automatically runs :
+- Unit tests
+- Cypress e2e tests
+- Generates code coverage reports for both
+- Merges code coverage reports
+- Publishes code coverage report to Codecov
 
 ## Tests
 The project includes e2e tests for the frontend layer To run the tests, use the following command:
    ```sh
       bun cypress:e2e
 ```
-Cypress code coverage:
+Unit tests:
    ```sh
-      bun cypress:coverage
+      bun test
 ```
-- /App/frontend/coverage/lcov-report/index.html for visual report
+Code coverage:
+   ```sh
+      bun coverage:full
+```
+- /App/frontend/coverage/merged/index.html for visual report
 
 ## Running the Application with Docker
 **Running Docker locally**
