@@ -1,18 +1,11 @@
 import CollaboratorItem from "./CollaboratorItem";
 import InvitationItem from "./InvitationItem";
-import { useNotesStore } from "@/hooks/useNotesStore";
-import { useInvitationsStore } from "@/hooks/useInvitationsStore";
 
 export const CollaboratorsList = ({ 
+  collaborators = [],
+  invitations = [],
   isLoading = false 
 }) => {
-  const { collaborators } = useNotesStore();
-  const { invitations } = useInvitationsStore();
-
-  const handleRemoveCollaborator = async (userId) => {
-
-  };
-
   if (isLoading) {
     return (
       <div className="text-center py-4">

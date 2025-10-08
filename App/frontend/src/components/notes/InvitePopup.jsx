@@ -30,6 +30,7 @@ export const InvitePopup = ({ isOpen, onClose }) => {
                     </h3>
                     <button
                         onClick={onClose}
+                        data-cy="closeInvitePopup"
                         className="text-gray-400 hover:text-gray-600 transition-colors"
                     >
                         <X className="size-5" />
@@ -47,9 +48,13 @@ export const InvitePopup = ({ isOpen, onClose }) => {
                             {inbox.map((inv) => (
                                 <div
                                     key={inv.invitation_id}
+                                    data-cy="invitationCard"
                                     className="p-3 border border-gray-200 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
                                 >
-                                    <div className="text-sm font-medium text-gray-900 mb-1">
+                                    <div 
+                                    className="text-sm font-medium text-gray-900 mb-1"
+                                    data-cy="invitationMessage"
+                                    >
                                         {inv.sender?.username || 'Someone'} invited you to a note
                                     </div>
                                     <div className="text-xs text-gray-500 mb-3">

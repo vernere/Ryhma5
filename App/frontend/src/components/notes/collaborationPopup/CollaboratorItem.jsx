@@ -14,7 +14,9 @@ export const CollaboratorItem = ({ collaborator }) => {
   };
 
   return (
-    <div className="flex items-center p-2 bg-gray-50 rounded-lg">
+    <div 
+      data-cy="collaboratorItem"
+      className="flex items-center p-2 bg-gray-50 rounded-lg">
       <div className="flex items-center gap-3">
         <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
           <span className="text-indigo-600 font-medium text-sm">
@@ -22,7 +24,9 @@ export const CollaboratorItem = ({ collaborator }) => {
           </span>
         </div>
         <div>
-          <div className="text-sm font-medium text-gray-900">
+          <div 
+            data-cy="collaboratorUsername"
+            className="text-sm font-medium text-gray-900">
             {collaborator.username || "Unknown"}
           </div>
         </div>
