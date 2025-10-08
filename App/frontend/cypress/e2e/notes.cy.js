@@ -140,6 +140,7 @@ describe('Collaboration invite tests', () => {
     noteSelect.first().click();
     cy.get('[data-cy=openCollaborationPopup]').click();
     cy.get('[data-cy=addCollaboratorInput]').type('Test2');
+    cy.get('[data-cy=addCollaboratorInput]').should('have.value', 'Test2');
     cy.get('[data-cy=sendInvite]').click();
     cy.wait(1000);
 
@@ -161,7 +162,7 @@ describe('Collaboration invite tests', () => {
     cy.wait(1000);
 
     cy.get('[data-cy=inviteError]').contains('An invitation has already been sent to Test2').should('exist');
-
+    
     cy.get('[data-cy=closeCollaborationPopup]').click();
   });
 
@@ -210,7 +211,6 @@ describe('Collaboration invite tests', () => {
     const noteSelect = cy.get('[data-cy=noteSelect]').contains('Collaboration');
     noteSelect.first().click();
     cy.get('[data-cy=openCollaborationPopup]').click();
-
     
     const collaborator = cy.get('[data-cy=collaboratorUsername]').contains('Test2').parent().parent().parent();
     collaborator.should('exist');
