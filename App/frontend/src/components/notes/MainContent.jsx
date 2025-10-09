@@ -118,7 +118,7 @@ export const MainContent = () => {
               <div className="flex items-center gap-4 w-full">
                 <input
                   data-cy="noteTitle"
-                  className="text-lg focus:outline-none max-w-fit w-25 overflow-ellipsis"
+                  className="text-lg focus:outline-none max-w-fit w-32 overflow-ellipsis"
                   value={selectedNote.title || ""}
                   onChange={handleTitleChange}
                   placeholder="Title…"
