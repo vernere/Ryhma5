@@ -3,6 +3,7 @@
         "loading": "Loading...",
         "error": "An error occurred. Please try again.",
         "logout": "Logout",
+        "connecting": "Connecting...",
         "roles": {
             "owner": "Owner",
             "editor": "Editor",

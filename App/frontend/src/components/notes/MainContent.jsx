@@ -165,14 +165,14 @@ export const MainContent = () => {
             {isProviderReady ? (
               <CollaborativeEditor provider={provider} ydoc={ydoc} />
             ) : (
-              <div className="p-4 text-gray-500">Connecting...</div>
+              <div className="p-4 text-gray-500">{t("common.connecting")}</div>
             )}
           </div>
         ) : (
           <div className="flex items-center justify-center h-full w-full pr-10">
             <div className="text-center">
               <CgNotes className="text-gray-300 text-4xl mx-auto mb-4" />
-              <div className="text-gray-400 text-lg">Select a note to start editing</div>
+              <div className="text-gray-400 text-lg">{t("notes.mainContent.selectNotePrompt")}</div>
             </div>
           </div>
         )}
