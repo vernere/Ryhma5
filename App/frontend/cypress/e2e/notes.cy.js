@@ -130,7 +130,6 @@ describe('Search tests', () => {
   });
 })
 
-
 describe('Collaboration invite tests', () => {
   it('Should invite user to collaborate', () => {
     loginUser();
@@ -162,7 +161,7 @@ describe('Collaboration invite tests', () => {
     cy.wait(1000);
 
     cy.get('[data-cy=inviteError]').contains('An invitation has already been sent to Test2').should('exist');
-    
+
     cy.get('[data-cy=closeCollaborationPopup]').click();
   });
 

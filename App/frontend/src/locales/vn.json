@@ -1,0 +1,16 @@
+{
+    "common": {
+        "loading": "Loading...",
+        "error": "An error occurred. Please try again.",
+        "logout": "đăng xuất"
+    },
+    "notes": {
+        "sidebar": {
+            "welcome": "Welcome, {{username}}",
+            "notes": "Notes",
+            "noNotes": "No notes available. Create a new note to get started!",
+            "createNote": "Create Note",
+            "inviteCollaborators": "Invite Collaborators"
+        }
+    }
+}
