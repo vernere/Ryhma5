@@ -13,6 +13,7 @@ import * as Y from "yjs";
 import { supabase } from "@/lib/supabaseClient";
 import { SupabaseProvider } from "@/lib/y-supabase";
 import { Toolbar } from "../ui/toolbar";
+import { useTranslation } from "react-i18next";
 
 export const MainContent = () => {
   const selectedNote = useNotesStore((state) => state.selectedNote);
@@ -22,7 +23,8 @@ export const MainContent = () => {
   const updateNoteTitle = useNotesStore((state) => state.updateNoteTitle);
   const fetchNoteCollaborators = useNotesStore((state) => state.fetchNoteCollaborators);
   const getInvitesByNoteId = useInvitationsStore((state) => state.getInvitesByNoteId);
-  
+
+  const { t } = useTranslation();
   const { user } = useAuth();
   const userId = user?.id;
   const isOwner = role === "owner";
@@ -149,9 +151,9 @@ export const MainContent = () => {
           <div className="flex items-center space-x-3">
             <CgNotes className="text-gray-400 text-2xl" />
             <div className="text-gray-600">
-              <div className="font-semibold">No note selected</div>
+              <div className="font-semibold">{t("notes.mainContent.noNoteSelected")}</div>
               <div className="text-sm text-gray-400">
-                Select a note from the sidebar to start editing
+                {t("notes.mainContent.selectNotePrompt")}
               </div>
             </div>
           </div>

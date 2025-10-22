@@ -2,12 +2,14 @@ import { X, Bell } from "lucide-react";
 import { useInvitationsStore } from "@/hooks/useInvitationsStore";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslation } from "react-i18next";
 
 export const InvitePopup = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
     const { user } = useAuth();
     const { inbox, setStatus, getInvites } = useInvitationsStore();
     const { fetchNotes } = useNotesStore();
+    const { t } = useTranslation();
 
     const handleAcceptInvite = (invite) => async (e) => {
         await setStatus(invite.invitation_id, "accepted");
@@ -26,7 +28,7 @@ export const InvitePopup = ({ isOpen, onClose }) => {
             <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 max-h-96 overflow-hidden">
                 <div className="flex items-center justify-between p-4 border-b border-gray-200">
                     <h3 className="text-lg font-semibold text-gray-900">
-                        Invitations ({inbox.length})
+                        {t("popups.invitePopup.invitations", { count: inbox.length })}
                     </h3>
                     <button
                         onClick={onClose}
@@ -41,7 +43,7 @@ export const InvitePopup = ({ isOpen, onClose }) => {
                     {inbox.length === 0 ? (
                         <div className="p-6 text-center text-gray-500">
                             <Bell className="size-8 mx-auto mb-2 text-gray-300" />
-                            <p>No new invitations</p>
+                            <p>{t("popups.invitePopup.noInvitations")}</p>
                         </div>
                     ) : (
                         <div className="p-4 space-y-3">

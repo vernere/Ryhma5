@@ -137,7 +137,7 @@ const Sidebar = () => {
             <input
               data-cy="searchInput"
               type="text"
-              placeholder="Search notes"
+              placeholder={t("notes.sidebar.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full focus:outline-none focus:ring-transparent py-1"

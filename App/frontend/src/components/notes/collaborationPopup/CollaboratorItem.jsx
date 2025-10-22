@@ -1,9 +1,11 @@
 import { CollaboratorContextBadge } from "./CollaboratorContextBadge";
 import { Trash2 } from "lucide-react";
 import { useNotesStore } from "@/hooks/useNotesStore";
+import { useTranslation } from "react-i18next";
 
 export const CollaboratorItem = ({ collaborator }) => {
   const { removeCollaborator, selectedNoteId } = useNotesStore();
+  const { t } = useTranslation();
   const isOwner = collaborator?.role === "owner";
 
   const handleRemoveCollaborator = (collaborator) => async (e) => {
