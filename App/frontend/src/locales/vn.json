@@ -1,55 +1,55 @@
 {
     "common": {
-        "loading": "Loading...",
-        "error": "An error occurred. Please try again.",
-        "logout": "Logout",
-        "connecting": "Connecting...",
+        "loading": "Đang tải...",
+        "error": "Đã xảy ra lỗi. Vui lòng thử lại.",
+        "logout": "Đăng xuất",
+        "connecting": "Đang kết nối...",
         "roles": {
-            "owner": "Owner",
-            "editor": "Editor",
-            "viewer": "Viewer",
-            "pending": "Pending",
-            "declined": "Declined"
+            "owner": "Chủ sở hữu",
+            "editor": "Biên tập viên",
+            "viewer": "Người xem",
+            "pending": "Đang chờ",
+            "declined": "Đã bị từ chối"
         }
     },
     "tags": {
-        "math": "Math",
-        "physics": "Physics",
-        "coding": "Coding",
-        "project": "Project",
-        "other": "Other"
+        "math": "Toán học",
+        "physics": "Vật lý",
+        "coding": "Lập trình",
+        "project": "Dự án",
+        "other": "Khác"
     },
     "notes": {
         "sidebar": {
-            "searchPlaceholder": "Search notes...",
-            "notes": "Notes",
-            "noNotes": "No notes available. Create a new note to get started!",
-            "createNote": "Create Note",
-            "inviteCollaborators": "Invite Collaborators"
+            "searchPlaceholder": "Tìm kiếm ghi chú...",
+            "notes": "Ghi chú",
+            "noNotes": "Chưa có ghi chú nào. Vui lòng tạo ghi chú mới để bắt đầu.",
+            "createNote": "Tạo ghi chú mới",
+            "inviteCollaborators": "Mời người cộng tác"
         },
         "mainContent": {
-            "noNoteSelected": "No note selected",
-            "selectNotePrompt": "Please select a note from the sidebar or create a new one.",
-            "untitled": "Untitled Note",
-            "lastEdited": "Last edited {{date}}",
-            "collaborators": "Collaborators",
-            "addCollaborator": "Add Collaborator",
-            "saveStatus": "All changes saved",
-            "saving": "Saving..."
+            "noNoteSelected": "Chưa chọn ghi chú nào",
+            "selectNotePrompt": "Vui lòng chọn một ghi chú từ thanh bên hoặc tạo ghi chú mới.",
+            "untitled": "Ghi chú chưa có tiêu đề",
+            "lastEdited": "Chỉnh sửa lần cuối vào {{date}}",
+            "collaborators": "Người cộng tác",
+            "addCollaborator": "Thêm người cộng tác",
+            "saveStatus": "Tất cả thay đổi đã được lưu",
+            "saving": "Đang lưu..."
         }
     },
     "popups": {
         "collaborationPopup": {
-            "manageCollaborators": "Manage Collaborators",
-            "viewCollaborators": "View Collaborators",
-            "inviteFieldPlaceholder": "Enter username",
-            "title": "Invite Collaborator",
-            "currentCollaborators": "Current Collaborators",
-            "noCollaborators": "No collaborators yet.",
-            "loadingCollaborators": "Loading collaborators...",
+            "manageCollaborators": "Quản lý người cộng tác",
+            "viewCollaborators": "Xem người cộng tác",
+            "inviteFieldPlaceholder": "Nhập tên người dùng",
+            "title": "Mời người cộng tác",
+            "currentCollaborators": "Người cộng tác hiện tại",
+            "noCollaborators": "Chưa có người cộng tác nào.",
+            "loadingCollaborators": "Đang tải danh sách người cộng tác...",
             "buttons": {
-                "inviting": "Inviting...",
-                "invite": "Invite"
+                "inviting": "Đang gửi lời mời...",
+                "invite": "Gửi lời mời"
             }
         },
         "invitePopup": {
