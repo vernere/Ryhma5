@@ -53,11 +53,11 @@
             }
         },
         "invitePopup": {
-            "title": "You have been invited to collaborate",
-            "noInvitations": "No new invitations.",
-            "invitations": "Invitations ({{count}})",
-            "accept": "Accept",
-            "decline": "Decline"
+            "title": "Bạn đã được mời để cộng tác",
+            "noInvitations": "Không có lời mời mới.",
+            "invitations": "Lời mời ({{count}})",
+            "accept": "Chấp nhận",
+            "decline": "Từ chối"
         }
     }
 }
