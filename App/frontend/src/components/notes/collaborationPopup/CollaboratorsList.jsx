@@ -24,7 +24,7 @@ export const CollaboratorsList = ({
   }
 
   return (
-    <div className="space-y-2 max-h-40 overflow-y-auto">
+    <div className="space-y-2 max-h-72 overflow-y-auto">
       {collaborators.map((collaborator) => (
         <CollaboratorItem
           key={collaborator.user_id || collaborator.id}
