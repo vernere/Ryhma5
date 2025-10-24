@@ -4,7 +4,7 @@ import { locales, defaultLocale } from "./config";
 
 import en from "../locales/en.json";
 import vn from "../locales/vn.json";
-import ar from "../locales/ar.json";
+import ku from "../locales/ku.json";
 
 i18n
     .use(initReactI18next)
@@ -14,7 +14,7 @@ i18n
         resources: {
             EN: { translation: en },
             VN: { translation: vn },
-            AR: { translation: ar },
+            KU: { translation: ku },
         },
         detection: {
             order: ['cookie'],

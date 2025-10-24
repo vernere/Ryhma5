@@ -3,17 +3,12 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
+import { languages } from "@/i18n/config";
 
 export const LanguageDropdown = ({ isOpen, onClose }) => {
     const { user } = useAuth();
     const { i18n } = useTranslation();
     if (!isOpen) return null;
-
-    const languages = {
-        EN: "English",
-        VN: "Vietnamese",
-        AR: "Arabic",
-    };
 
     const handleSelectLanguage = async (code) => {
         console.log("Selected language code:", code);
