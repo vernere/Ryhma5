@@ -1,12 +1,14 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { locales, defaultLocale } from "./config";
+import LanguageDetector from 'i18next-browser-languagedetector';
 
 import en from "../locales/en.json";
 import vn from "../locales/vn.json";
 import ku from "../locales/ku.json";
 
 i18n
+    .use(LanguageDetector)
     .use(initReactI18next)
     .init({
         fallbackLng: defaultLocale,
