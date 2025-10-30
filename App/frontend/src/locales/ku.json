@@ -1,63 +1,63 @@
 {
     "common": {
-        "loading": "Loading...",
-        "error": "An error occurred. Please try again.",
-        "logout": "Logout",
-        "connecting": "Connecting...",
+        "loading": "Xo begra...",
+        "error": "Halayek chebo. Je karama xo xo begra.",
+        "logout": "Darkava",
+        "connecting": "Tekgertin...",
         "roles": {
-            "owner": "Owner",
-            "editor": "Editor",
-            "viewer": "Viewer",
-            "pending": "Pending",
-            "declined": "Declined"
+            "owner": "Xodan",
+            "editor": "Rastker",
+            "viewer": "Temaşevan",
+            "pending": "Le bande",
+            "declined": "Hatenxar"
         }
     },
     "tags": {
-        "math": "Math",
-        "physics": "Physics",
-        "coding": "Coding",
-        "project": "Project",
-        "other": "Other"
+        "math": "Birkari",
+        "physics": "Phisic",
+        "coding": "Coder",
+        "project": "Proja",
+        "other": "Tshteki di"
     },
     "notes": {
         "sidebar": {
-            "searchPlaceholder": "Search notes...",
-            "notes": "Notes",
-            "noNotes": "No notes available. Create a new note to get started!",
-            "createNote": "Create Note",
-            "inviteCollaborators": "Invite Collaborators"
+            "searchPlaceholder": "Lê bigere Birawari...",
+            "notes": "Birawari",
+            "noNotes": "Ch birawari ninen. Amadaba bo nivesina birawariaka ni!",
+            "createNote": "Birawaria benvisa",
+            "inviteCollaborators": "Merova daxazka"
         },
         "mainContent": {
-            "noNoteSelected": "No note selected",
-            "selectNotePrompt": "Please select a note from the sidebar or create a new one.",
-            "untitled": "Untitled Note",
-            "lastEdited": "Last edited {{date}}",
-            "collaborators": "Collaborators",
-            "addCollaborator": "Add Collaborator",
-            "saveStatus": "All changes saved",
-            "saving": "Saving..."
+            "noNoteSelected": "Birawariake helbijera",
+            "selectNotePrompt": "Je karama xo birawarijaki halbjera j tanishte janji eka ni benvesa.",
+            "untitled": "birawari ya be sar u shine",
+            "lastEdited": "Vagera chekerna bare {{date}}",
+            "collaborators": "Merov",
+            "addCollaborator": "Merova zidaka",
+            "saveStatus": "Herteshtak jebara",
+            "saving": "Jebarkern..."
         }
     },
     "popups": {
         "collaborationPopup": {
-            "manageCollaborators": "Manage Collaborators",
-            "viewCollaborators": "View Collaborators",
-            "inviteFieldPlaceholder": "Enter username",
-            "title": "Invite Collaborator",
-            "currentCollaborators": "Current Collaborators",
-            "noCollaborators": "No collaborators yet.",
-            "loadingCollaborators": "Loading collaborators...",
+            "manageCollaborators": "Merova be drest bke",
+            "viewCollaborators": "Merova Temaşa bke",
+            "inviteFieldPlaceholder": "Nave xo benvisa",
+            "title": "Merova daxazka",
+            "currentCollaborators": " Meroven hey",
+            "noCollaborators": "Che merov hazerninen.",
+            "loadingCollaborators": "Xo begra merov behen...",
             "buttons": {
-                "inviting": "Inviting...",
-                "invite": "Invite"
+                "inviting": "Daxazi...",
+                "invite": "Daxaz"
             }
         },
         "invitePopup": {
-            "title": "You have been invited to collaborate",
-            "noInvitations": "No new invitations.",
-            "invitations": "Invitations ({{count}})",
-            "accept": "Accept",
-            "decline": "Decline"
+            "title": "Tu hatya daxaz keren bo birwariake",
+            "noInvitations": "Che daxazit ni ninen.",
+            "invitations": "Daxaz ({{count}})",
+            "accept": "Halbejera",
+            "decline": "blavke"
         }
     }
 }
