@@ -6,6 +6,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 import en from "../locales/en.json";
 import vn from "../locales/vn.json";
 import ku from "../locales/ku.json";
+import se from "../locales/se.json";
 
 i18n
     .use(LanguageDetector)
@@ -17,6 +18,7 @@ i18n
             EN: { translation: en },
             VN: { translation: vn },
             KU: { translation: ku },
+            SE: { translation: se },
         },
         detection: {
             order: ['cookie'],

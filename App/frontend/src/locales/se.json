@@ -1,0 +1,63 @@
+{
+    "common": {
+        "loading": "Laddar...",
+        "error": "Ett fel uppstod. Försök igen.",
+        "logout": "Logga ut",
+        "connecting": "Ansluter...",
+        "roles": {
+            "owner": "Ägare",
+            "editor": "Redaktör",
+            "viewer": "Läsare",
+            "pending": "Pågående",
+            "declined": "Vägrad"
+        }
+    },
+    "tags": {
+        "math": "Matematik",
+        "physics": "Fysik",
+        "coding": "Kodning",
+        "project": "Projekt",
+        "other": "Annat"
+    },
+    "notes": {
+        "sidebar": {
+            "searchPlaceholder": "Sök anteckningar...",
+            "notes": "Anteckningar",
+            "noNotes": "Inga anteckningar tillgängliga. Skapa en ny anteckning för att komma igång!",
+            "createNote": "Skapa anteckning",
+            "inviteCollaborators": "Bjud in kollaboratörer"
+        },
+        "mainContent": {
+            "noNoteSelected": "Ingen anteckning vald",
+            "selectNotePrompt": "Välj en anteckning från sidofältet eller skapa en ny.",
+            "untitled": "Namnlös anteckning",
+            "lastEdited": "Senast redigerad {{date}}",
+            "collaborators": "Kollaboratörer",
+            "addCollaborator": "Lägg till kollaboratör",
+            "saveStatus": "Alla ändringar har sparats",
+            "saving": "Sparar..."
+        }
+    },
+    "popups": {
+        "collaborationPopup": {
+            "manageCollaborators": "Hantera Kollaboratörer",
+            "viewCollaborators": "Betrakta Kollaboratörer",
+            "inviteFieldPlaceholder": "Ange användarnamn",
+            "title": "Bjud in Kollaboratör",
+            "currentCollaborators": "Nuvarande Kollaboratörer",
+            "noCollaborators": "Inga Kollaboratörer ennu.",
+            "loadingCollaborators": "Laddar kollaboratörer...",
+            "buttons": {
+                "inviting": "Bjuder in...",
+                "invite": "Bjud"
+            }
+        },
+        "invitePopup": {
+            "title": "Du har blivit inbjuden att samarbeta",
+            "noInvitations": "Inga nya inbjudningar.",
+            "invitations": "Inbjudan ({{count}})",
+            "accept": "Acceptera",
+            "decline": "Vägra"
+        }
+    }
+}
