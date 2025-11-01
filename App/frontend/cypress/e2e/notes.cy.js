@@ -221,3 +221,36 @@ describe('Collaboration invite tests', () => {
     cy.get('[data-cy=closeCollaborationPopup]').click();
   });
 });
+
+describe('Language selector tests', () => {
+  it('Should change localization', () => {
+    loginUser();
+
+    cy.get('[data-cy=languageButton]').click();
+    cy.get('[data-cy=languageList]').children().contains("Vietnamese").click();
+    cy.contains("Đăng xuất").should('exist');
+    cy.get('[data-cy=languageList]').should('not.exist')
+
+    cy.get('[data-cy=languageButton]').click();
+    cy.get('[data-cy=languageList]').children().contains("Kurdish").click();
+    cy.contains("Darkava").should('exist');
+    cy.get('[data-cy=languageList]').should('not.exist')
+
+    cy.get('[data-cy=languageButton]').click();
+    cy.get('[data-cy=languageList]').children().contains("Swedish").click();
+    cy.contains("Logga ut").should('exist');
+    cy.get('[data-cy=languageList]').should('not.exist')
+
+    /*
+    cy.get('[data-cy=languageButton]').click();
+    cy.get('[data-cy=languageList]').children().contains("Finnish").click();
+    cy.contains("Kirjaudu ulos").should('exist');
+    cy.get('[data-cy=languageList]').should('not.exist')
+     */
+
+    cy.get('[data-cy=languageButton]').click();
+    cy.get('[data-cy=languageList]').children().contains("English").click();
+    cy.contains("Logout").should('exist');
+    cy.get('[data-cy=languageList]').should('not.exist')
+  });
+});

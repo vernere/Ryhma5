@@ -26,7 +26,7 @@ export const LanguageDropdown = ({ isOpen, onClose }) => {
     return (
         <div className="bg-white rounded-lg shadow-xl max-w-md w-fit mx-4 absolute left-0 bottom-8 z-50">
             <div className="p-4">
-                <ul className="mt-2">
+                <ul className="mt-2" data-cy="languageList">
                     {languages &&
                         Object.entries(languages).map(([code, name]) => (
                             <li
@@ -54,6 +54,7 @@ export const LanguageButton = () => {
     return (
         <div className="relative">
             <button
+                data-cy='languageButton'
                 onClick={() => handleOpen()}
                 className="ml-4 px-3 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
             >
