@@ -38,6 +38,14 @@
             "saving": "Đang lưu..."
         }
     },
+    "dropdown": {
+        "export": {
+            "pdf": "Xuất ra pdf",
+            "md": "Xuất ra md",
+            "txt": "Xuất ra txt",
+            "docx": "Xuất ra docx"
+        }
+    },
     "popups": {
         "collaborationPopup": {
             "manageCollaborators": "Quản lý người cộng tác",

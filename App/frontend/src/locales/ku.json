@@ -38,6 +38,14 @@
             "saving": "Jebarkern..."
         }
     },
+    "dropdown": {
+        "export": {
+            "pdf": "Wêne bide pdf",
+            "md": "Wêne bide md",
+            "txt": "Wêne bide txt",
+            "docx": "Wêne bide docx"
+        }
+    },
     "popups": {
         "collaborationPopup": {
             "manageCollaborators": "Merova be drest bke",

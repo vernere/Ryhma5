@@ -1,7 +1,9 @@
 import { useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
     const dropdownRef = useRef(null);
+    const { t } = useTranslation();
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -40,7 +42,7 @@ const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
                 }}
                 className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-t-lg"
             >
-                Export as pdf
+                {t('dropdown.export.pdf')}
             </button>
             <div className="h-px w-40 bg-gray-300"></div>
             <button
@@ -51,7 +53,7 @@ const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
                 }}
                 className="w-full text-left px-4 py-2 hover:bg-gray-100 "
             >
-                Export as md
+                {t('dropdown.export.md')}
             </button>
             <div className="h-px w-40 bg-gray-300"></div>
             <button
@@ -62,7 +64,7 @@ const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
                 }}
                 className="w-full text-left px-4 py-2 hover:bg-gray-100 "
             >
-                Export as txt
+                {t('dropdown.export.txt')}
             </button>
             <div className="h-px w-40 bg-gray-300"></div>
             <button
@@ -73,7 +75,7 @@ const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
                 }}
                 className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-b-lg"
             >
-                Export as docx
+                {t('dropdown.export.docx')}
             </button>
         </div>
     )
