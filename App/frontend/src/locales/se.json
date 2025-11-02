@@ -59,5 +59,38 @@
             "accept": "Acceptera",
             "decline": "Vägra"
         }
+    },
+        "landing": {
+        "h1":"Anteckningsappen för teknikentusiaster",
+        "h2": "Get all the functionality of a traditional note taking application, with added benefits like collaborative features, tagged notes for easy search and easy to add code snippets.",
+        "features":"Features",
+        "collaboration":"Collaboration",
+        "collaborationText": "Collaborative features that allow users to invite other users to shared notes for easy and seamless teamwork.",
+        "search":"Search and tagging",
+        "searchText": "Tagging of notes and advanced search gives you control over what things you want to have handy, and organize your notes accordingly.",
+        "code": "Code editing",
+        "codeText":"Code pasting and formatting has never been easier, with in applictaion syntax highlighting and formatting giving you control over what you display."
+    },
+    "header":{
+        "buttons": {
+            "login": "Login",
+            "register": "Sign up!"
+        }
+    },
+    "footer": {
+       "trademark": " | All rights reserved." 
+    },
+    "placeholders": {
+        "email":"Email",
+        "password":"Password",
+        "confirmPassword": "Confirm Password"
+    },
+    "register" : {
+        "welcome": "Welcome to Notely",
+        "createAccountButton":"Create account"
+    },
+    "login": {
+        "loginHeader":"Login",
+        "forgot":"Forgot Password?"
     }
 }
