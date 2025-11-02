@@ -65,7 +65,6 @@ export const exportToDocx = async (html, noteTitle) => {
     const doc = parser.parseFromString(html, 'text/html');
 
     const paragraphs = [];
-    let currentLevel = 0;
 
     const processNode = (node) => {
         if (node.nodeType === Node.TEXT_NODE) {
@@ -131,8 +130,8 @@ export const exportToDocx = async (html, noteTitle) => {
             const paragraph = new Paragraph({
                 children: runs.flat(),
                 heading: element.tagName.toLowerCase().startsWith('h')
-                ? HeadingLevel[element.tagName.toUpperCase()]
-                : undefined,
+                    ? HeadingLevel[element.tagName.toUpperCase()]
+                    : undefined,
             });
             paragraphs.push(paragraph);
         }

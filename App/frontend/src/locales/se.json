@@ -38,6 +38,14 @@
             "saving": "Sparar..."
         }
     },
+    "dropdown": {
+        "export": {
+            "pdf": "Exportera som pdf",
+            "md": "Exportera som md",
+            "txt": "Exportera som txt",
+            "docx": "Exportera som docx"
+        }
+    },
     "popups": {
         "collaborationPopup": {
             "manageCollaborators": "Hantera Kollaboratörer",
