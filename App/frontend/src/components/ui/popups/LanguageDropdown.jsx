@@ -12,13 +12,16 @@ export const LanguageDropdown = ({ isOpen, onClose }) => {
 
     const handleSelectLanguage = async (code) => {
         console.log("Selected language code:", code);
-        const { error } = await supabase
-            .from("users")
-            .update({ language: code })
-            .eq("id", user.id);
-        if (error) {
-            console.error("Error updating user language:", error);
+        if (user?.id) {
+            const { error } = await supabase
+                .from("users")
+                .update({ language: code })
+                .eq("id", user.id);
+            if (error) {
+                console.error("Error updating user language:", error);
+            }
         }
+
         i18n.changeLanguage(code);
         onClose();
     };
