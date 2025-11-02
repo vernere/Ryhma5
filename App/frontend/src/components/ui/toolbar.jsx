@@ -31,7 +31,7 @@ const Toolbar = ({ editor, noteTitle = "Untitled note" }) => {
             }
         };
 
-        document.addEventListener("clieck", closeOnClickOutside);
+        document.addEventListener("click", closeOnClickOutside);
         return () => document.removeEventListener("click", closeOnClickOutside);
     }, [isDropdownOpen]);
 

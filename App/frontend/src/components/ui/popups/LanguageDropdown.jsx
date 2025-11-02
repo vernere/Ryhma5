@@ -11,7 +11,6 @@ export const LanguageDropdown = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 
     const handleSelectLanguage = async (code) => {
-        console.log("Selected language code:", code);
         const { error } = await supabase
             .from("users")
             .update({ language: code })
