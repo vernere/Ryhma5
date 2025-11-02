@@ -38,6 +38,14 @@
             "saving": "Saving..."
         }
     },
+    "dropdown": {
+        "export": {
+            "pdf": "Export as pdf",
+            "md": "Export as md",
+            "txt": "Export as txt",
+            "docx": "Export as docx"
+        }
+    },
     "popups": {
         "collaborationPopup": {
             "manageCollaborators": "Manage Collaborators",
