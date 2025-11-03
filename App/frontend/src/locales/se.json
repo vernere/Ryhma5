@@ -100,5 +100,15 @@
     "login": {
         "loginHeader":"Inloggning",
         "forgot":"Glömt lösenord?"
+    },
+    "onboarding":{
+        "welcome" : "Välkommen",
+        "p1" : "Välj ett lämpligt användarnamn för att börja",
+        "username":"Användarnamn",
+        "errorRequired": "Användarnamn krävs",
+        "errorTaken":"Användarnamnet äre redan upptagen",
+        "errorGeneric":"Något gick fel.",
+        "buttonSaving":"Sparar...",
+        "buttonContinue":"Fortsätt"
     }
 }

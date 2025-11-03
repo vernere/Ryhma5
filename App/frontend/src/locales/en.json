@@ -100,5 +100,15 @@
     "login": {
         "loginHeader":"Login",
         "forgot":"Forgot Password?"
+    },
+    "onboarding":{
+        "welcome" : "Welcome",
+        "p1" : "Please pick a suitable username to get started.",
+        "username":"Username",
+        "errorRequired": "Username is required",
+        "errorTaken":"Username is already taken.",
+        "errorGeneric":"Something went wrong.",
+        "buttonSaving":"Saving...",
+        "buttonContinue":"Continue"
     }
 }
