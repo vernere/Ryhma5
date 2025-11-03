@@ -67,5 +67,25 @@
             "accept": "Accept",
             "decline": "Decline"
         }
+    },
+    "placeholders": {
+        "email":"Email",
+        "password":"Password",
+        "confirmPassword": "Confirm Password",
+        "newPassword": "Enter new password"
+    },
+    "password":{
+        "reset":{
+            "title" : "Forgot your password?",
+            "resetButton" : "Send reset link to email"
+        },
+        "change":{
+            "title" : "Create a new password",
+            "updateButton" : "Update"
+        },
+        "changed":{
+            "title" : "Your password has been successfully updated!",
+            "toLoginButton" : "Go to Login"
+        }
     }
 }
