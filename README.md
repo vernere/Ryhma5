@@ -35,6 +35,7 @@ The project is implemented in React using Bun and supports localization using i1
 - html2pdf
 - turndown
 - v8-to-istanbul
+- i18n
 
 ## Use case diagram
 
