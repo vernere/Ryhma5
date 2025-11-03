@@ -12,6 +12,17 @@
             "declined": "Vägrad"
         }
     },
+    
+        "invite": {
+            "title": "Bjud in samarbetare",
+            "placeholder": "Ange användarnamn",
+            "send": "Bjud in"
+        },
+        "errors": {
+            "userNotFound": "Användaren \"{{username}}\" hittades inte"
+        },
+    
+
     "tags": {
         "math": "Matematik",
         "physics": "Fysik",

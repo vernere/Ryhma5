@@ -12,6 +12,17 @@
             "declined": "Đã bị từ chối"
         }
     },
+    
+        "invite": {
+            "title": "Mời cộng tác viên",
+            "placeholder": "Nhập tên người dùng",
+            "send": "Mời"
+        },
+        "errors": {
+            "userNotFound": "Không tìm thấy người dùng \"{{username}}\""
+        },
+    
+
     "tags": {
         "math": "Toán học",
         "physics": "Vật lý",

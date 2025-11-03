@@ -12,6 +12,18 @@
             "declined": "Declined"
         }
     },
+
+        "invite": {
+            "title": "Invite collaborator",
+            "placeholder": "Enter username",
+            "send": "Invite"
+        },
+        "errors": {
+            "userNotFound": "User \"{{username}}\" not found"
+        },
+    
+
+
     "tags": {
         "math": "Math",
         "physics": "Physics",

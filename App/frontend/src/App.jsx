@@ -13,7 +13,10 @@ import ProtectedRoute from "./components/routes/ProtectedRoute";
 import PasswordRecoveryRoute from "./components/routes/PasswordRecoveryRoute";
 import OnboardingGuard from "./components/routes/OnboardingGuard";
 import OnboardingPage from "./pages/onboardingPage";
+import InviteI18nAddon from "@/components/div/InviteI18nAddon.jsx";
 import { ProfileProvider } from "./utils/ProfileContext";
+import ErrorSwap from "@/components/div/ErrorSwap.jsx";
+
 
 function App() {
     const { user, passwordRecovery, loading } = useAuth();
@@ -21,6 +24,7 @@ function App() {
     if (loading) return <p>Loading...</p>;
 
     return (
+         <>
         <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/register" element={<RegistrationPage />} />
@@ -74,7 +78,14 @@ function App() {
                 }
             />
         </Routes>
-    );
+       
+        {/* dev-only helper to show the localized red error */}
+        {import.meta.env.DEV && <InviteI18nAddon />}
+        {import.meta.env.DEV && <ErrorSwap />}
+
+       </> 
+
+    ); 
 }
 
 export default App;

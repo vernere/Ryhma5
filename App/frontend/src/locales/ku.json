@@ -12,6 +12,14 @@
             "declined": "Hatenxar"
         }
     },
+    "invite": {
+        "title": "Merova daxazka",
+        "placeholder": "Navê bikarhêner binivîse",
+        "send": "Daxaz"
+    },
+    "errors": {
+        "userNotFound": "Bikarhêner \"{{username}}\" nehate dîtin"
+    },
     "tags": {
         "math": "Birkari",
         "physics": "Phisic",
