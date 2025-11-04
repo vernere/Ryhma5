@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 import { InvitePopup } from "./InvitePopup";
 import NoteMenuItem from "./NoteMenuItem";
 import { useProfile } from "@/utils/ProfileContext";
+import { useTranslation } from "react-i18next";
 
 const Sidebar = () => {
   const notes = useNotesStore((state) => state.notes);
@@ -34,6 +35,7 @@ const Sidebar = () => {
 
   const getTags = useTagStore((state) => state.getTags);
   const noteTags = useTagStore((state) => state.noteTags);
+  const { t } = useTranslation();
 
   const { profile } = useProfile();
   const { user } = useAuth();
@@ -135,7 +137,7 @@ const Sidebar = () => {
             <input
               data-cy="searchInput"
               type="text"
-              placeholder="Search notes"
+              placeholder={t("notes.sidebar.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full focus:outline-none focus:ring-transparent py-1"

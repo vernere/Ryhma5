@@ -130,7 +130,6 @@ describe('Search tests', () => {
   });
 })
 
-
 describe('Collaboration invite tests', () => {
   it('Should invite user to collaborate', () => {
     loginUser();
@@ -139,7 +138,7 @@ describe('Collaboration invite tests', () => {
 
     noteSelect.first().click();
     cy.get('[data-cy=openCollaborationPopup]').click();
-    cy.get('[data-cy=addCollaboratorInput]').type('Test2');
+    cy.get('[data-cy=addCollaboratorInput]').clear().type('Test2');
     cy.get('[data-cy=addCollaboratorInput]').should('have.value', 'Test2');
     cy.get('[data-cy=sendInvite]').click();
     cy.wait(1000);
@@ -156,13 +155,13 @@ describe('Collaboration invite tests', () => {
 
     noteSelect.first().click();
     cy.get('[data-cy=openCollaborationPopup]').click();
-    cy.get('[data-cy=addCollaboratorInput]').type('Test2');
+    cy.get('[data-cy=addCollaboratorInput]').clear().type('Test2');
     cy.get('[data-cy=addCollaboratorInput]').should('have.value', 'Test2');
     cy.get('[data-cy=sendInvite]').click();
     cy.wait(1000);
 
     cy.get('[data-cy=inviteError]').contains('An invitation has already been sent to Test2').should('exist');
-    
+
     cy.get('[data-cy=closeCollaborationPopup]').click();
   });
 
@@ -195,7 +194,7 @@ describe('Collaboration invite tests', () => {
 
     noteSelect.first().click();
     cy.get('[data-cy=openCollaborationPopup]').click();
-    cy.get('[data-cy=addCollaboratorInput]').type('Test2');
+    cy.get('[data-cy=addCollaboratorInput]').clear().type('Test2');
     cy.get('[data-cy=addCollaboratorInput]').should('have.value', 'Test2');
     cy.get('[data-cy=sendInvite]').click();
     cy.wait(1000);
@@ -220,5 +219,38 @@ describe('Collaboration invite tests', () => {
     collaborator.should('not.exist');
 
     cy.get('[data-cy=closeCollaborationPopup]').click();
+  });
+});
+
+describe('Language selector tests', () => {
+  it('Should change localization', () => {
+    loginUser();
+
+    cy.get('[data-cy=languageButton]').click();
+    cy.get('[data-cy=languageList]').children().contains("Vietnamese").click();
+    cy.contains("Đăng xuất").should('exist');
+    cy.get('[data-cy=languageList]').should('not.exist')
+
+    cy.get('[data-cy=languageButton]').click();
+    cy.get('[data-cy=languageList]').children().contains("Kurdish").click();
+    cy.contains("Darkava").should('exist');
+    cy.get('[data-cy=languageList]').should('not.exist')
+
+    cy.get('[data-cy=languageButton]').click();
+    cy.get('[data-cy=languageList]').children().contains("Swedish").click();
+    cy.contains("Logga ut").should('exist');
+    cy.get('[data-cy=languageList]').should('not.exist')
+
+    /*
+    cy.get('[data-cy=languageButton]').click();
+    cy.get('[data-cy=languageList]').children().contains("Finnish").click();
+    cy.contains("Kirjaudu ulos").should('exist');
+    cy.get('[data-cy=languageList]').should('not.exist')
+     */
+
+    cy.get('[data-cy=languageButton]').click();
+    cy.get('[data-cy=languageList]').children().contains("English").click();
+    cy.contains("Logout").should('exist');
+    cy.get('[data-cy=languageList]').should('not.exist')
   });
 });

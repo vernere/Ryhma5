@@ -5,6 +5,7 @@ import CollaboratorsList from "./CollaboratorsList";
 import { useInvitationsStore } from "@/hooks/useInvitationsStore";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const CollaborationPopup = ({ 
   isOpen, 
@@ -13,9 +14,10 @@ export const CollaborationPopup = ({
 }) => {
   const { role } = useNotesStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const isOwner = role === "owner";
   const { collaborators } = useNotesStore();
   const { invitations } = useInvitationsStore();
+  const { t } = useTranslation();
+  const isOwner = role === "owner";
 
   if (!isOpen) return null;
 
@@ -27,7 +29,7 @@ export const CollaborationPopup = ({
             {isOwner && (
               <UserRoundPlus className="size-5" />
             )}
-            {isOwner ? "Manage Collaborators" : "View Collaborators"}
+            {isOwner ? t("popups.collaborationPopup.manageCollaborators") : t("popups.collaborationPopup.viewCollaborators")}
           </h3>
           <button
             onClick={onClose}
@@ -45,7 +47,7 @@ export const CollaborationPopup = ({
 
           <div>
             <h4 className="text-sm font-medium text-gray-700 mb-3">
-              Current Collaborators
+              {t("popups.collaborationPopup.currentCollaborators")}
             </h4>
             <CollaboratorsList
               collaborators={collaborators}

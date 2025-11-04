@@ -1,0 +1,156 @@
+{
+    "common": {
+        "loading": "Laddar...",
+        "error": "Ett fel uppstod. Försök igen.",
+        "logout": "Logga ut",
+        "connecting": "Ansluter...",
+        "roles": {
+            "owner": "Ägare",
+            "editor": "Redaktör",
+            "viewer": "Läsare",
+            "pending": "Pågående",
+            "declined": "Vägrad"
+        }
+    },
+    "invite": {
+        "title": "Bjud in kollaboratörer",
+        "placeholder": "Ange användarnamn",
+        "send": "Bjud"
+    },
+    "tags": {
+        "math": "Matematik",
+        "physics": "Fysik",
+        "coding": "Kodning",
+        "project": "Projekt",
+        "other": "Annat"
+    },
+    "notes": {
+        "sidebar": {
+            "searchPlaceholder": "Sök anteckningar...",
+            "notes": "Anteckningar",
+            "noNotes": "Inga anteckningar tillgängliga. Skapa en ny anteckning för att komma igång!",
+            "createNote": "Skapa anteckning",
+            "inviteCollaborators": "Bjud in kollaboratörer"
+        },
+        "mainContent": {
+            "noNoteSelected": "Ingen anteckning vald",
+            "selectNotePrompt": "Välj en anteckning från sidofältet eller skapa en ny.",
+            "untitled": "Namnlös anteckning",
+            "lastEdited": "Senast redigerad {{date}}",
+            "collaborators": "Kollaboratörer",
+            "addCollaborator": "Lägg till kollaboratör",
+            "saveStatus": "Alla ändringar har sparats",
+            "saving": "Sparar..."
+        }
+    },
+    "dropdown": {
+        "export": {
+            "pdf": "Exportera som pdf",
+            "md": "Exportera som md",
+            "txt": "Exportera som txt",
+            "docx": "Exportera som docx"
+        }
+    },
+    "popups": {
+        "collaborationPopup": {
+            "manageCollaborators": "Hantera Kollaboratörer",
+            "viewCollaborators": "Betrakta Kollaboratörer",
+            "inviteFieldPlaceholder": "Ange användarnamn",
+            "title": "Bjud in Kollaboratör",
+            "currentCollaborators": "Nuvarande Kollaboratörer",
+            "noCollaborators": "Inga Kollaboratörer ennu.",
+            "loadingCollaborators": "Laddar kollaboratörer...",
+            "buttons": {
+                "inviting": "Bjuder in...",
+                "invite": "Bjud"
+            },
+            "errors": {
+                "selfInvite": "Du kan inte bjuda in dig själv",
+                "lookupFailed": "Användarsökning misslyckades. Försök igen.",
+                "userNotFound": "Användaren {{username}} hittades inte",
+                "inviteAlreadySent": "En inbjudan har redan skickats till {{username}}",
+                "alreadyCollaborator": "{{username}} är redan en samarbetspartner i den här anteckningen",
+                "noNoteSelected": "Inga anteckningar valda. Välj en."
+            }
+        },
+        "invitePopup": {
+            "title": "Du har blivit inbjuden att samarbeta",
+            "noInvitations": "Inga nya inbjudningar.",
+            "invitations": "Inbjudan ({{count}})",
+            "accept": "Acceptera",
+            "decline": "Vägra"
+        }
+    },
+    "landing": {
+        "h1": "Anteckningsappen för teknikentusiaster",
+        "h2": "Få alla funktioner i ett traditionellt anteckningsprogram, med extra fördelar som samarbetsfunktioner, taggade anteckningar för enkel sökning och enkelt att lägga till kodavsnitt.",
+        "features": "Verktyg",
+        "collaboration": "Kollaboration",
+        "collaborationText": "Kollaboratör funktioner som gör det möjligt för användaren att bjuda in andra användare till delade anteckningar för enkelt och smidigt samarbete.",
+        "search": "Sökande och taggande",
+        "searchText": "Taggning av anteckningar och avancerad sökning ger dig kontroll över vilka saker du vill ha till hands, och organisering av dina anteckningar därefter.",
+        "code": "Kodredigering",
+        "codeText": "Att klistra in och formatera kod har aldrig varit enklare, med syntaxmarkering och formatering i applikationen, som ger dig kontroll över vad du visar."
+    },
+    "header": {
+        "buttons": {
+            "login": "Inloggning",
+            "register": "Registrera dig"
+        }
+    },
+    "footer": {
+        "trademark": " | Copyright"
+    },
+    "placeholders": {
+        "email": "E-post",
+        "password": "Lösenord",
+        "confirmPassword": "Bekräfta Lösenord",
+        "newPassword": "Ange nytt lösenord"
+    },
+    "register": {
+        "welcome": "Välkommen till Notely",
+        "createAccountButton": "Skapa konto",
+        "errorEmail": "Ange en giltig e-postadress.",
+        "errorPassword": "Lösenordet måste vara minst 7 tecken långt, innehålla en stor bokstav och ett nummer.",
+        "errorMatch": "Lösenorden matchar inte.",
+        "errorGeneric": "Registreringen misslyckades.",
+        "verify": "Verifiera ditt konto",
+        "sentLink": "Vi har skickat en bekräftelselänk till ditt e-postadress.",
+        "start": "Verifiera ditt konto för att börja använda Notely.",
+        "goToLogin": "Gå till inloggning"
+    },
+    "login": {
+        "loginHeader": "Inloggning",
+        "forgot": "Glömt lösenord?",
+        "error": "Ogiltigt lösenord eller e-postadress"
+    },
+    "onboarding": {
+        "welcome": "Välkommen",
+        "p1": "Välj ett lämpligt användarnamn för att börja",
+        "username": "Användarnamn",
+        "errorRequired": "Användarnamn krävs",
+        "errorTaken": "Användarnamnet äre redan upptagen",
+        "errorGeneric": "Något gick fel.",
+        "buttonSaving": "Sparar...",
+        "buttonContinue": "Fortsätt"
+    },
+    "password": {
+        "reset": {
+            "title": "Glömt lösenordet?",
+            "resetButton": "Skicka återställningslänk",
+            "setMessage": "Kolla din e-post",
+            "error": "Fel vid sändning av länk"
+        },
+        "change": {
+            "title": "Skapa ett nytt lösenord",
+            "updateButton": "Uppdatera",
+            "validPasswordError": "Lösenordet måste vara minst 7 tecken långt och innehålla en stor bokstav och en siffra.",
+            "passwordMatchError": "Lösenorden matchar inte.",
+            "updateError": "Lösenordsuppdateringen misslyckades."
+        },
+        "changed": {
+            "title": "Ditt lösenord har uppdaterats!",
+            "toLoginButton": "Logga in"
+        }
+    }
+}

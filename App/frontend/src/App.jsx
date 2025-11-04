@@ -14,31 +14,38 @@ import PasswordRecoveryRoute from "./components/routes/PasswordRecoveryRoute";
 import OnboardingGuard from "./components/routes/OnboardingGuard";
 import OnboardingPage from "./pages/onboardingPage";
 import { ProfileProvider } from "./utils/ProfileContext";
+import { useTranslation } from "react-i18next";
+
 
 function App() {
     const { user, passwordRecovery, loading } = useAuth();
+    const { t } = useTranslation();
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <p>{t("common.loading")}</p>;
 
     return (
+
         <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/register" element={<RegistrationPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/resetPassword" element={<ResetPassword />} />
-            <Route path="/passwordChanged" element={<PasswordChanged />} />
+            <Route path="/" element={<ProfileProvider><LandingPage /></ProfileProvider>} />
+            <Route path="/register" element={<ProfileProvider><RegistrationPage /></ProfileProvider>} />
+            <Route path="/login" element={<ProfileProvider><LoginPage /></ProfileProvider>} />
+            <Route path="/resetPassword" element={<ProfileProvider><ResetPassword /></ProfileProvider>} />
+            <Route path="/passwordChanged" element={<ProfileProvider><PasswordChanged /></ProfileProvider>} />
             <Route
                 path="/registrationSuccess"
-                element={<RegistrationSuccess />}
+                element={<ProfileProvider><RegistrationSuccess /></ProfileProvider>}
             />
 
             <Route
                 path="/changePassword"
                 element={
-                    <PasswordRecoveryRoute>
-                        {" "}
-                        <ChangePassword />{" "}
-                    </PasswordRecoveryRoute>
+                    <ProfileProvider>
+                        <PasswordRecoveryRoute>
+                            {" "}
+                            <ChangePassword />{" "}
+                        </PasswordRecoveryRoute>
+                    </ProfileProvider>
+
                 }
             />
 
@@ -46,7 +53,9 @@ function App() {
                 path="/onboarding"
                 element={
                     <ProtectedRoute>
-                        <OnboardingPage />
+                        <ProfileProvider>
+                            <OnboardingPage />
+                        </ProfileProvider>
                     </ProtectedRoute>
                 }
             />
@@ -67,10 +76,13 @@ function App() {
             <Route
                 path="*"
                 element={
-                    <Navigate
-                        to={user && !passwordRecovery ? "/notes" : "/"}
-                        replace
-                    />
+                    <ProfileProvider>
+                        <Navigate
+                            to={user && !passwordRecovery ? "/notes" : "/"}
+                            replace
+                        />
+                    </ProfileProvider>
+
                 }
             />
         </Routes>

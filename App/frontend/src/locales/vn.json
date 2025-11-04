@@ -1,0 +1,156 @@
+{
+    "common": {
+        "loading": "Đang tải...",
+        "error": "Đã xảy ra lỗi. Vui lòng thử lại.",
+        "logout": "Đăng xuất",
+        "connecting": "Đang kết nối...",
+        "roles": {
+            "owner": "Chủ sở hữu",
+            "editor": "Biên tập viên",
+            "viewer": "Người xem",
+            "pending": "Đang chờ",
+            "declined": "Đã bị từ chối"
+        }
+    },
+    "invite": {
+        "title": "Mời cộng tác viên",
+        "placeholder": "Nhập tên người dùng",
+        "send": "Mời"
+    },
+    "tags": {
+        "math": "Toán học",
+        "physics": "Vật lý",
+        "coding": "Lập trình",
+        "project": "Dự án",
+        "other": "Khác"
+    },
+    "notes": {
+        "sidebar": {
+            "searchPlaceholder": "Tìm kiếm ghi chú...",
+            "notes": "Ghi chú",
+            "noNotes": "Chưa có ghi chú nào. Vui lòng tạo ghi chú mới để bắt đầu.",
+            "createNote": "Tạo ghi chú mới",
+            "inviteCollaborators": "Mời người cộng tác"
+        },
+        "mainContent": {
+            "noNoteSelected": "Chưa chọn ghi chú nào",
+            "selectNotePrompt": "Vui lòng chọn một ghi chú từ thanh bên hoặc tạo ghi chú mới.",
+            "untitled": "Ghi chú chưa có tiêu đề",
+            "lastEdited": "Chỉnh sửa lần cuối vào {{date}}",
+            "collaborators": "Người cộng tác",
+            "addCollaborator": "Thêm người cộng tác",
+            "saveStatus": "Tất cả thay đổi đã được lưu",
+            "saving": "Đang lưu..."
+        }
+    },
+    "dropdown": {
+        "export": {
+            "pdf": "Xuất ra pdf",
+            "md": "Xuất ra md",
+            "txt": "Xuất ra txt",
+            "docx": "Xuất ra docx"
+        }
+    },
+    "popups": {
+        "collaborationPopup": {
+            "manageCollaborators": "Quản lý người cộng tác",
+            "viewCollaborators": "Xem người cộng tác",
+            "inviteFieldPlaceholder": "Nhập tên người dùng",
+            "title": "Mời người cộng tác",
+            "currentCollaborators": "Người cộng tác hiện tại",
+            "noCollaborators": "Chưa có người cộng tác nào.",
+            "loadingCollaborators": "Đang tải danh sách người cộng tác...",
+            "buttons": {
+                "inviting": "Đang gửi lời mời...",
+                "invite": "Gửi lời mời"
+            },
+            "errors": {
+                "selfInvite": "Bạn không thể tự mời mình",
+                "lookupFailed": "Tìm kiếm người dùng không thành công. Vui lòng thử lại.",
+                "userNotFound": "Không tìm thấy người dùng \"{{username}}\"",
+                "inviteAlreadySent": "Lời mời đã được gửi đến {{username}}",
+                "alreadyCollaborator": "{{username}} đã là cộng tác viên trên ghi chú này",
+                "noNoteSelected": "Không có ghi chú nào được chọn. Vui lòng chọn một ghi chú."
+            }
+        },
+        "invitePopup": {
+            "title": "Bạn đã được mời để cộng tác",
+            "noInvitations": "Không có lời mời mới.",
+            "invitations": "Lời mời ({{count}})",
+            "accept": "Chấp nhận",
+            "decline": "Từ chối"
+        }
+    },
+    "landing": {
+        "h1": "Ứng dụng ghi chú dành cho những người đam mê công nghệ",
+        "h2": "Có đầy đủ chức năng của một ứng dụng ghi chú truyền thống, cùng với các lợi ích bổ sung như tính năng cộng tác, ghi chú được gắn thẻ để dễ dàng tìm kiếm và dễ dàng thêm đoạn mã.",
+        "features": "Đặc trưng",
+        "collaboration": "Sự hợp tác",
+        "collaborationText": "Các tính năng cộng tác cho phép người dùng mời người dùng khác tham gia ghi chú chung để làm việc nhóm dễ dàng và liền mạch.",
+        "search": "Tìm kiếm và gắn thẻ",
+        "searchText": "Việc gắn thẻ ghi chú và tìm kiếm nâng cao giúp bạn kiểm soát những thứ bạn muốn lưu trữ và sắp xếp ghi chú của mình cho phù hợp.",
+        "code": "Chỉnh sửa mã",
+        "codeText": "Việc dán và định dạng mã chưa bao giờ dễ dàng hơn thế, với tính năng tô sáng cú pháp và định dạng trong ứng dụng cho phép bạn kiểm soát những gì bạn hiển thị."
+    },
+    "header": {
+        "buttons": {
+            "login": "Đăng nhập",
+            "register": "Đăng ký ngay"
+        }
+    },
+    "footer": {
+        "trademark": " | Mọi quyền được bảo lưu."
+    },
+    "placeholders": {
+        "email": "E-mail",
+        "password": "Mật khẩu",
+        "confirmPassword": "Xác nhận mật khẩu",
+        "newPassword": "Nhập mật khẩu mới"
+    },
+    "register": {
+        "welcome": "Chào mừng đến với Notely",
+        "createAccountButton": "Tạo tài khoản",
+        "errorEmail": "Vui lòng nhập địa chỉ email hợp lệ.",
+        "errorPassword": "Mật khẩu phải có ít nhất 7 ký tự, bao gồm chữ cái viết hoa và số.",
+        "errorMatch": "Mật khẩu không khớp.",
+        "errorGeneric": "Đăng ký không thành công.",
+        "verify": "Xác minh tài khoản của bạn",
+        "sentLink": "Chúng tôi đã gửi liên kết xác nhận tới email của bạn.",
+        "start": "Vui lòng xác minh tài khoản của bạn để bắt đầu sử dụng Notely.",
+        "goToLogin": "Đi đến Đăng nhập"
+    },
+    "login": {
+        "loginHeader": "Đăng nhập",
+        "forgot": "Quên mật khẩu?",
+        "error": "Mật khẩu hoặc email không hợp lệ"
+    },
+    "onboarding": {
+        "welcome": "Chào mừng",
+        "p1": "Vui lòng chọn tên người dùng phù hợp để bắt đầu.",
+        "username": "Tên người dùng",
+        "errorRequired": "Tên người dùng là bắt buộc",
+        "errorTaken": "Tên người dùng đã được sử dụng.",
+        "errorGeneric": "Có gì đó không ổn.",
+        "buttonSaving": "Đang lưu...",
+        "buttonContinue": "Tiếp tục"
+    },
+    "password": {
+        "reset": {
+            "title": "Quên mật khẩu?",
+            "resetButton": "Gửi liên kết đặt lại",
+            "setMessage": "Kiểm tra email của bạn",
+            "error": "Lỗi khi gửi liên kết"
+        },
+        "change": {
+            "title": "Tạo mật khẩu mới",
+            "updateButton": "Cập nhật",
+            "validPasswordError": "Mật khẩu phải dài ít nhất 7 ký tự và chứa một chữ cái viết hoa và một số.",
+            "passwordMatchError": "Mật khẩu không khớp.",
+            "updateError": "Cập nhật mật khẩu không thành công."
+        },
+        "changed": {
+            "title": "Mật khẩu của bạn đã được cập nhật thành công!",
+            "toLoginButton": "Đăng nhập"
+        }
+    }
+}

@@ -3,6 +3,7 @@ import { useInvitationsStore } from "@/hooks/useInvitationsStore";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { UserRoundPlus } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const CollaboratorForm = () => {
   const [username, setUsername] = useState("");
@@ -13,6 +14,7 @@ export const CollaboratorForm = () => {
   const { collaborators } = useNotesStore();
   const { invitations } = useInvitationsStore();
   const [error, setError] = useState("");
+  const { t } = useTranslation();
 
   const handleInvite = async (e) => {
     e.preventDefault();
@@ -21,35 +23,35 @@ export const CollaboratorForm = () => {
     if (!trimmedUsername) return;  
 
     if (trimmedUsername.toLowerCase() === user?.username?.toLowerCase()) {
-      setError("You cannot invite yourself to collaborate");
+      setError(t("popups.collaborationPopup.errors.selfInvite"));
       return;
     }
 
     const recipientId = await usernameToId(trimmedUsername).catch(err => {
       console.error("Error looking up user:", err);
-      setError("Failed to look up user. Please try again.");
+      setError(t("popups.collaborationPopup.errors.lookupFailed"));
       return null;
     });
 
     if (!recipientId) {
-      setError(`User "${trimmedUsername}" not found`);
+      setError(t("popups.collaborationPopup.errors.userNotFound", { username: trimmedUsername }));
       return;
     }
 
     if (invitations && invitations.find(invite => invite.recipient_id === recipientId)) {
       console.log("Invite already sent to:", recipientId);
-      setError(`An invitation has already been sent to ${trimmedUsername}`);
+      setError(t("popups.collaborationPopup.errors.inviteAlreadySent", { username: trimmedUsername }));
       return;
     }
 
     if (collaborators && collaborators.find(c => c.user_id === recipientId)) {
       console.log("Already a collaborator:", recipientId);
-      setError(`${trimmedUsername} is already a collaborator on this note`);
+      setError(t("popups.collaborationPopup.errors.alreadyCollaborator", { username: trimmedUsername }));
       return;
     }
     
     if (!selectedNoteId) {
-      setError("No note selected. Please select a note first.");
+      setError(t("popups.collaborationPopup.errors.noNoteSelected"));
       return;
     }
     
@@ -68,7 +70,7 @@ export const CollaboratorForm = () => {
   return (
     <form onSubmit={handleInvite} className="mb-6">
       <label className="block text-sm font-medium text-gray-700 mb-2">
-        Invite Collaborator
+        {t("popups.collaborationPopup.title")}
       </label>
       
       {error && (
@@ -90,7 +92,7 @@ export const CollaboratorForm = () => {
               setUsername(e.target.value);
               if (error) setError("");
             }}
-            placeholder="Enter username"
+            placeholder={t("popups.collaborationPopup.inviteFieldPlaceholder")}
             className={`w-full pl-10 pr-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition-colors ${
               error 
                 ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
@@ -106,7 +108,7 @@ export const CollaboratorForm = () => {
           disabled={isSubmitting || !username.trim()}
           className="px-4 py-2 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          {isSubmitting ? "Inviting..." : "Invite"}
+          {isSubmitting ? t("popups.collaborationPopup.buttons.inviting") : t("popups.collaborationPopup.buttons.invite")}
         </button>
       </div>
     </form>

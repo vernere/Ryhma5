@@ -5,6 +5,7 @@ import { Header } from "@/components/ui/header";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const LoginPage = () => {
     const { signIn } = useAuth();
@@ -12,6 +13,8 @@ const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const { t } = useTranslation();
+
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -21,7 +24,7 @@ const LoginPage = () => {
             navigate("/notes");
         } catch (err) {
             setError(err);
-            setError("Invalid password or email");
+            setError(t("login.error"));
         }
     };
 
@@ -30,17 +33,17 @@ const LoginPage = () => {
             <Header />
             <div className="flex-grow flex items-center justify-center">
                 <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-md flex-col justify-items-center">
-                    <p className="mb-4 text-lg font-semibold">Login</p>
+                    <p className="mb-4 text-lg font-semibold">{t("login.loginHeader")}</p>
                     {error && (
                         <p style={{ color: "red" }}>
-                            {"Invalid password or email"}
+                            {t("login.error")}
                         </p>
                     )}
                     <div className="flex flex-col">
                         <Input
                             className="mb-2 w-60"
                             type="email"
-                            placeholder="Email"
+                            placeholder={t("placeholders.email")}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             data-cy="login-email"
@@ -48,7 +51,7 @@ const LoginPage = () => {
                         <Input
                             className="mb-2 w-60"
                             type="password"
-                            placeholder="Password"
+                            placeholder={t("placeholders.password")}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             data-cy="login-password"
@@ -58,10 +61,10 @@ const LoginPage = () => {
                             onClick={handleLogin}
                         >
                             {" "}
-                            Login{" "}
+                            {t("login.loginHeader")}{" "}
                         </Button>
                         <Button variant="link" asChild data-cy="resetPasswordButton">
-                            <Link to="/resetPassword">Forgot Password?</Link>
+                            <Link to="/resetPassword">{t("login.forgot")}</Link>
                         </Button>
                     </div>
                 </div>

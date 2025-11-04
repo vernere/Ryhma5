@@ -1,6 +1,7 @@
 import { useEffect, useCallback, memo } from "react";
 import { useTagStore } from "@/hooks/useTagStore";
 import { useNotesStore } from "@/hooks/useNotesStore";
+import { useTranslation } from "react-i18next";
 
 export const Tags = memo(({ note }) => {
   const allTags = useTagStore((state) => state.allTags);
@@ -8,6 +9,7 @@ export const Tags = memo(({ note }) => {
   const addTag = useTagStore((state) => state.addTag);
   const removeTag = useTagStore((state) => state.removeTag);
   const fetchNoteById = useNotesStore((state) => state.fetchNoteById);
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetchTags();
@@ -46,7 +48,7 @@ export const Tags = memo(({ note }) => {
               }`}
               onClick={() => handleSelectTag(tag.tag_id)}
             >
-              {tag.name}
+              {t(`tags.${tag.name}`)}
             </span>
           );
       })}

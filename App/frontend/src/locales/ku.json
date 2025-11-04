@@ -1,0 +1,156 @@
+{
+  "common": {
+    "loading": "Xo begra...",
+    "error": "Halayek chebo. Je karama xo xo begra.",
+    "logout": "Darkava",
+    "connecting": "Tekgertin...",
+    "roles": {
+      "owner": "Xodan",
+      "editor": "Rastker",
+      "viewer": "Temaşevan",
+      "pending": "Le bande",
+      "declined": "Hatenxar"
+    }
+  },
+  "invite": {
+    "title": "Merova daxazka",
+    "placeholder": "Navê bikarhêner binivîse",
+    "send": "Daxaz"
+  },
+  "tags": {
+    "math": "Birkari",
+    "physics": "Phisic",
+    "coding": "Coder",
+    "project": "Proja",
+    "other": "Tshteki di"
+  },
+  "notes": {
+    "sidebar": {
+      "searchPlaceholder": "Lê bigere Birawari...",
+      "notes": "Birawari",
+      "noNotes": "Ch birawari ninen. Amadaba bo nivesina birawariaka ni",
+      "createNote": "Birawaria benvisa",
+      "inviteCollaborators": "Merova daxazka"
+    },
+    "mainContent": {
+      "noNoteSelected": "Birawariake helbijera",
+      "selectNotePrompt": "Je karama xo birawarijaki halbjera j tanishte janji eka ni benvesa.",
+      "untitled": "birawari ya be sar u shine",
+      "lastEdited": "Vagera chekerna bare {{date}}",
+      "collaborators": "Merov",
+      "addCollaborator": "Merova zidaka",
+      "saveStatus": "Herteshtak jebara",
+      "saving": "Jebarkern..."
+    }
+  },
+  "dropdown": {
+    "export": {
+      "pdf": "Wêne bide pdf",
+      "md": "Wêne bide md",
+      "txt": "Wêne bide txt",
+      "docx": "Wêne bide docx"
+    }
+  },
+  "popups": {
+    "collaborationPopup": {
+      "manageCollaborators": "Merova be drest bke",
+      "viewCollaborators": "Merova Temaşa bke",
+      "inviteFieldPlaceholder": "Nave xo benvisa",
+      "title": "Merova daxazka",
+      "currentCollaborators": " Meroven hey",
+      "noCollaborators": "Che merov hazerninen.",
+      "loadingCollaborators": "Xo begra merov behen...",
+      "buttons": {
+        "inviting": "Daxazi...",
+        "invite": "Daxaz"
+      },
+      "errors": {
+        "selfInvite": "Tu nikarî xwe vexwazî bikî",
+        "lookupFailed": "Lêgerîna bikarhêner bi ser neket. Ji kerema xwe dîsa biceribîne.",
+        "userNotFound": "Bikarhêner \"{{username}}\" nehate dîtin",
+        "inviteAlreadySent": "Ji bo {{username}} jixwe daxwazekê hat şandin",
+        "alreadyCollaborator": "{{username}} jixwe hevalkar e li vê notê",
+        "noNoteSelected": "Tu note nehat hilbijartin. Ji kerema xwe yekê hilbijêre."
+      }
+    },
+    "invitePopup": {
+      "title": "Tu hatya daxaz keren bo birwariake",
+      "noInvitations": "Che daxazit ni ninen.",
+      "invitations": "Daxaz ({{count}})",
+      "accept": "Halbejera",
+      "decline": "blavke"
+    }
+  },
+  "landing": {
+    "h1": "Serlêdana notan ji bo hezkiriyên teknolojiyê",
+    "h2": "Hemû fonksiyonên serîlêdanek nivîsandina notan a kevneşopî bistînin, bi feydeyên zêdekirî yên wekî taybetmendiyên hevkariyê, notên etîketkirî ji bo lêgerîna hêsan û perçeyên kodê yên hêsan lê zêde bikin.",
+    "taybetmendî": "Taybetmendî",
+    "hevkarî": "Hevkarî",
+    "collaborationText": "Taybetmendiyên hevkariyê ku dihêle bikarhêner bikarhênerên din vexwînin notên hevpar ji bo xebata tîmê ya hêsan û bênavber.",
+    "search": "Lêgerîn û etîketkirin",
+    "searchText": "Etîketkirina notan û lêgerîna pêşkeftî dihêle hûn li ser tiştên ku hûn dixwazin di destê we de bin kontrol bikin, û notên xwe li gorî wê rêxistin bikin.",
+    "code": "Sererastkirina kodê",
+    "codeText": "Çêkirina kodê û formatkirin qet ne hêsan bûde tê da ku tu dikarî bi hêsanî kod li birawariyakan xwe zêde bikî. Bi piştgirî ji gelek zimanên programekirinê, Notely amûrên pêwîst pêşkêş daka bo nivîsina û rêvebirina kodê."
+  },
+  "header": {
+    "buttons": {
+      "login": "Xobevisa",
+      "register": "Darkava"
+    }
+  },
+  "footer": {
+    "trademark": " | Hemû maf parastî ne."
+  },
+  "placeholders": {
+    "email": "E-name",
+    "password": "Şîfre",
+    "confirmPassword": "Pishtraska Şîfre",
+    "newPassword": "Şîfreya nû binivîse"
+  },
+  "register": {
+    "welcome": "Bi xêr hatin bo Notely",
+    "createAccountButton": "Hesabê çêke",
+    "errorEmail": "Ji kerema xwe navnîşaneke e-nameyek derbasdar binivîse.",
+    "errorPassword": "Divê şîfre herî kêm 7 tîpan be, tîpeke mezin û hejmarekê tê de hebe.",
+    "errorMatch": "Şîfre li hev nayên.",
+    "errorGeneric": "Qeydkirin bi ser neket.",
+    "verify": "Hesabê xwe piştrast bike",
+    "sentLink": "Me girêdanek piştrastkirinê ji e-nameya te re şandiye.",
+    "start": "Ji kerema xwe hesabê xwe piştrast bike da ku dest bi karanîna Notely bikî.",
+    "goToLogin": "Biçe Têketinê"
+  },
+  "login": {
+    "loginHeader": "Têkeve",
+    "forgot": "Şîfre ji bîr kir?",
+    "error": "Şîfre an e-name ne derbasdar e"
+  },
+  "onboarding": {
+    "welcome": " Bi xêr hatî bo birwaria!",
+    "p1": " Birawari amûrên pêwîst pêşkêş daka bo rêvebirina birawariyakan xwe bi rêya xwe.",
+    "username": "Nave eke",
+    "errorRequired": "Navê bikarhêner pêwîst e.",
+    "errorTaken": " Navê bikarhêner jixwe tê bikar anîn.",
+    "errorGeneric": " Halayek chebo. Je karama xo xo begra.",
+    "buttonSaving": " jberkern...",
+    "buttonContinue": "Berdewam bon"
+  },
+  "password": {
+    "reset": {
+      "title": "Şîfreya xwe ji bîr kir?",
+      "resetButton": "Girêdana vesazkirinê bişîne",
+      "setMessage": "E-nameya xwe kontrol bike",
+      "error": "Di şandina lînkê de xeletî"
+    },
+    "change": {
+      "title": "Şîfreyek nû biafirîne",
+      "updateButton": "Nûvekirin",
+      "validPasswordError": "Divê şîfre herî kêm 7 tîpan dirêj be û tîpek mezin û hejmarek hebe.",
+      "passwordMatchError": "Şîfre li hev nayên.",
+      "updateError": "Nûvekirina şîfreyê bi ser neket."
+    },
+    "changed": {
+      "title": "Şîfreya te bi serkeftî hate nûvekirin!",
+      "toLoginButton": "Têkeve"
+    }
+  }
+}

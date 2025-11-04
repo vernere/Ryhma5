@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { supabase } from "../lib/supabaseClient";
+import { useTranslation } from "react-i18next";
 
 export const ProfileContext = createContext();
 
@@ -8,6 +9,7 @@ export const ProfileProvider = ({ children }) => {
     const { user } = useAuth();
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
+    const { i18n } = useTranslation();
 
     useEffect(() => {
         if (user) {
@@ -15,7 +17,7 @@ export const ProfileProvider = ({ children }) => {
 
             supabase
                 .from("users")
-                .select("username, is_onboarded")
+                .select("username, is_onboarded, language")
                 .eq("id", user.id)
                 .single()
                 .then(({ data, error }) => {
@@ -23,6 +25,9 @@ export const ProfileProvider = ({ children }) => {
                         console.error("Error fetching profile:", error);
                     } else {
                         setProfile(data);
+                        if (data.language) {
+                            i18n.changeLanguage(data.language);
+                        }
                     }
                     setLoading(false);
                 });
@@ -38,7 +43,6 @@ export const ProfileProvider = ({ children }) => {
                         filter: `id=eq.${user.id}`,
                     },
                     (payload) => {
-                        console.log("Profile updated:", payload.new);
                         setProfile(payload.new);
                     }
                 )

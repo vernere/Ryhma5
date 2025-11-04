@@ -10,7 +10,7 @@ export const CollaboratorsList = ({
     return (
       <div className="text-center py-4">
         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600 mx-auto"></div>
-        <p className="text-sm text-gray-500 mt-2">Loading collaborators...</p>
+        <p className="text-sm text-gray-500 mt-2">{t("popups.collaborationPopup.loadingCollaborators")}</p>
       </div>
     );
   }
@@ -18,13 +18,13 @@ export const CollaboratorsList = ({
   if (collaborators.length === 0 && invitations.length === 0) {
     return (
       <div className="text-center py-4 text-gray-500 text-sm">
-        No collaborators yet
+        {t("popups.collaborationPopup.noCollaborators")}
       </div>
     );
   }
 
   return (
-    <div className="space-y-2 max-h-40 overflow-y-auto">
+    <div className="space-y-2 max-h-72 overflow-y-auto">
       {collaborators.map((collaborator) => (
         <CollaboratorItem
           key={collaborator.user_id || collaborator.id}
