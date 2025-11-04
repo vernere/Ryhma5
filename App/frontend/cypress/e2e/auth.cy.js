@@ -1,4 +1,6 @@
 /// <reference types="cypress" />
+import { loginUser } from '../support/helpers';
+
 /*
 import { MailSlurp } from "mailslurp-client";
 
@@ -27,6 +29,7 @@ describe('Authentication Tests', () => {
 
     cy.url().should('include', '/notes')
   */
+
   });
 
   it('Email validation', () => {
@@ -115,6 +118,27 @@ describe('Authentication Tests', () => {
 
     // Add non accessible login page
   })
+  it('Tests onboarding page', () => {
+    loginUser();
+
+    cy.visit('/onboarding');
+
+    cy.get('[data-cy="onboarding-username"]').type('Test')
+    cy.get('[data-cy="onboarding-username"]').should('have.value', 'Test')
+
+    cy.get('[data-cy="onboarding-submit"]').click()
+
+    cy.url().should('include', '/notes')
+
+    cy.visit('/onboarding');
+
+    cy.get('[data-cy="onboarding-username"]').type('Test2')
+    cy.get('[data-cy="onboarding-username"]').should('have.value', 'Test2')
+
+    cy.get('[data-cy="onboarding-submit"]').click()
+
+    cy.get('[data-cy="onboarding-error"]').should('exist')
+  });
 
   it('Attempt login with invalid credentials', () => {
     cy.visit('/');
