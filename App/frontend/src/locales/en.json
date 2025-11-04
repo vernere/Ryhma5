@@ -98,7 +98,7 @@
     "header": {
         "buttons": {
             "login": "Login",
-            "register": "Sign up!"
+            "register": "Sign up"
         }
     },
     "footer": {

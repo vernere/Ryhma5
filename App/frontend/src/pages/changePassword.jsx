@@ -6,6 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useEffect, useState } from "react";
 import { validPassword } from "@/utils/validation.js";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const ChangePassword = () => {
     const { changePassword, signOut, passwordRecovery } = useAuth();
@@ -13,6 +14,7 @@ const ChangePassword = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (!passwordRecovery) {
@@ -25,14 +27,12 @@ const ChangePassword = () => {
         setError("");
 
         if (!validPassword(password)) {
-            setError(
-                "Password must be at least 7 characters, contain an uppercase letter and a number."
-            );
+            setError(t("password.change.validPasswordError"));
             return;
         }
 
         if (password !== confirmPassword) {
-            setError("Passwords do not match.");
+            setError(t("password.change.passwordMatchError"));
             return;
         }
 
@@ -42,7 +42,7 @@ const ChangePassword = () => {
             navigate("/passwordChanged");
         } catch (err) {
             setError(err);
-            setError("Error updating password.");
+            setError(t("password.change.updateError"));
         }
     };
 
@@ -52,21 +52,21 @@ const ChangePassword = () => {
             <div className="flex-grow flex items-center justify-center">
                 <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-md flex-col justify-items-center">
                     <p className="mb-4 text-lg font-semibold">
-                        Create a new password
+                        {t("password.change.title")}
                     </p>
                     {error && <p style={{ color: "red" }}>{error}</p>}
                     <div className="flex flex-col">
                         <Input
                             className="mb-2 w-60"
                             type="password"
-                            placeholder="Enter new password"
+                            placeholder={t("placeholders.newPassword")}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <Input
                             className="mb-2 w-60"
                             type="password"
-                            placeholder="Confirm Password"
+                            placeholder={t("placeholders.confirmPassword")}
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                         />
@@ -74,7 +74,7 @@ const ChangePassword = () => {
                             className="bg-secondary text-black shadow-md hover:text-white"
                             onClick={handleUpdatePassword}
                         >
-                            Update
+                            {t("password.change.updateButton")}
                         </Button>
                     </div>
                 </div>
