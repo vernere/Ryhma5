@@ -67,5 +67,57 @@
             "accept": "Chấp nhận",
             "decline": "Từ chối"
         }
+    },
+    "landing": {
+        "h1":"Ứng dụng ghi chú dành cho những người đam mê công nghệ",
+        "h2": "Có đầy đủ chức năng của một ứng dụng ghi chú truyền thống, cùng với các lợi ích bổ sung như tính năng cộng tác, ghi chú được gắn thẻ để dễ dàng tìm kiếm và dễ dàng thêm đoạn mã.",
+        "features":"Đặc trưng",
+        "collaboration":"Sự hợp tác",
+        "collaborationText": "Các tính năng cộng tác cho phép người dùng mời người dùng khác tham gia ghi chú chung để làm việc nhóm dễ dàng và liền mạch.",
+        "search":"Tìm kiếm và gắn thẻ",
+        "searchText": "Việc gắn thẻ ghi chú và tìm kiếm nâng cao giúp bạn kiểm soát những thứ bạn muốn lưu trữ và sắp xếp ghi chú của mình cho phù hợp.",
+        "code": "Chỉnh sửa mã",
+        "codeText":"Việc dán và định dạng mã chưa bao giờ dễ dàng hơn thế, với tính năng tô sáng cú pháp và định dạng trong ứng dụng cho phép bạn kiểm soát những gì bạn hiển thị."
+    },
+    "header":{
+        "buttons": {
+            "login": "Đăng nhập",
+            "register": "Đăng ký ngay!"
+        }
+    },
+    "footer": {
+       "trademark": " | Mọi quyền được bảo lưu." 
+    },
+    "placeholders": {
+        "email":"E-mail",
+        "password":"Mật khẩu",
+        "confirmPassword": "Xác nhận mật khẩu"
+    },
+    "register" : {
+        "welcome": "Chào mừng đến với Notely",
+        "createAccountButton":"Tạo tài khoản",
+        "errorEmail":"Vui lòng nhập địa chỉ email hợp lệ.",
+        "errorPassword":"Mật khẩu phải có ít nhất 7 ký tự, bao gồm chữ cái viết hoa và số.",
+        "errorMatch":"Mật khẩu không khớp.",
+        "errorGeneric":"Đăng ký không thành công.",
+        "verify":"Xác minh tài khoản của bạn",
+        "sentLink": "Chúng tôi đã gửi liên kết xác nhận tới email của bạn.",
+        "start" :"Vui lòng xác minh tài khoản của bạn để bắt đầu sử dụng Notely.",
+        "goToLogin" : "Đi đến Đăng nhập"
+    },
+    "login": {
+        "loginHeader":"Đăng nhập",
+        "forgot":"Quên mật khẩu?",
+        "error":"Mật khẩu hoặc email không hợp lệ"
+    },
+    "onboarding":{
+        "welcome" : "Chào mừng",
+        "p1" : "Vui lòng chọn tên người dùng phù hợp để bắt đầu.",
+        "username":"Tên người dùng",
+        "errorRequired": "Tên người dùng là bắt buộc",
+        "errorTaken":"Tên người dùng đã được sử dụng.",
+        "errorGeneric":"Có gì đó không ổn.",
+        "buttonSaving":"Đang lưu...",
+        "buttonContinue":"Tiếp tục"
     }
 }
