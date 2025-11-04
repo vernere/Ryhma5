@@ -12,18 +12,14 @@
             "declined": "Declined"
         }
     },
-
-        "invite": {
-            "title": "Invite collaborator",
-            "placeholder": "Enter username",
-            "send": "Invite"
-        },
-        "errors": {
-            "userNotFound": "User \"{{username}}\" not found"
-        },
-    
-
-
+    "invite": {
+        "title": "Invite collaborator",
+        "placeholder": "Enter username",
+        "send": "Invite"
+    },
+    "errors": {
+        "userNotFound": "User \"{{username}}\" not found"
+    },
     "tags": {
         "math": "Math",
         "physics": "Physics",
@@ -79,5 +75,84 @@
             "accept": "Accept",
             "decline": "Decline"
         }
-    }
+    },
+    
+        "common": {
+            "loading": "Loading...",
+            "error": "An error occurred. Please try again.",
+            "logout": "Logout",
+            "connecting": "Connecting...",
+            "roles": {
+                "owner": "Owner",
+                "editor": "Editor",
+                "viewer": "Viewer",
+                "pending": "Pending",
+                "declined": "Declined"
+            }
+        },
+        "invite": {
+            "title": "Invite collaborator",
+            "placeholder": "Enter username",
+            "send": "Invite"
+        },
+        "errors": {
+            "userNotFound": "User \"{{username}}\" not found"
+        },
+        "tags": {
+            "math": "Math",
+            "physics": "Physics",
+            "coding": "Coding",
+            "project": "Project",
+            "other": "Other"
+        },
+        "notes": {
+            "sidebar": {
+                "searchPlaceholder": "Search notes...",
+                "notes": "Notes",
+                "noNotes": "No notes available. Create a new note to get started!",
+                "createNote": "Create Note",
+                "inviteCollaborators": "Invite Collaborators"
+            },
+            "mainContent": {
+                "noNoteSelected": "No note selected",
+                "selectNotePrompt": "Please select a note from the sidebar or create a new one.",
+                "untitled": "Untitled Note",
+                "lastEdited": "Last edited {{date}}",
+                "collaborators": "Collaborators",
+                "addCollaborator": "Add Collaborator",
+                "saveStatus": "All changes saved",
+                "saving": "Saving..."
+            }
+        },
+        "dropdown": {
+            "export": {
+                "pdf": "Export as pdf",
+                "md": "Export as md",
+                "txt": "Export as txt",
+                "docx": "Export as docx"
+            }
+        },
+        "popups": {
+            "collaborationPopup": {
+                "manageCollaborators": "Manage Collaborators",
+                "viewCollaborators": "View Collaborators",
+                "inviteFieldPlaceholder": "Enter username",
+                "title": "Invite Collaborator",
+                "currentCollaborators": "Current Collaborators",
+                "noCollaborators": "No collaborators yet.",
+                "loadingCollaborators": "Loading collaborators...",
+                "buttons": {
+                    "inviting": "Inviting...",
+                    "invite": "Invite"
+                }
+            },
+            "invitePopup": {
+                "title": "You have been invited to collaborate",
+                "noInvitations": "No new invitations.",
+                "invitations": "Invitations ({{count}})",
+                "accept": "Accept",
+                "decline": "Decline"
+            }
+        }
+    
 }
