@@ -12,6 +12,11 @@
       "declined": "Hylätty"
     }
   },
+  "invite": {
+    "title": "Kutsu yhteistyökumppani",
+    "placeholder": "Anna käyttäjätunnus",
+    "send": "Kutsu"
+  },
   "tags": {
     "math": "Matematiikka",
     "physics": "Fysiikka",
@@ -90,7 +95,7 @@
   "header": {
     "buttons": {
       "login": "Kirjaudu sisään",
-      "register": "Luo tili!"
+      "register": "Luo tili"
     }
   },
   "footer": {
@@ -106,7 +111,7 @@
     "welcome": "Tervetuloa Notelyyn",
     "createAccountButton": "Luo tili",
     "errorEmail": "Anna voimassa oleva sähköpostiosoite.",
-    "errorPassowrd": "Salasanan on oltava vähintään 7 merkkiä pitkä ja sisällettävä iso kirjain sekä numero.",
+    "errorPassword": "Salasanan on oltava vähintään 7 merkkiä pitkä ja sisällettävä iso kirjain sekä numero.",
     "errorMatch": "Salasanat eivät täsmää.",
     "errorGeneric": "Rekisteröinti epäonnistui.",
     "verify": "Vahvista tilisi",

@@ -95,7 +95,7 @@
     "header": {
         "buttons": {
             "login": "Inloggning",
-            "register": "Registrera dig!"
+            "register": "Registrera dig"
         }
     },
     "footer": {
@@ -104,13 +104,14 @@
     "placeholders": {
         "email": "E-post",
         "password": "Lösenord",
-        "confirmPassword": "Bekräfta Lösenord"
+        "confirmPassword": "Bekräfta Lösenord",
+        "newPassword": "Ange nytt lösenord"
     },
     "register": {
         "welcome": "Välkommen till Notely",
         "createAccountButton": "Skapa konto",
         "errorEmail": "Ange en giltig e-postadress.",
-        "errorPassowrd": "Lösenordet måste vara minst 7 tecken långt, innehålla en stor bokstav och ett nummer.",
+        "errorPassword": "Lösenordet måste vara minst 7 tecken långt, innehålla en stor bokstav och ett nummer.",
         "errorMatch": "Lösenorden matchar inte.",
         "errorGeneric": "Registreringen misslyckades.",
         "verify": "Verifiera ditt konto",
@@ -132,5 +133,24 @@
         "errorGeneric": "Något gick fel.",
         "buttonSaving": "Sparar...",
         "buttonContinue": "Fortsätt"
+    },
+    "password": {
+        "reset": {
+            "title": "Glömt lösenordet?",
+            "resetButton": "Skicka återställningslänk",
+            "setMessage": "Kolla din e-post",
+            "error": "Fel vid sändning av länk"
+        },
+        "change": {
+            "title": "Skapa ett nytt lösenord",
+            "updateButton": "Uppdatera",
+            "validPasswordError": "Lösenordet måste vara minst 7 tecken långt och innehålla en stor bokstav och en siffra.",
+            "passwordMatchError": "Lösenorden matchar inte.",
+            "updateError": "Lösenordsuppdateringen misslyckades."
+        },
+        "changed": {
+            "title": "Ditt lösenord har uppdaterats!",
+            "toLoginButton": "Logga in"
+        }
     }
 }

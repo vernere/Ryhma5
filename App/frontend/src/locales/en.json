@@ -104,7 +104,8 @@
     "placeholders": {
         "email": "Email",
         "password": "Password",
-        "confirmPassword": "Confirm Password"
+        "confirmPassword": "Confirm Password",
+        "newPassword": "Enter new password"
     },
     "register": {
         "welcome": "Welcome to Notely",
@@ -132,5 +133,24 @@
         "errorGeneric": "Something went wrong.",
         "buttonSaving": "Saving...",
         "buttonContinue": "Continue"
+    },
+    "password": {
+        "reset": {
+            "title": "Forgot your password?",
+            "resetButton": "Send reset link",
+            "setMessage": "Check your email",
+            "error": "Error sending link"
+        },
+        "change": {
+            "title": "Create a new password",
+            "updateButton": "Update",
+            "validPasswordError": "Password must be at least 7 characters long and contain an uppercase letter and a number.",
+            "passwordMatchError": "Passwords do not match.",
+            "updateError": "Password update failed."
+        },
+        "changed": {
+            "title": "Your password has been updated successfully!",
+            "toLoginButton": "Login"
+        }
     }
 }

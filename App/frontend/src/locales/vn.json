@@ -95,7 +95,7 @@
     "header": {
         "buttons": {
             "login": "Đăng nhập",
-            "register": "Đăng ký ngay!"
+            "register": "Đăng ký ngay"
         }
     },
     "footer": {
@@ -104,7 +104,8 @@
     "placeholders": {
         "email": "E-mail",
         "password": "Mật khẩu",
-        "confirmPassword": "Xác nhận mật khẩu"
+        "confirmPassword": "Xác nhận mật khẩu",
+        "newPassword": "Nhập mật khẩu mới"
     },
     "register": {
         "welcome": "Chào mừng đến với Notely",
@@ -132,5 +133,24 @@
         "errorGeneric": "Có gì đó không ổn.",
         "buttonSaving": "Đang lưu...",
         "buttonContinue": "Tiếp tục"
+    },
+    "password": {
+        "reset": {
+            "title": "Quên mật khẩu?",
+            "resetButton": "Gửi liên kết đặt lại",
+            "setMessage": "Kiểm tra email của bạn",
+            "error": "Lỗi khi gửi liên kết"
+        },
+        "change": {
+            "title": "Tạo mật khẩu mới",
+            "updateButton": "Cập nhật",
+            "validPasswordError": "Mật khẩu phải dài ít nhất 7 ký tự và chứa một chữ cái viết hoa và một số.",
+            "passwordMatchError": "Mật khẩu không khớp.",
+            "updateError": "Cập nhật mật khẩu không thành công."
+        },
+        "changed": {
+            "title": "Mật khẩu của bạn đã được cập nhật thành công!",
+            "toLoginButton": "Đăng nhập"
+        }
     }
 }

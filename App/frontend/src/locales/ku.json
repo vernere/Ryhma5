@@ -28,7 +28,7 @@
     "sidebar": {
       "searchPlaceholder": "Lê bigere Birawari...",
       "notes": "Birawari",
-      "noNotes": "Ch birawari ninen. Amadaba bo nivesina birawariaka ni!",
+      "noNotes": "Ch birawari ninen. Amadaba bo nivesina birawariaka ni",
       "createNote": "Birawaria benvisa",
       "inviteCollaborators": "Merova daxazka"
     },
@@ -95,7 +95,7 @@
   "header": {
     "buttons": {
       "login": "Xobevisa",
-      "register": "Darkava!"
+      "register": "Darkava"
     }
   },
   "footer": {
@@ -104,15 +104,25 @@
   "placeholders": {
     "email": "Email",
     "password": "Password",
-    "confirmPassword": "Pishtraska Password"
+    "confirmPassword": "Pishtraska Password",
+    "newPassword": "Şîfreya nû binivîse"
   },
   "register": {
-    "welcome": "Bi xêr hatî bo berwaria xo!",
-    "createAccountButton": " Heseb cheka"
+    "welcome": "Bi xêr hatin bo Notely",
+    "createAccountButton": "Hesabê çêke",
+    "errorEmail": "Ji kerema xwe navnîşaneke e-nameyek derbasdar binivîse.",
+    "errorPassword": "Divê şîfre herî kêm 7 tîpan be, tîpeke mezin û hejmarekê tê de hebe.",
+    "errorMatch": "Şîfre li hev nayên.",
+    "errorGeneric": "Qeydkirin bi ser neket.",
+    "verify": "Hesabê xwe piştrast bike",
+    "sentLink": "Me girêdanek piştrastkirinê ji e-nameya te re şandiye.",
+    "start": "Ji kerema xwe hesabê xwe piştrast bike da ku dest bi karanîna Notely bikî.",
+    "goToLogin": "Biçe Têketinê"
   },
   "login": {
-    "loginHeader": "Xobevisa bo berwaria xo!",
-    "forgot": "Jbirchona password?"
+    "loginHeader": "Têkeve",
+    "forgot": "Şîfre ji bîr kir?",
+    "error": "Şîfre an e-name ne derbasdar e"
   },
   "onboarding": {
     "welcome": " Bi xêr hatî bo birwaria!",
@@ -123,6 +133,24 @@
     "errorGeneric": " Halayek chebo. Je karama xo xo begra.",
     "buttonSaving": " jberkern...",
     "buttonContinue": "Berdewam bon"
+  },
+  "password": {
+    "reset": {
+      "title": "Şîfreya xwe ji bîr kir?",
+      "resetButton": "Girêdana vesazkirinê bişîne",
+      "setMessage": "E-nameya xwe kontrol bike",
+      "error": "Di şandina lînkê de xeletî"
+    },
+    "change": {
+      "title": "Şîfreyek nû biafirîne",
+      "updateButton": "Nûvekirin",
+      "validPasswordError": "Divê şîfre herî kêm 7 tîpan dirêj be û tîpek mezin û hejmarek hebe.",
+      "passwordMatchError": "Şîfre li hev nayên.",
+      "updateError": "Nûvekirina şîfreyê bi ser neket."
+    },
+    "changed": {
+      "title": "Şîfreya te bi serkeftî hate nûvekirin!",
+      "toLoginButton": "Têkeve"
+    }
   }
 }
-
