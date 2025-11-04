@@ -12,17 +12,14 @@
             "declined": "Vägrad"
         }
     },
-    
-        "invite": {
-            "title": "Bjud in samarbetare",
-            "placeholder": "Ange användarnamn",
-            "send": "Bjud in"
+    "invite": {
+        "title": "Bjud in kollaboratörer",
+        "placeholder": "Ange användarnamn",
+        "send": "Bjud"
         },
         "errors": {
-            "userNotFound": "Användaren \"{{username}}\" hittades inte"
+            "userNotFound": "Användare \"{{username}}\" hittades inte"
         },
-    
-
     "tags": {
         "math": "Matematik",
         "physics": "Fysik",
@@ -78,5 +75,57 @@
             "accept": "Acceptera",
             "decline": "Vägra"
         }
+    },
+        "landing": {
+        "h1":"Anteckningsappen för teknikentusiaster",
+        "h2": "Få alla funktioner i ett traditionellt anteckningsprogram, med extra fördelar som samarbetsfunktioner, taggade anteckningar för enkel sökning och enkelt att lägga till kodavsnitt.",
+        "features":"Verktyg",
+        "collaboration":"Kollaboration",
+        "collaborationText": "Kollaboratör funktioner som gör det möjligt för användaren att bjuda in andra användare till delade anteckningar för enkelt och smidigt samarbete.",
+        "search":"Sökande och taggande",
+        "searchText": "Taggning av anteckningar och avancerad sökning ger dig kontroll över vilka saker du vill ha till hands, och organisering av dina anteckningar därefter.",
+        "code": "Kodredigering",
+        "codeText":"Att klistra in och formatera kod har aldrig varit enklare, med syntaxmarkering och formatering i applikationen, som ger dig kontroll över vad du visar."
+    },
+    "header":{
+        "buttons": {
+            "login": "Inloggning",
+            "register": "Registrera dig!"
+        }
+    },
+    "footer": {
+       "trademark": " | Copyright" 
+    },
+    "placeholders": {
+        "email":"E-post",
+        "password":"Lösenord",
+        "confirmPassword": "Bekräfta Lösenord"
+    },
+    "register" : {
+        "welcome": "Välkommen till Notely",
+        "createAccountButton":"Skapa konto",
+        "errorEmail":"Ange en giltig e-postadress.",
+        "errorPassowrd":"Lösenordet måste vara minst 7 tecken långt, innehålla en stor bokstav och ett nummer.",
+        "errorMatch":"Lösenorden matchar inte.",
+        "errorGeneric":"Registreringen misslyckades.",
+        "verify":"Verifiera ditt konto",
+        "sentLink": "Vi har skickat en bekräftelselänk till ditt e-postadress.",
+        "start" :"Verifiera ditt konto för att börja använda Notely.",
+        "goToLogin" : "Gå till inloggning"
+    },
+    "login": {
+        "loginHeader":"Inloggning",
+        "forgot":"Glömt lösenord?",
+        "error":"Ogiltigt lösenord eller e-postadress"
+    },
+    "onboarding":{
+        "welcome" : "Välkommen",
+        "p1" : "Välj ett lämpligt användarnamn för att börja",
+        "username":"Användarnamn",
+        "errorRequired": "Användarnamn krävs",
+        "errorTaken":"Användarnamnet äre redan upptagen",
+        "errorGeneric":"Något gick fel.",
+        "buttonSaving":"Sparar...",
+        "buttonContinue":"Fortsätt"
     }
 }

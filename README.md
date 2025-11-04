@@ -3,7 +3,7 @@
 ## Overview
 Notely is a notation tool developed for technical students, software engineers. Offering features like : real-time collaboration, tagging and categorozation, in editor code pasting .
 
-The project is implemented in React using Bun and supports localization in English, TBA, and TBA.
+The project is implemented in React using Bun and supports localization using i18n in English, Vietnamese, Kurdish, Finnish, Swedish, Ukrainian and Hindi.
 ## Features
 - Manage notes
 - Manage users
@@ -35,6 +35,7 @@ The project is implemented in React using Bun and supports localization in Engli
 - html2pdf
 - turndown
 - v8-to-istanbul
+- i18n
 
 ## Use case diagram
 

@@ -76,83 +76,56 @@
             "decline": "Decline"
         }
     },
-    
-        "common": {
-            "loading": "Loading...",
-            "error": "An error occurred. Please try again.",
-            "logout": "Logout",
-            "connecting": "Connecting...",
-            "roles": {
-                "owner": "Owner",
-                "editor": "Editor",
-                "viewer": "Viewer",
-                "pending": "Pending",
-                "declined": "Declined"
-            }
-        },
-        "invite": {
-            "title": "Invite collaborator",
-            "placeholder": "Enter username",
-            "send": "Invite"
-        },
-        "errors": {
-            "userNotFound": "User \"{{username}}\" not found"
-        },
-        "tags": {
-            "math": "Math",
-            "physics": "Physics",
-            "coding": "Coding",
-            "project": "Project",
-            "other": "Other"
-        },
-        "notes": {
-            "sidebar": {
-                "searchPlaceholder": "Search notes...",
-                "notes": "Notes",
-                "noNotes": "No notes available. Create a new note to get started!",
-                "createNote": "Create Note",
-                "inviteCollaborators": "Invite Collaborators"
-            },
-            "mainContent": {
-                "noNoteSelected": "No note selected",
-                "selectNotePrompt": "Please select a note from the sidebar or create a new one.",
-                "untitled": "Untitled Note",
-                "lastEdited": "Last edited {{date}}",
-                "collaborators": "Collaborators",
-                "addCollaborator": "Add Collaborator",
-                "saveStatus": "All changes saved",
-                "saving": "Saving..."
-            }
-        },
-        "dropdown": {
-            "export": {
-                "pdf": "Export as pdf",
-                "md": "Export as md",
-                "txt": "Export as txt",
-                "docx": "Export as docx"
-            }
-        },
-        "popups": {
-            "collaborationPopup": {
-                "manageCollaborators": "Manage Collaborators",
-                "viewCollaborators": "View Collaborators",
-                "inviteFieldPlaceholder": "Enter username",
-                "title": "Invite Collaborator",
-                "currentCollaborators": "Current Collaborators",
-                "noCollaborators": "No collaborators yet.",
-                "loadingCollaborators": "Loading collaborators...",
-                "buttons": {
-                    "inviting": "Inviting...",
-                    "invite": "Invite"
-                }
-            },
-            "invitePopup": {
-                "title": "You have been invited to collaborate",
-                "noInvitations": "No new invitations.",
-                "invitations": "Invitations ({{count}})",
-                "accept": "Accept",
-                "decline": "Decline"
-            }
+    "landing": {
+        "h1":"The note application for tech enthusiasts",
+        "h2": "Get all the functionality of a traditional note taking application, with added benefits like collaborative features, tagged notes for easy search and easy to add code snippets.",
+        "features":"Features",
+        "collaboration":"Collaboration",
+        "collaborationText": "Collaborative features that allow users to invite other users to shared notes for easy and seamless teamwork.",
+        "search":"Search and tagging",
+        "searchText": "Tagging of notes and advanced search gives you control over what things you want to have handy, and organize your notes accordingly.",
+        "code": "Code editing",
+        "codeText":"Code pasting and formatting has never been easier, with in applictaion syntax highlighting and formatting giving you control over what you display."
+    },
+    "header":{
+        "buttons": {
+            "login": "Login",
+            "register": "Sign up!"
         }
-    
+    },
+    "footer": {
+       "trademark": " | All rights reserved." 
+    },
+    "placeholders": {
+        "email":"Email",
+        "password":"Password",
+        "confirmPassword": "Confirm Password"
+    },
+    "register" : {
+        "welcome": "Welcome to Notely",
+        "createAccountButton":"Create account",
+        "errorEmail":"Please enter a valid email address.",
+        "errorPassword":"Password must be at least 7 characters, contain an uppercase letter and a number.",
+        "errorMatch":"Passwords do not match.",
+        "errorGeneric":"Registration failed.",
+        "verify":"Verify Your Account",
+        "sentLink": "We’ve sent a confirmation link to your email.",
+        "start" :"Please verify your account to start using Notely.",
+        "goToLogin" : "Go to Login"
+    },
+    "login": {
+        "loginHeader":"Login",
+        "forgot":"Forgot Password?",
+        "error":"Invalid password or email"
+    },
+    "onboarding":{
+        "welcome" : "Welcome",
+        "p1" : "Please pick a suitable username to get started.",
+        "username":"Username",
+        "errorRequired": "Username is required",
+        "errorTaken":"Username is already taken.",
+        "errorGeneric":"Something went wrong.",
+        "buttonSaving":"Saving...",
+        "buttonContinue":"Continue"
+    }
 }
