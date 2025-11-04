@@ -97,7 +97,7 @@
         "welcome": "Welcome to Notely",
         "createAccountButton":"Create account",
         "errorEmail":"Please enter a valid email address.",
-        "errorPassowrd":"Password must be at least 7 characters, contain an uppercase letter and a number.",
+        "errorPassword":"Password must be at least 7 characters, contain an uppercase letter and a number.",
         "errorMatch":"Passwords do not match.",
         "errorGeneric":"Registration failed.",
         "verify":"Verify Your Account",
