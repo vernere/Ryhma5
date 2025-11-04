@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
 import { languages } from "@/i18n/config";
+import { CgGlobeAlt } from "react-icons/cg";
 
 export const LanguageDropdown = ({ isOpen, onClose }) => {
     const { user } = useAuth();
@@ -61,7 +62,7 @@ export const LanguageButton = () => {
                 onClick={() => handleOpen()}
                 className="ml-4 px-3 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
             >
-                {profile?.language?.toUpperCase() || "LANG"}
+                {profile?.language?.toUpperCase() || <CgGlobeAlt />}
             </button>
 
             {isOpen && <LanguageDropdown isOpen={isOpen} onClose={handleOpen} />}

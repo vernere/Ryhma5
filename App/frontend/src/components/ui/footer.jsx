@@ -13,8 +13,9 @@ export const Footer = ({ className }) => {
                 <p>
                     <strong>© 2025 Notely</strong>{t("footer.trademark")}
                 </p>
-                <LanguageButton />
-
+                <div className="absolute bottom-2 left-2">
+                    <LanguageButton />
+                </div>
             </div>
         </>
     );
