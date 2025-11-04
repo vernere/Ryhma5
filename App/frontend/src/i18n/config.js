@@ -1,4 +1,4 @@
-export const locales = ["EN", "VN", "KU", "SE", "FI", "HI"];
+export const locales = ["EN", "VN", "KU", "SE", "FI", "HI", "UA"];
 export const defaultLocale = "EN";
 export const languages = {
     EN: "English",
@@ -7,4 +7,5 @@ export const languages = {
     SE: "Swedish",
     FI: "Finnish",
     HI: "Hindi",
+    UA: "Ukrainian",
 };
