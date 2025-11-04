@@ -58,6 +58,14 @@
       "buttons": {
         "inviting": "Kutsutaan...",
         "invite": "Kutsu"
+      },
+      "errors": {
+        "selfInvite": "Et voi kutsua itseäsi",
+        "lookupFailed": "Käyttäjän haku epäonnistui. Yritä uudelleen.",
+        "userNotFound": "Käyttäjää \"{{username}}\" ei löytynyt",
+        "inviteAlreadySent": "Kutsu on jo lähetetty käyttäjälle {{username}}",
+        "alreadyCollaborator": "{{username}} on jo tämän muistiinpanon yhteiskäyttäjä",
+        "noNoteSelected": "Ei valittuja muistiinpanoja. Valitse yksi."
       }
     },
     "invitePopup": {
@@ -69,17 +77,17 @@
     }
   },
   "landing": {
-    "h1":"Muistiinpanosovellus tekniikasta innostuville",
+    "h1": "Muistiinpanosovellus tekniikasta innostuville",
     "h2": "Saat käyttöösi kaikki perinteisen muistiinpanosovelluksen ominaisuudet ja lisäksi yhteistyötoiminnot, tunnisteet helppoon hakuun sekä kätevän tavan lisätä koodinpätkiä.",
-    "features":"Ominaisuudet",
-    "collaboration":"Yhteistyö",
+    "features": "Ominaisuudet",
+    "collaboration": "Yhteistyö",
     "collaborationText": "Yhteistyötoimintojen avulla käyttäjät voivat kutsua muita muokkaamaan ja tarkastelemaan jaettuja muistioita vaivattomasti.",
-    "search":"Haku ja tunnisteet",
+    "search": "Haku ja tunnisteet",
     "searchText": "Muistioiden tunnisteet ja kehittynyt hakutoiminto auttavat sinua löytämään tarvitut asiat nopeasti ja pitämään muistiot järjestyksessä.",
     "code": "Koodin muokkaus",
-    "codeText":"Koodin liittäminen ja muotoilu ei ole koskaan ollut helpompaa: sisäänrakennettu syntaksin korostus ja muotoilu antavat sinulle hallinnan esitystavalle."
+    "codeText": "Koodin liittäminen ja muotoilu ei ole koskaan ollut helpompaa: sisäänrakennettu syntaksin korostus ja muotoilu antavat sinulle hallinnan esitystavalle."
   },
-  "header":{
+  "header": {
     "buttons": {
       "login": "Kirjaudu sisään",
       "register": "Luo tili!"
@@ -89,55 +97,55 @@
     "trademark": " | Kaikki oikeudet pidätetään."
   },
   "placeholders": {
-    "email":"Sähköposti",
-    "password":"Salasana",
+    "email": "Sähköposti",
+    "password": "Salasana",
     "confirmPassword": "Vahvista salasana",
     "newPassword": "Syötä uusi salasana"
   },
-  "register" : {
+  "register": {
     "welcome": "Tervetuloa Notelyyn",
-    "createAccountButton":"Luo tili",
-    "errorEmail":"Anna voimassa oleva sähköpostiosoite.",
-    "errorPassowrd":"Salasanan on oltava vähintään 7 merkkiä pitkä ja sisällettävä iso kirjain sekä numero.",
-    "errorMatch":"Salasanat eivät täsmää.",
-    "errorGeneric":"Rekisteröinti epäonnistui.",
-    "verify":"Vahvista tilisi",
+    "createAccountButton": "Luo tili",
+    "errorEmail": "Anna voimassa oleva sähköpostiosoite.",
+    "errorPassowrd": "Salasanan on oltava vähintään 7 merkkiä pitkä ja sisällettävä iso kirjain sekä numero.",
+    "errorMatch": "Salasanat eivät täsmää.",
+    "errorGeneric": "Rekisteröinti epäonnistui.",
+    "verify": "Vahvista tilisi",
     "sentLink": "Olemme lähettäneet vahvistuslinkin sähköpostiisi.",
-    "start" :"Vahvista tilisi aloittaaksesi Notelyn käytön.",
-    "goToLogin" : "Siirry kirjautumiseen"
+    "start": "Vahvista tilisi aloittaaksesi Notelyn käytön.",
+    "goToLogin": "Siirry kirjautumiseen"
   },
   "login": {
-    "loginHeader":"Kirjaudu sisään",
-    "forgot":"Unohditko salasanasi?",
-    "error":"Virheellinen sähköpostiosoite tai salasana"
+    "loginHeader": "Kirjaudu sisään",
+    "forgot": "Unohditko salasanasi?",
+    "error": "Virheellinen sähköpostiosoite tai salasana"
   },
-  "onboarding":{
-    "welcome" : "Tervetuloa",
-    "p1" : "Valitse sopiva käyttäjänimi aloittaaksesi.",
-    "username":"Käyttäjänimi",
+  "onboarding": {
+    "welcome": "Tervetuloa",
+    "p1": "Valitse sopiva käyttäjänimi aloittaaksesi.",
+    "username": "Käyttäjänimi",
     "errorRequired": "Käyttäjänimi on pakollinen.",
-    "errorTaken":"Käyttäjänimi on jo varattu.",
-    "errorGeneric":"Jotain meni pieleen.",
-    "buttonSaving":"Tallennetaan...",
-    "buttonContinue":"Jatka"
+    "errorTaken": "Käyttäjänimi on jo varattu.",
+    "errorGeneric": "Jotain meni pieleen.",
+    "buttonSaving": "Tallennetaan...",
+    "buttonContinue": "Jatka"
   },
-  "password":{
-    "reset":{
-      "title" : "Unohditko salasanasi?",
-      "resetButton" : "Lähetä palautuslinkki",
-      "setMessage" : "Tarkasta sähköpostisi",
-      "error" : "Virhe linkin lähettämisessä"
+  "password": {
+    "reset": {
+      "title": "Unohditko salasanasi?",
+      "resetButton": "Lähetä palautuslinkki",
+      "setMessage": "Tarkasta sähköpostisi",
+      "error": "Virhe linkin lähettämisessä"
     },
-    "change":{
-      "title" : "Luo uusi salasana",
-      "updateButton" : "Päivitä",
-      "validPasswordError" : "Salasanan on oltava vähintään 7 merkkiä pitkä ja sisällettävä iso kirjain sekä numero.",
-      "passwordMatchError" : "Salasanat eivät täsmää.",
-      "updateError" : "Salasanan päivittäminen epäonnistui."
+    "change": {
+      "title": "Luo uusi salasana",
+      "updateButton": "Päivitä",
+      "validPasswordError": "Salasanan on oltava vähintään 7 merkkiä pitkä ja sisällettävä iso kirjain sekä numero.",
+      "passwordMatchError": "Salasanat eivät täsmää.",
+      "updateError": "Salasanan päivittäminen epäonnistui."
     },
-    "changed":{
-      "title" : "Salasanasi on päivitetty onnistuneesti!",
-      "toLoginButton" : "Kirjaudu sisään"
+    "changed": {
+      "title": "Salasanasi on päivitetty onnistuneesti!",
+      "toLoginButton": "Kirjaudu sisään"
     }
   }
 }
