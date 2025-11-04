@@ -1,0 +1,143 @@
+{
+  "common": {
+    "loading": "Ladataan...",
+    "error": "Tapahtui virhe. Yritä uudelleen.",
+    "logout": "Kirjaudu ulos",
+    "connecting": "Yhdistetään...",
+    "roles": {
+      "owner": "Omistaja",
+      "editor": "Muokkaaja",
+      "viewer": "Lukija",
+      "pending": "Odottaa",
+      "declined": "Hylätty"
+    }
+  },
+  "tags": {
+    "math": "Matematiikka",
+    "physics": "Fysiikka",
+    "coding": "Ohjelmointi",
+    "project": "Projekti",
+    "other": "Muu"
+  },
+  "notes": {
+    "sidebar": {
+      "searchPlaceholder": "Etsi muistiota...",
+      "notes": "Muistio",
+      "noNotes": "Ei merkintöjä. Aloita luomalla uusi muistio!",
+      "createNote": "Luo muistio",
+      "inviteCollaborators": "Kutsu käyttäjiä"
+    },
+    "mainContent": {
+      "noNoteSelected": "Ei valittua muistiota",
+      "selectNotePrompt": "Valitse sivupalkista muistio tai luo uusi.",
+      "untitled": "Nimetön muistio",
+      "lastEdited": "Viimeksi muokattu {{date}}",
+      "collaborators": "Käyttäjät",
+      "addCollaborator": "Lisää käyttäjä",
+      "saveStatus": "Muutokset tallennettu",
+      "saving": "Tallennetaan..."
+    }
+  },
+  "dropdown": {
+    "export": {
+      "pdf": "Vie pdf-muodossa",
+      "md": "Vie md-muodossa",
+      "txt": "Vie txt-muodossa",
+      "docx": "Vie docx-muodossa"
+    }
+  },
+  "popups": {
+    "collaborationPopup": {
+      "manageCollaborators": "Hallinnoi käyttäjiä",
+      "viewCollaborators": "Näytä käyttäjät",
+      "inviteFieldPlaceholder": "Lisää käyttäjätunnus",
+      "title": "Kutsu käyttäjä",
+      "currentCollaborators": "Nykyiset käyttäjät",
+      "noCollaborators": "Ei muita käyttäjiä",
+      "loadingCollaborators": "Ladataan käyttäjiä...",
+      "buttons": {
+        "inviting": "Kutsutaan...",
+        "invite": "Kutsu"
+      }
+    },
+    "invitePopup": {
+      "title": "Olet saanut kutsun yhteistyöhön",
+      "noInvitations": "Ei avoimia kutsuja.",
+      "invitations": "Kutsut ({{count}})",
+      "accept": "Hyväksy",
+      "decline": "Hylkää"
+    }
+  },
+  "landing": {
+    "h1":"Muistiinpanosovellus tekniikasta innostuville",
+    "h2": "Saat käyttöösi kaikki perinteisen muistiinpanosovelluksen ominaisuudet ja lisäksi yhteistyötoiminnot, tunnisteet helppoon hakuun sekä kätevän tavan lisätä koodinpätkiä.",
+    "features":"Ominaisuudet",
+    "collaboration":"Yhteistyö",
+    "collaborationText": "Yhteistyötoimintojen avulla käyttäjät voivat kutsua muita muokkaamaan ja tarkastelemaan jaettuja muistioita vaivattomasti.",
+    "search":"Haku ja tunnisteet",
+    "searchText": "Muistioiden tunnisteet ja kehittynyt hakutoiminto auttavat sinua löytämään tarvitut asiat nopeasti ja pitämään muistiot järjestyksessä.",
+    "code": "Koodin muokkaus",
+    "codeText":"Koodin liittäminen ja muotoilu ei ole koskaan ollut helpompaa: sisäänrakennettu syntaksin korostus ja muotoilu antavat sinulle hallinnan esitystavalle."
+  },
+  "header":{
+    "buttons": {
+      "login": "Kirjaudu sisään",
+      "register": "Luo tili!"
+    }
+  },
+  "footer": {
+    "trademark": " | Kaikki oikeudet pidätetään."
+  },
+  "placeholders": {
+    "email":"Sähköposti",
+    "password":"Salasana",
+    "confirmPassword": "Vahvista salasana",
+    "newPassword": "Syötä uusi salasana"
+  },
+  "register" : {
+    "welcome": "Tervetuloa Notelyyn",
+    "createAccountButton":"Luo tili",
+    "errorEmail":"Anna voimassa oleva sähköpostiosoite.",
+    "errorPassowrd":"Salasanan on oltava vähintään 7 merkkiä pitkä ja sisällettävä iso kirjain sekä numero.",
+    "errorMatch":"Salasanat eivät täsmää.",
+    "errorGeneric":"Rekisteröinti epäonnistui.",
+    "verify":"Vahvista tilisi",
+    "sentLink": "Olemme lähettäneet vahvistuslinkin sähköpostiisi.",
+    "start" :"Vahvista tilisi aloittaaksesi Notelyn käytön.",
+    "goToLogin" : "Siirry kirjautumiseen"
+  },
+  "login": {
+    "loginHeader":"Kirjaudu sisään",
+    "forgot":"Unohditko salasanasi?",
+    "error":"Virheellinen sähköpostiosoite tai salasana"
+  },
+  "onboarding":{
+    "welcome" : "Tervetuloa",
+    "p1" : "Valitse sopiva käyttäjänimi aloittaaksesi.",
+    "username":"Käyttäjänimi",
+    "errorRequired": "Käyttäjänimi on pakollinen.",
+    "errorTaken":"Käyttäjänimi on jo varattu.",
+    "errorGeneric":"Jotain meni pieleen.",
+    "buttonSaving":"Tallennetaan...",
+    "buttonContinue":"Jatka"
+  },
+  "password":{
+    "reset":{
+      "title" : "Unohditko salasanasi?",
+      "resetButton" : "Lähetä palautuslinkki",
+      "setMessage" : "Tarkasta sähköpostisi",
+      "error" : "Virhe linkin lähettämisessä"
+    },
+    "change":{
+      "title" : "Luo uusi salasana",
+      "updateButton" : "Päivitä",
+      "validPasswordError" : "Salasanan on oltava vähintään 7 merkkiä pitkä ja sisällettävä iso kirjain sekä numero.",
+      "passwordMatchError" : "Salasanat eivät täsmää.",
+      "updateError" : "Salasanan päivittäminen epäonnistui."
+    },
+    "changed":{
+      "title" : "Salasanasi on päivitetty onnistuneesti!",
+      "toLoginButton" : "Kirjaudu sisään"
+    }
+  }
+}

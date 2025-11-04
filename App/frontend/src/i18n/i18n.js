@@ -7,6 +7,7 @@ import en from "../locales/en.json";
 import vn from "../locales/vn.json";
 import ku from "../locales/ku.json";
 import se from "../locales/se.json";
+import fi from "../locales/fi.json";
 
 i18n
     .use(LanguageDetector)
@@ -19,6 +20,7 @@ i18n
             VN: { translation: vn },
             KU: { translation: ku },
             SE: { translation: se },
+            FI: { translation: fi },
         },
         detection: {
             order: ['cookie'],
