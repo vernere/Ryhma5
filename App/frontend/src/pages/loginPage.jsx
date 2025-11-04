@@ -24,7 +24,7 @@ const LoginPage = () => {
             navigate("/notes");
         } catch (err) {
             setError(err);
-            setError("Invalid password or email");
+            setError(t("login.error"));
         }
     };
 
@@ -36,7 +36,7 @@ const LoginPage = () => {
                     <p className="mb-4 text-lg font-semibold">{t("login.loginHeader")}</p>
                     {error && (
                         <p style={{ color: "red" }}>
-                            {"Invalid password or email"}
+                            {t("login.error")}
                         </p>
                     )}
                     <div className="flex flex-col">

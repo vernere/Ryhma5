@@ -12,6 +12,14 @@
             "declined": "Vägrad"
         }
     },
+    "invite": {
+        "title": "Bjud in kollaboratörer",
+        "placeholder": "Ange användarnamn",
+        "send": "Bjud"
+        },
+        "errors": {
+            "userNotFound": "Användare \"{{username}}\" hittades inte"
+        },
     "tags": {
         "math": "Matematik",
         "physics": "Fysik",
@@ -95,11 +103,20 @@
     },
     "register" : {
         "welcome": "Välkommen till Notely",
-        "createAccountButton":"Skapa konto"
+        "createAccountButton":"Skapa konto",
+        "errorEmail":"Ange en giltig e-postadress.",
+        "errorPassowrd":"Lösenordet måste vara minst 7 tecken långt, innehålla en stor bokstav och ett nummer.",
+        "errorMatch":"Lösenorden matchar inte.",
+        "errorGeneric":"Registreringen misslyckades.",
+        "verify":"Verifiera ditt konto",
+        "sentLink": "Vi har skickat en bekräftelselänk till ditt e-postadress.",
+        "start" :"Verifiera ditt konto för att börja använda Notely.",
+        "goToLogin" : "Gå till inloggning"
     },
     "login": {
         "loginHeader":"Inloggning",
-        "forgot":"Glömt lösenord?"
+        "forgot":"Glömt lösenord?",
+        "error":"Ogiltigt lösenord eller e-postadress"
     },
     "onboarding":{
         "welcome" : "Välkommen",

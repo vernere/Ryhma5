@@ -95,11 +95,20 @@
     },
     "register" : {
         "welcome": "Welcome to Notely",
-        "createAccountButton":"Create account"
+        "createAccountButton":"Create account",
+        "errorEmail":"Please enter a valid email address.",
+        "errorPassowrd":"Password must be at least 7 characters, contain an uppercase letter and a number.",
+        "errorMatch":"Passwords do not match.",
+        "errorGeneric":"Registration failed.",
+        "verify":"Verify Your Account",
+        "sentLink": "We’ve sent a confirmation link to your email.",
+        "start" :"Please verify your account to start using Notely.",
+        "goToLogin" : "Go to Login"
     },
     "login": {
         "loginHeader":"Login",
-        "forgot":"Forgot Password?"
+        "forgot":"Forgot Password?",
+        "error":"Invalid password or email"
     },
     "onboarding":{
         "welcome" : "Welcome",

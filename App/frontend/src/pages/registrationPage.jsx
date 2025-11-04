@@ -23,18 +23,18 @@ const RegistrationPage = () => {
         e.preventDefault();
         setError("");
         if (!validEmail(email)) {
-            setError("Please enter a valid email address.");
+            setError (t("register.errorEmail"));
             return;
         }
         if (!validPassword(password)) {
             setError(
-                "Password must be at least 7 characters, contain an uppercase letter and a number."
+                t("register.errorPassword")
             );
             return;
         }
 
         if (password !== confirmPassword) {
-            setError("Passwords do not match.");
+            setError(t("register.errorMatch"));
             return;
         }
 
@@ -43,7 +43,7 @@ const RegistrationPage = () => {
             await signOut();
             navigate("/registrationSuccess");
         } catch (error) {
-            setError(error?.message || "Registration failed.");
+            setError(error?.message || t("register.errorGeneric"));
         }
     };
 
