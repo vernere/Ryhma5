@@ -24,68 +24,67 @@ function App() {
     if (loading) return <p>Loading...</p>;
 
     return (
-         <>
-        <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/register" element={<RegistrationPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/resetPassword" element={<ResetPassword />} />
-            <Route path="/passwordChanged" element={<PasswordChanged />} />
-            <Route
-                path="/registrationSuccess"
-                element={<RegistrationSuccess />}
-            />
+        <>
+            <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/register" element={<RegistrationPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/resetPassword" element={<ResetPassword />} />
+                <Route path="/passwordChanged" element={<PasswordChanged />} />
+                <Route
+                    path="/registrationSuccess"
+                    element={<RegistrationSuccess />}
+                />
 
-            <Route
-                path="/changePassword"
-                element={
-                    <PasswordRecoveryRoute>
-                        {" "}
-                        <ChangePassword />{" "}
-                    </PasswordRecoveryRoute>
-                }
-            />
+                <Route
+                    path="/changePassword"
+                    element={
+                        <PasswordRecoveryRoute>
+                            {" "}
+                            <ChangePassword />{" "}
+                        </PasswordRecoveryRoute>
+                    }
+                />
 
-            <Route
-                path="/onboarding"
-                element={
-                    <ProtectedRoute>
-                        <OnboardingPage />
-                    </ProtectedRoute>
-                }
-            />
+                <Route
+                    path="/onboarding"
+                    element={
+                        <ProtectedRoute>
+                            <OnboardingPage />
+                        </ProtectedRoute>
+                    }
+                />
 
-            <Route
-                path="/notes"
-                element={
-                    <ProtectedRoute>
-                        <ProfileProvider>
-                            <OnboardingGuard>
-                                <NotesPage />
-                            </OnboardingGuard>
-                        </ProfileProvider>
-                    </ProtectedRoute>
-                }
-            />
+                <Route
+                    path="/notes"
+                    element={
+                        <ProtectedRoute>
+                            <ProfileProvider>
+                                <OnboardingGuard>
+                                    <NotesPage />
+                                </OnboardingGuard>
+                            </ProfileProvider>
+                        </ProtectedRoute>
+                    }
+                />
 
-            <Route
-                path="*"
-                element={
-                    <Navigate
-                        to={user && !passwordRecovery ? "/notes" : "/"}
-                        replace
-                    />
-                }
-            />
-        </Routes>
-       
-        {/* dev-only helper to show the localized red error */}
-        {import.meta.env.DEV && <InviteI18nAddon />}
-        {import.meta.env.DEV && <ErrorSwap />}
+                <Route
+                    path="*"
+                    element={
+                        <Navigate
+                            to={user && !passwordRecovery ? "/notes" : "/"}
+                            replace
+                        />
+                    }
+                />
+            </Routes>
 
-       </> 
+            {import.meta.env.DEV && <InviteI18nAddon />}
+            {import.meta.env.DEV && <ErrorSwap />}
 
-    ); 
+        </>
+
+    );
 }
 
 export default App;
