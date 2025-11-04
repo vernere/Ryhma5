@@ -82,15 +82,15 @@
     }
   },
   "landing": {
-    "h1": "Notely - Nivisandina birawariyakan bo hemu kesan",
-    "h2": "Notely nivisandina birawariyakan bo hemu kesan asan daka. Bi taybetmendiyakanî wek hevkariya bihevgirêdan, lêgerîn û kod nivîsandin, Notely amûrên pêwîst pêşkêş daka bo rêvebirina birawariyakan xwe bi rêya xwe.",
-    "features": " Taybetmendiyakan",
-    "collaboration": "Merov bihevgirêdan",
-    "collaborationText": " Bi Notely, tu dikarî bi hevalên xwe an tîmê xwe li ser birawariyakan bihevgirêdan bikî. Bi taybetmendiyên merov bihevgirêdan, hertişt di demeke rast de nûve dibe û hertişt ji bo hemû endamên tîmê te nûve dibe.",
-    "search": " Lêgerîna pêşkeftî",
-    "searchText": " Birawari bi taybetmendiyên lêgerîna pêşkeftî tê da ku tu bi hêsanî dikarî di nav birawariyakan xwe de tiştên ku dixwazî bibînî. Bi karanîna fîltre û kategoriyan, tu dikarî bi hêsanî tiştên ku dixwazî bibînî.",
-    "code": " Nivîsina kode",
-    "codeText": " Birawari bi taybetmendiyên nivîsina kode tê da ku tu dikarî bi hêsanî kod li birawariyakan xwe zêde bikî. Bi piştgirî ji gelek zimanên programekirinê, Notely amûrên pêwîst pêşkêş daka bo nivîsina û rêvebirina kodê."
+    "h1": "Serlêdana notan ji bo hezkiriyên teknolojiyê",
+    "h2": "Hemû fonksiyonên serîlêdanek nivîsandina notan a kevneşopî bistînin, bi feydeyên zêdekirî yên wekî taybetmendiyên hevkariyê, notên etîketkirî ji bo lêgerîna hêsan û perçeyên kodê yên hêsan lê zêde bikin.",
+    "taybetmendî": "Taybetmendî",
+    "hevkarî": "Hevkarî",
+    "collaborationText": "Taybetmendiyên hevkariyê ku dihêle bikarhêner bikarhênerên din vexwînin notên hevpar ji bo xebata tîmê ya hêsan û bênavber.",
+    "search": "Lêgerîn û etîketkirin",
+    "searchText": "Etîketkirina notan û lêgerîna pêşkeftî dihêle hûn li ser tiştên ku hûn dixwazin di destê we de bin kontrol bikin, û notên xwe li gorî wê rêxistin bikin.",
+    "code": "Sererastkirina kodê",
+    "codeText": "Çêkirina kodê û formatkirin qet ne hêsan bûde tê da ku tu dikarî bi hêsanî kod li birawariyakan xwe zêde bikî. Bi piştgirî ji gelek zimanên programekirinê, Notely amûrên pêwîst pêşkêş daka bo nivîsina û rêvebirina kodê."
   },
   "header": {
     "buttons": {
@@ -99,12 +99,12 @@
     }
   },
   "footer": {
-    "trademark": " | All rights reserved."
+    "trademark": " | Hemû maf parastî ne."
   },
   "placeholders": {
-    "email": "Email",
-    "password": "Password",
-    "confirmPassword": "Pishtraska Password",
+    "email": "E-name",
+    "password": "Şîfre",
+    "confirmPassword": "Pishtraska Şîfre",
     "newPassword": "Şîfreya nû binivîse"
   },
   "register": {
