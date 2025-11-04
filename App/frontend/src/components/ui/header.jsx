@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
 
 export const Header = () => {
+  const { t } = useTranslation();
+
   return (
     <header className="bg-white w-full text-black font-roboto-slab flex items-center p-2">
       <div className="flex items-center">
@@ -14,7 +18,7 @@ export const Header = () => {
       <div className="h-8 w-px bg-gray-300"></div>
       <div className="flex flex-row pl-6">
         <nav className="relative group text-2xl px-4 hover:text-purple-950 pt-2 transition-all duration-300 ease-in-out">
-          <a href="/login" className="relative z-10 text-lg">Login</a>
+          <a href="/login" className="relative z-10 text-lg">{t("header.buttons.login")}</a>
           <span
             className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-950 transition-all duration-300 group-hover:w-full"
           ></span>
@@ -25,7 +29,7 @@ export const Header = () => {
             className="rounded-full border-b-purple-950 text-white bg-purple-950 px-6 py-2 hover:bg-purple-900 transition-all duration-300 ease-in-out shadow"
             style={{ display: "inline-block" }}
           >
-            Sign up
+            {t("header.buttons.register")}
           </a>
         </nav>
       </div>

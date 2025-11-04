@@ -138,7 +138,7 @@ describe('Collaboration invite tests', () => {
 
     noteSelect.first().click();
     cy.get('[data-cy=openCollaborationPopup]').click();
-    cy.get('[data-cy=addCollaboratorInput]').type('Test2');
+    cy.get('[data-cy=addCollaboratorInput]').clear().type('Test2');
     cy.get('[data-cy=addCollaboratorInput]').should('have.value', 'Test2');
     cy.get('[data-cy=sendInvite]').click();
     cy.wait(1000);
@@ -155,7 +155,7 @@ describe('Collaboration invite tests', () => {
 
     noteSelect.first().click();
     cy.get('[data-cy=openCollaborationPopup]').click();
-    cy.get('[data-cy=addCollaboratorInput]').type('Test2');
+    cy.get('[data-cy=addCollaboratorInput]').clear().type('Test2');
     cy.get('[data-cy=addCollaboratorInput]').should('have.value', 'Test2');
     cy.get('[data-cy=sendInvite]').click();
     cy.wait(1000);
@@ -194,7 +194,7 @@ describe('Collaboration invite tests', () => {
 
     noteSelect.first().click();
     cy.get('[data-cy=openCollaborationPopup]').click();
-    cy.get('[data-cy=addCollaboratorInput]').type('Test2');
+    cy.get('[data-cy=addCollaboratorInput]').clear().type('Test2');
     cy.get('[data-cy=addCollaboratorInput]').should('have.value', 'Test2');
     cy.get('[data-cy=sendInvite]').click();
     cy.wait(1000);

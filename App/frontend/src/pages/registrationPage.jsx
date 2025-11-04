@@ -6,6 +6,8 @@ import { useAuth } from "../hooks/useAuth";
 import { useState } from "react";
 import { validEmail, validPassword } from "@/utils/validation";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
 
 const RegistrationPage = () => {
     const { signUp, signOut } = useAuth();
@@ -14,23 +16,25 @@ const RegistrationPage = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const { t } = useTranslation();
+
 
     const handleSignup = async (e) => {
         e.preventDefault();
         setError("");
         if (!validEmail(email)) {
-            setError("Please enter a valid email address.");
+            setError (t("register.errorEmail"));
             return;
         }
         if (!validPassword(password)) {
             setError(
-                "Password must be at least 7 characters, contain an uppercase letter and a number."
+                t("register.errorPassword")
             );
             return;
         }
 
         if (password !== confirmPassword) {
-            setError("Passwords do not match.");
+            setError(t("register.errorMatch"));
             return;
         }
 
@@ -39,7 +43,7 @@ const RegistrationPage = () => {
             await signOut();
             navigate("/registrationSuccess");
         } catch (error) {
-            setError(error?.message || "Registration failed.");
+            setError(error?.message || t("register.errorGeneric"));
         }
     };
 
@@ -49,14 +53,14 @@ const RegistrationPage = () => {
             <div className="flex-grow flex items-center justify-center">
                 <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-md flex-col justify-items-center">
                     <p className="mb-4 text-lg font-semibold">
-                        Welcome to Notely
+                        {t("register.welcome")}
                     </p>
                     {error && <p style={{ color: "red" }}>{error}</p>}
                     <div className="flex flex-col">
                         <Input
                             className="mb-2 w-60"
                             type="email"
-                            placeholder="Email"
+                            placeholder={t("placeholders.email")}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             data-cy="register-email"
@@ -64,7 +68,7 @@ const RegistrationPage = () => {
                         <Input
                             className="mb-2 w-60"
                             type="password"
-                            placeholder="Password"
+                            placeholder={t("placeholders.password")}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             data-cy="register-password"
@@ -72,7 +76,7 @@ const RegistrationPage = () => {
                         <Input
                             className="mb-2 w-60"
                             type="password"
-                            placeholder="Confirm Password"
+                            placeholder={t("placeholders.confirmPassword")}
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             data-cy="register-confirm-password"
@@ -82,7 +86,7 @@ const RegistrationPage = () => {
                             onClick={handleSignup}
                         >
                             {" "}
-                            Create account{" "}
+                            {t("register.createAccountButton")}{" "}
                         </Button>
                     </div>
                 </div>

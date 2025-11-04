@@ -4,6 +4,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
+import { useTranslation } from "react-i18next";
+import { LanguageButton } from "@/components/ui/popups/LanguageDropdown";
+
 
 export default function OnboardingPage() {
   const { user } = useAuth();
@@ -11,6 +14,7 @@ export default function OnboardingPage() {
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState("");
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (user.username) setUsername(user.username);
@@ -30,7 +34,7 @@ export default function OnboardingPage() {
     const name = username.trim();
 
     if (!name) {
-      setErr("Username is required");
+      setErr(t("onboarding.errorRequired"));
       return;
     }
 
@@ -45,9 +49,9 @@ export default function OnboardingPage() {
 
     if (error) {
       if (error.code === "23505") {
-        setErr("Username is already taken.");
+        setErr(t("onboarding.errorTaken"));
       } else {
-        setErr(error.message || "Something went wrong.");
+        setErr(error.message || t("onboarding.errorGeneric"));
       }
       return;
     }
@@ -59,19 +63,19 @@ export default function OnboardingPage() {
     <div className="max-w-md mx-auto mt-20 p-6 bg-white rounded shadow flex flex-col gap-6">
       <div className="gap-2 flex flex-col">
         <h1
-         className="text-2xl font-bold"
-        >👋 Welcome
+          className="text-2xl font-bold"
+        >👋 {t("onboarding.welcome")}
         </h1>
-        <p>Please pick a suitable username to get started.</p>
+        <p>{t("onboarding.p1")}</p>
       </div>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-2 mb-4">
-          <label>Username</label>
+          <label>{t("onboarding.username")}</label>
           <Input
             data-cy="onboarding-username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="yourname"
+            placeholder={t("onboarding.username")}
             autoFocus
           />
           {err && (
@@ -88,9 +92,10 @@ export default function OnboardingPage() {
           disabled={saving || !username.trim()}
           type="submit"
         >
-          {saving ? "Saving..." : "Continue"}
+          {saving ? t("onboarding.buttonSaving") : t("onboarding.buttonContinue")}
         </Button>
       </form>
+      <LanguageButton />
     </div>
   );
 }
