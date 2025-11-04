@@ -23,35 +23,35 @@ export const CollaboratorForm = () => {
     if (!trimmedUsername) return;  
 
     if (trimmedUsername.toLowerCase() === user?.username?.toLowerCase()) {
-      setError("You cannot invite yourself to collaborate");
+      setError(t("popups.collaborationPopup.errors.selfInvite"));
       return;
     }
 
     const recipientId = await usernameToId(trimmedUsername).catch(err => {
       console.error("Error looking up user:", err);
-      setError("Failed to look up user. Please try again.");
+      setError(t("popups.collaborationPopup.errors.lookupFailed"));
       return null;
     });
 
     if (!recipientId) {
-      setError(`User "${trimmedUsername}" not found`);
+      setError(t("popups.collaborationPopup.errors.userNotFound", { username: trimmedUsername }));
       return;
     }
 
     if (invitations && invitations.find(invite => invite.recipient_id === recipientId)) {
       console.log("Invite already sent to:", recipientId);
-      setError(`An invitation has already been sent to ${trimmedUsername}`);
+      setError(t("popups.collaborationPopup.errors.inviteAlreadySent", { username: trimmedUsername }));
       return;
     }
 
     if (collaborators && collaborators.find(c => c.user_id === recipientId)) {
       console.log("Already a collaborator:", recipientId);
-      setError(`${trimmedUsername} is already a collaborator on this note`);
+      setError(t("popups.collaborationPopup.errors.alreadyCollaborator", { username: trimmedUsername }));
       return;
     }
     
     if (!selectedNoteId) {
-      setError("No note selected. Please select a note first.");
+      setError(t("popups.collaborationPopup.errors.noNoteSelected"));
       return;
     }
     

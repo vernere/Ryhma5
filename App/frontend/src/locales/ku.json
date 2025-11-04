@@ -1,71 +1,128 @@
 {
-    "common": {
-        "loading": "Xo begra...",
-        "error": "Halayek chebo. Je karama xo xo begra.",
-        "logout": "Darkava",
-        "connecting": "Tekgertin...",
-        "roles": {
-            "owner": "Xodan",
-            "editor": "Rastker",
-            "viewer": "Temaşevan",
-            "pending": "Le bande",
-            "declined": "Hatenxar"
-        }
-    },
-    "tags": {
-        "math": "Birkari",
-        "physics": "Phisic",
-        "coding": "Coder",
-        "project": "Proja",
-        "other": "Tshteki di"
-    },
-    "notes": {
-        "sidebar": {
-            "searchPlaceholder": "Lê bigere Birawari...",
-            "notes": "Birawari",
-            "noNotes": "Ch birawari ninen. Amadaba bo nivesina birawariaka ni!",
-            "createNote": "Birawaria benvisa",
-            "inviteCollaborators": "Merova daxazka"
-        },
-        "mainContent": {
-            "noNoteSelected": "Birawariake helbijera",
-            "selectNotePrompt": "Je karama xo birawarijaki halbjera j tanishte janji eka ni benvesa.",
-            "untitled": "birawari ya be sar u shine",
-            "lastEdited": "Vagera chekerna bare {{date}}",
-            "collaborators": "Merov",
-            "addCollaborator": "Merova zidaka",
-            "saveStatus": "Herteshtak jebara",
-            "saving": "Jebarkern..."
-        }
-    },
-    "dropdown": {
-        "export": {
-            "pdf": "Wêne bide pdf",
-            "md": "Wêne bide md",
-            "txt": "Wêne bide txt",
-            "docx": "Wêne bide docx"
-        }
-    },
-    "popups": {
-        "collaborationPopup": {
-            "manageCollaborators": "Merova be drest bke",
-            "viewCollaborators": "Merova Temaşa bke",
-            "inviteFieldPlaceholder": "Nave xo benvisa",
-            "title": "Merova daxazka",
-            "currentCollaborators": " Meroven hey",
-            "noCollaborators": "Che merov hazerninen.",
-            "loadingCollaborators": "Xo begra merov behen...",
-            "buttons": {
-                "inviting": "Daxazi...",
-                "invite": "Daxaz"
-            }
-        },
-        "invitePopup": {
-            "title": "Tu hatya daxaz keren bo birwariake",
-            "noInvitations": "Che daxazit ni ninen.",
-            "invitations": "Daxaz ({{count}})",
-            "accept": "Halbejera",
-            "decline": "blavke"
-        }
+  "common": {
+    "loading": "Xo begra...",
+    "error": "Halayek chebo. Je karama xo xo begra.",
+    "logout": "Darkava",
+    "connecting": "Tekgertin...",
+    "roles": {
+      "owner": "Xodan",
+      "editor": "Rastker",
+      "viewer": "Temaşevan",
+      "pending": "Le bande",
+      "declined": "Hatenxar"
     }
+  },
+  "invite": {
+    "title": "Merova daxazka",
+    "placeholder": "Navê bikarhêner binivîse",
+    "send": "Daxaz"
+  },
+  "tags": {
+    "math": "Birkari",
+    "physics": "Phisic",
+    "coding": "Coder",
+    "project": "Proja",
+    "other": "Tshteki di"
+  },
+  "notes": {
+    "sidebar": {
+      "searchPlaceholder": "Lê bigere Birawari...",
+      "notes": "Birawari",
+      "noNotes": "Ch birawari ninen. Amadaba bo nivesina birawariaka ni!",
+      "createNote": "Birawaria benvisa",
+      "inviteCollaborators": "Merova daxazka"
+    },
+    "mainContent": {
+      "noNoteSelected": "Birawariake helbijera",
+      "selectNotePrompt": "Je karama xo birawarijaki halbjera j tanishte janji eka ni benvesa.",
+      "untitled": "birawari ya be sar u shine",
+      "lastEdited": "Vagera chekerna bare {{date}}",
+      "collaborators": "Merov",
+      "addCollaborator": "Merova zidaka",
+      "saveStatus": "Herteshtak jebara",
+      "saving": "Jebarkern..."
+    }
+  },
+  "dropdown": {
+    "export": {
+      "pdf": "Wêne bide pdf",
+      "md": "Wêne bide md",
+      "txt": "Wêne bide txt",
+      "docx": "Wêne bide docx"
+    }
+  },
+  "popups": {
+    "collaborationPopup": {
+      "manageCollaborators": "Merova be drest bke",
+      "viewCollaborators": "Merova Temaşa bke",
+      "inviteFieldPlaceholder": "Nave xo benvisa",
+      "title": "Merova daxazka",
+      "currentCollaborators": " Meroven hey",
+      "noCollaborators": "Che merov hazerninen.",
+      "loadingCollaborators": "Xo begra merov behen...",
+      "buttons": {
+        "inviting": "Daxazi...",
+        "invite": "Daxaz"
+      },
+      "errors": {
+        "selfInvite": "Tu nikarî xwe vexwazî bikî",
+        "lookupFailed": "Lêgerîna bikarhêner bi ser neket. Ji kerema xwe dîsa biceribîne.",
+        "userNotFound": "Bikarhêner \"{{username}}\" nehate dîtin",
+        "inviteAlreadySent": "Ji bo {{username}} jixwe daxwazekê hat şandin",
+        "alreadyCollaborator": "{{username}} jixwe hevalkar e li vê notê",
+        "noNoteSelected": "Tu note nehat hilbijartin. Ji kerema xwe yekê hilbijêre."
+      }
+    },
+    "invitePopup": {
+      "title": "Tu hatya daxaz keren bo birwariake",
+      "noInvitations": "Che daxazit ni ninen.",
+      "invitations": "Daxaz ({{count}})",
+      "accept": "Halbejera",
+      "decline": "blavke"
+    }
+  },
+  "landing": {
+    "h1": "Notely - Nivisandina birawariyakan bo hemu kesan",
+    "h2": "Notely nivisandina birawariyakan bo hemu kesan asan daka. Bi taybetmendiyakanî wek hevkariya bihevgirêdan, lêgerîn û kod nivîsandin, Notely amûrên pêwîst pêşkêş daka bo rêvebirina birawariyakan xwe bi rêya xwe.",
+    "features": " Taybetmendiyakan",
+    "collaboration": "Merov bihevgirêdan",
+    "collaborationText": " Bi Notely, tu dikarî bi hevalên xwe an tîmê xwe li ser birawariyakan bihevgirêdan bikî. Bi taybetmendiyên merov bihevgirêdan, hertişt di demeke rast de nûve dibe û hertişt ji bo hemû endamên tîmê te nûve dibe.",
+    "search": " Lêgerîna pêşkeftî",
+    "searchText": " Birawari bi taybetmendiyên lêgerîna pêşkeftî tê da ku tu bi hêsanî dikarî di nav birawariyakan xwe de tiştên ku dixwazî bibînî. Bi karanîna fîltre û kategoriyan, tu dikarî bi hêsanî tiştên ku dixwazî bibînî.",
+    "code": " Nivîsina kode",
+    "codeText": " Birawari bi taybetmendiyên nivîsina kode tê da ku tu dikarî bi hêsanî kod li birawariyakan xwe zêde bikî. Bi piştgirî ji gelek zimanên programekirinê, Notely amûrên pêwîst pêşkêş daka bo nivîsina û rêvebirina kodê."
+  },
+  "header": {
+    "buttons": {
+      "login": "Xobevisa",
+      "register": "Darkava!"
+    }
+  },
+  "footer": {
+    "trademark": " | All rights reserved."
+  },
+  "placeholders": {
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Pishtraska Password"
+  },
+  "register": {
+    "welcome": "Bi xêr hatî bo berwaria xo!",
+    "createAccountButton": " Heseb cheka"
+  },
+  "login": {
+    "loginHeader": "Xobevisa bo berwaria xo!",
+    "forgot": "Jbirchona password?"
+  },
+  "onboarding": {
+    "welcome": " Bi xêr hatî bo birwaria!",
+    "p1": " Birawari amûrên pêwîst pêşkêş daka bo rêvebirina birawariyakan xwe bi rêya xwe.",
+    "username": "Nave eke",
+    "errorRequired": "Navê bikarhêner pêwîst e.",
+    "errorTaken": " Navê bikarhêner jixwe tê bikar anîn.",
+    "errorGeneric": " Halayek chebo. Je karama xo xo begra.",
+    "buttonSaving": " jberkern...",
+    "buttonContinue": "Berdewam bon"
+  }
 }
+

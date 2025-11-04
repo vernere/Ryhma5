@@ -16,6 +16,7 @@ import OnboardingPage from "./pages/onboardingPage";
 import { ProfileProvider } from "./utils/ProfileContext";
 import { useTranslation } from "react-i18next";
 
+
 function App() {
     const { user, passwordRecovery, loading } = useAuth();
     const { t } = useTranslation();
@@ -23,6 +24,7 @@ function App() {
     if (loading) return <p>{t("common.loading")}</p>;
 
     return (
+
         <Routes>
             <Route path="/" element={<ProfileProvider><LandingPage /></ProfileProvider>} />
             <Route path="/register" element={<ProfileProvider><RegistrationPage /></ProfileProvider>} />
