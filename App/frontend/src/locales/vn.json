@@ -17,9 +17,6 @@
         "placeholder": "Nhập tên người dùng",
         "send": "Mời"
     },
-    "errors": {
-        "userNotFound": "Không tìm thấy người dùng \"{{username}}\""
-    },
     "tags": {
         "math": "Toán học",
         "physics": "Vật lý",

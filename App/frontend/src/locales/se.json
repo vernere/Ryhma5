@@ -17,9 +17,6 @@
         "placeholder": "Ange användarnamn",
         "send": "Bjud"
     },
-    "errors": {
-        "userNotFound": "Användare \"{{username}}\" hittades inte"
-    },
     "tags": {
         "math": "Matematik",
         "physics": "Fysik",
