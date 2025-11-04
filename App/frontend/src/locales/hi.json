@@ -58,6 +58,14 @@
       "buttons": {
         "inviting": "आमंत्रण भेजा जा रहा है…",
         "invite": "आमंत्रित करें"
+      },
+      "errors": {
+        "selfInvite": "आप स्वयं को आमंत्रित नहीं कर सकते",
+        "lookupFailed": "उपयोगकर्ता खोज विफल रही। कृपया पुनः प्रयास करें।",
+        "userNotFound": "उपयोगकर्ता \"{{username}}\" नहीं मिला",
+        "inviteAlreadySent": "{{username}} को पहले ही आमंत्रण भेजा जा चुका है",
+        "alreadyCollaborator": "{{username}} पहले से ही इस नोट पर सहयोगी हैं",
+        "noNoteSelected": "कोई नोट चयनित नहीं है। कृपया एक चुनें।"
       }
     },
     "invitePopup": {

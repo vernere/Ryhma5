@@ -58,6 +58,14 @@
       "buttons": {
         "inviting": "Надсилається запрошення…",
         "invite": "Запросити"
+      },
+      "errors": {
+        "selfInvite": "Ви не можете запросити себе",
+        "lookupFailed": "Не вдалося знайти користувача. Будь ласка, спробуйте ще раз.",
+        "userNotFound": "Користувача \"{{username}}\" не знайдено",
+        "inviteAlreadySent": "Запрошення для {{username}} вже надіслано",
+        "alreadyCollaborator": "{{username}} вже є співавтором цієї нотатки",
+        "noNoteSelected": "Нотатки не вибрано. Будь ласка, виберіть одну."
       }
     },
     "invitePopup": {
