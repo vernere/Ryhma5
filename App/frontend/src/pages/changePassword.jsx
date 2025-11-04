@@ -27,14 +27,12 @@ const ChangePassword = () => {
         setError("");
 
         if (!validPassword(password)) {
-            setError(
-                "Password must be at least 7 characters, contain an uppercase letter and a number."
-            );
+            setError(t("password.change.validPasswordError"));
             return;
         }
 
         if (password !== confirmPassword) {
-            setError("Passwords do not match.");
+            setError(t("password.change.passwordMatchError"));
             return;
         }
 
@@ -44,7 +42,7 @@ const ChangePassword = () => {
             navigate("/passwordChanged");
         } catch (err) {
             setError(err);
-            setError("Error updating password.");
+            setError(t("password.change.updateError"));
         }
     };
 

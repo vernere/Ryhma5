@@ -77,11 +77,16 @@
     "password":{
         "reset":{
             "title" : "Forgot your password?",
-            "resetButton" : "Send reset link to email"
+            "resetButton" : "Send reset link to email",
+            "setMessage" : "Check our email",
+            "error" : "Error sending reset link"
         },
         "change":{
             "title" : "Create a new password",
-            "updateButton" : "Update"
+            "updateButton" : "Update",
+            "validPasswordError" : "Password must be at least 7 characters, contain an uppercase letter and a number.",
+            "passwordMatchError" : "Passwords do not match.",
+            "updateError" : "Error updating password."
         },
         "changed":{
             "title" : "Your password has been successfully updated!",

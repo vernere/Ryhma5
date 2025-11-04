@@ -19,10 +19,10 @@ const ResetPassword = () => {
         setMessage('');
         try {
             await resetPassword(email);
-            setMessage("Check our email");
+            setMessage(t("password.reset.setMessage"));
         } catch (err) {
             setError(err);
-            setError("Error sending reset link");
+            setError(t("password.reset.error"));
         }
     };
 
