@@ -27,8 +27,18 @@ function App() {
 
         <Routes>
             <Route path="/" element={<ProfileProvider><LandingPage /></ProfileProvider>} />
-            <Route path="/register" element={<ProfileProvider><RegistrationPage /></ProfileProvider>} />
-            <Route path="/login" element={<ProfileProvider><LoginPage /></ProfileProvider>} />
+            <Route path="/register" 
+                element={
+                <ProfileProvider>
+                    { user ? <Navigate to="/notes" replace /> : <RegistrationPage /> }
+                </ProfileProvider>
+            }/>
+            <Route path="/login" 
+                element={
+                <ProfileProvider>
+                    { user ? <Navigate to="/notes" replace /> : <LoginPage /> }
+                </ProfileProvider>
+            }/>
             <Route path="/resetPassword" element={<ProfileProvider><ResetPassword /></ProfileProvider>} />
             <Route path="/passwordChanged" element={<ProfileProvider><PasswordChanged /></ProfileProvider>} />
             <Route
@@ -82,7 +92,6 @@ function App() {
                             replace
                         />
                     </ProfileProvider>
-
                 }
             />
         </Routes>
