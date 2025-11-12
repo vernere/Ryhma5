@@ -38,7 +38,7 @@ This project implements localization through **i18n** with JSON translation file
 }
 ```
 
-See [translation files](../src/locales/) for complete examples.
+See [translation files](../App/frontend/src/locales/) for complete examples.
 
 ## Character encoding
 
@@ -153,4 +153,5 @@ See [Validation script](../App/frontend/src/components/ui/popups/hooks) for comp
 ## Refrences 
 
 - [i18n documentation](https://www.i18next.com/)
+
 
