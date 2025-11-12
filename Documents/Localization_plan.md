@@ -131,7 +131,7 @@ export default i18n;
 
 LanguageDropdown component 
 
-See [LanguageDropdown](../App/frontend/src/components/ui/popups/hooks) for complete implementation.
+See [LanguageDropdown](../App/frontend/src/components/ui/popups/LanguageDropdown.jsx) for complete implementation.
 
 
 ## Adding new translations
@@ -148,10 +148,11 @@ See [Validation script](../App/frontend/src/components/ui/popups/hooks) for comp
 
 ## Tests
 
-- Language selector tests ([Cypress e2e tests](../App/frontend/src/cypress/e2e/notes.cy.js))
+- Language selector tests ([Cypress e2e tests](../App/frontend/cypress/e2e/notes.cy.js))
 
 ## Refrences 
 
 - [i18n documentation](https://www.i18next.com/)
+
 
 
