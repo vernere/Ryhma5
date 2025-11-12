@@ -13,12 +13,6 @@ export default function CollaborativeEditor({ ydoc, provider }) {
     const noteTitle = useNotesStore((state) => state.selectedNote?.title);
     const { profile } = useProfile();
 
-    
-    CollaborativeEditor.PropTypes = {
-        ydoc: PropTypes.object.isRequired,
-        provider: PropTypes.object.isRequired,
-    };
-
     const editor = useEditor(
         {
             editorProps: {
@@ -107,3 +101,8 @@ export default function CollaborativeEditor({ ydoc, provider }) {
         </div>
     );
 }
+
+CollaborativeEditor.propTypes = {
+    ydoc: PropTypes.object.isRequired,
+    provider: PropTypes.object.isRequired,
+};
