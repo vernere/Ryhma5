@@ -181,8 +181,9 @@ describe('Collaboration invite tests', () => {
     acceptInvite().click();
     cy.wait(500);
 
-    invitationCard.should('not.exist');
     cy.get('[data-cy=closeInvitePopup]').click();
+    invitationCard.should('not.exist');
+
 
     cy.get('[data-cy=noteSelect]').contains('Collaboration').should('exist');
   });

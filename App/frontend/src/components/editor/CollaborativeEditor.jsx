@@ -6,11 +6,18 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import { COLORS, EDITOR_EXTENSIONS } from "./constants";
 import { useEffect } from "react";
 import { useProfile } from "@/utils/ProfileContext";
+import PropTypes from 'prop-types'
 
 export default function CollaborativeEditor({ ydoc, provider }) {
     const selectedNoteId = useNotesStore((state) => state.selectedNoteId);
     const noteTitle = useNotesStore((state) => state.selectedNote?.title);
     const { profile } = useProfile();
+
+    
+    CollaborativeEditor.PropTypes = {
+        ydoc: PropTypes.object.isRequired,
+        provider: PropTypes.object.isRequired,
+    };
 
     const editor = useEditor(
         {

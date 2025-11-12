@@ -1,3 +1,7 @@
 .idea
 .DS_STORE
 .vscode
+sonar-project.properties
+.sonar_lock
+report-task.txt
+.env
