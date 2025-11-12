@@ -14,7 +14,7 @@ This project implements localization through **i18n** with JSON translation file
 - Hindi (HI)
 
 ## Localization method architecture
-![Localization Flow](localizationflow.png)
+![Localization Flow](../resources/localizationflow.png)
 
 ## Why?
 
@@ -153,3 +153,4 @@ See [Validation script](../App/frontend/src/components/ui/popups/hooks) for comp
 ## Refrences 
 
 - [i18n documentation](https://www.i18next.com/)
+
