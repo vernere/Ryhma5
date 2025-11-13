@@ -50,6 +50,12 @@ The project is implemented in React using Bun and supports localization using i1
 
 ## Setup
 
+## Localization
+
+This project implements localization through **i18n** with JSON translation files. User language prefrences are stored as a ENUM type in the database, while UI strings are maintained in the JSON files.
+
+See [Localization plan and report](/Documents/Localization_plan.md) for complete documentation.
+
 ## Project structure
 - /App: Contains the main application code.
 - /App/frontend: Contains the configuration files.
@@ -119,6 +125,7 @@ Add the following code to the .env file:
    ```sh
       docker pull vernere/ryhma5:latest
    ```
+## Sonarqube
 
 ## Data persistance
 
