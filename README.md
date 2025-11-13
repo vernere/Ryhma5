@@ -40,7 +40,10 @@ The project is implemented in React using Bun and supports localization using i1
 ## Use case diagram
 
 ## DB Schema
-![alt text](/resources/image.jpg)
+![supabase er graph](/resources/Er_graph.png)
+![er graph](/resources/Er_graph_converted.png)
+![er graph converted to realtional graph](/resources/image.jpg)
+
 ## Plugins
 
 ### Bun
