@@ -25,5 +25,4 @@ export const Footer = ({ className }) => {
 
 Footer.propTypes = {
     className: PropTypes.object.isRequired,
-
 };

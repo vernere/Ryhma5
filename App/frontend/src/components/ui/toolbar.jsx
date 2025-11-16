@@ -155,8 +155,8 @@ const Toolbar = ({ editor, noteTitle = "Untitled note" }) => {
 };
 
 Toolbar.propTypes = {
-    className: PropTypes.object.isRequired,
-
+    editor: PropTypes.object.isRequired,
+    noteTitle: PropTypes.object.isRequired,
 };
 
 export { Toolbar };
