@@ -1,51 +1,53 @@
 name: SonarQube Analysis
 
 on:
-  push:
-    branches:
-      - '**'
-    paths:
-      - 'App/frontend/**'
-      - '.github/workflows/sonarqube.yaml'
+    push:
+        branches:
+            - "**"
+        paths:
+            - "App/frontend/**"
+            - ".github/workflows/sonarqube.yaml"
+    pull_request:
+        types: [opened, synchronize, reopened]
 
 jobs:
-  sonarqube:
-    name: SonarQube Scan
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      
-      - name: Setup bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-          cache-dependency-path: ./App/frontend/bun.lock
-      
-      - name: Install dependencies
-        working-directory: ./App/frontend
-        run: bun install --frozen-lockfile
-      
-      - name: Run tests with coverage
-        working-directory: ./App/frontend
-        run: bun test --coverage
-        continue-on-error: true # Don't fail the build if tests fail
-      
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@master
-        with:
-          projectBaseDir: ./App/frontend
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      
-      - name: SonarQube Quality Gate check
-        uses: SonarSource/sonarqube-quality-gate-action@master
-        timeout-minutes: 5
-        with:
-          scanMetadataReportFile: ./App/frontend/.scannerwork/report-task.txt
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        continue-on-error: true
+    sonarqube:
+        name: SonarQube Scan
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup bun
+              uses: oven-sh/setup-bun@v2
+              with:
+                  bun-version: latest
+                  cache-dependency-path: ./App/frontend/bun.lock
+
+            - name: Install dependencies
+              working-directory: ./App/frontend
+              run: bun install --frozen-lockfile
+
+            - name: Run tests with coverage
+              working-directory: ./App/frontend
+              run: bun test --coverage
+              continue-on-error: true # Don't fail the build if tests fail
+
+            - name: SonarQube Scan
+              uses: SonarSource/sonarqube-scan-action@master
+              with:
+                  projectBaseDir: ./App/frontend
+              env:
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+            - name: SonarQube Quality Gate check
+              uses: SonarSource/sonarqube-quality-gate-action@master
+              timeout-minutes: 5
+              with:
+                  scanMetadataReportFile: ./App/frontend/.scannerwork/report-task.txt
+              env:
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+              continue-on-error: true
