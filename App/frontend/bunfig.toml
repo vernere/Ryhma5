@@ -1,3 +1,6 @@
 [test]
 coverageReporter = ["text", "lcov"]
 coverageDir = "coverage"
+
+[test.env]
+NODE_ENV = "test"
