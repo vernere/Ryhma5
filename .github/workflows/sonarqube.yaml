@@ -31,13 +31,12 @@ jobs:
       
       - name: Run tests with coverage
         run: bun test --coverage
-        continue-on-error: true  # Don't fail the build if tests fail
+        continue-on-error: true # Don't fail the build if tests fail
       
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_URL }}  # Remove this line if using SonarCloud
       
       - name: SonarQube Quality Gate check
         uses: SonarSource/sonarqube-quality-gate-action@master
