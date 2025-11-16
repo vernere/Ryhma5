@@ -30,11 +30,73 @@ jobs:
             - name: Install dependencies
               working-directory: ./App/frontend
               run: bun install --frozen-lockfile
-
-            - name: Run tests with coverage
+        
+            - name: Create .nyc_output directory
               working-directory: ./App/frontend
-              run: bun test --coverage
-              continue-on-error: true # Don't fail the build if tests fail
+              run: mkdir -p .nyc_output
+
+            - name: Create coverage directories
+              working-directory: ./App/frontend
+              run: mkdir -p coverage/{unit,e2e,merged}
+
+            - name: Run unit tests with coverage
+              working-directory: ./App/frontend
+              run: |
+                echo "Running unit tests with coverage..."
+                bun run test:coverage
+                echo "Unit test coverage generated"
+                ls -la coverage/unit/
+
+            - name: Start dev server for E2E tests
+              working-directory: ./App/frontend
+              run: |
+                echo "Starting dev server..."
+                bun run dev &
+                sleep 15
+                echo "Development server should be ready..."
+
+            - name: Run Cypress e2e tests with coverage
+              working-directory: ./App/frontend
+              env:
+               NODE_ENV: test
+              run: |
+                echo "Running Cypress tests with coverage..."
+                COVERAGE=true bun run test:e2e:coverage
+                ls -la coverage/e2e/
+            
+            - name: Stop dev server
+              working-directory: ./App/frontend
+              run: pkill -f "bun run dev" || true
+
+            - name: Debug coverage files
+              working-directory: ./App/frontend
+              run: |
+                echo "Unit test coverage files:"
+                ls -la coverage/unit/
+                echo "E2E test coverage files:"
+                ls -la coverage/e2e/
+                
+            - name: Merge coverage reports
+              working-directory: ./App/frontend
+              run: |
+                echo "Merging coverage reports..."
+                bun run coverage:merge
+                
+                echo "Coverage directory structure:"
+                find coverage -type f -exec ls -l {} \;
+                
+                echo "Content of merged coverage file:"
+                cat coverage/merged/coverage-final.json || echo "Merged coverage file not found"
+                
+                echo "Verifying LCOV file for SonarQube:"
+                if [ -f coverage/merged/lcov.info ]; then
+                  echo "✓ LCOV file found at coverage/merged/lcov.info"
+                  head -20 coverage/merged/lcov.info
+                else
+                  echo "✗ LCOV file NOT found - SonarQube will not receive coverage data"
+                  exit 1
+                fi
+
 
             - name: SonarQube Scan
               uses: SonarSource/sonarqube-scan-action@master
