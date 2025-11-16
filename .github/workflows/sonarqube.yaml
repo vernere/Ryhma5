@@ -30,11 +30,14 @@ jobs:
         run: bun install --frozen-lockfile
       
       - name: Run tests with coverage
+        working-directory: ./App/frontend
         run: bun test --coverage
         continue-on-error: true # Don't fail the build if tests fail
       
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@master
+        with:
+          projectBaseDir: ./App/frontend
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       
