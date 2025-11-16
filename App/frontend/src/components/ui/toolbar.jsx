@@ -4,8 +4,6 @@ import {
     CgFormatUnderline,
     CgList,
     CgCode,
-    CgImage,
-    CgMoreAlt,
     CgExport,
 } from "react-icons/cg";
 import {
@@ -18,6 +16,8 @@ import {
 import Dropdown from "./Dropdown";
 import { useEffect, useState, useRef } from "react";
 import { ImageUploadButton } from "../editor/ImageUploadButton";
+import PropTypes from 'prop-types'
+
 
 const Toolbar = ({ editor, noteTitle = "Untitled note" }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -49,6 +49,7 @@ const Toolbar = ({ editor, noteTitle = "Untitled note" }) => {
                 break;
             case "docx":
                 exportToDocx(htmlContent, noteTitle);
+                break;
             default:
                 break;
         }
@@ -70,6 +71,7 @@ const Toolbar = ({ editor, noteTitle = "Untitled note" }) => {
                 break;
             case "code":
                 editor.chain().focus().toggleCodeBlock().run();
+                break;
             default:
                 break;
         }
@@ -150,6 +152,11 @@ const Toolbar = ({ editor, noteTitle = "Untitled note" }) => {
             </div>
         </div>
     );
+};
+
+Toolbar.propTypes = {
+    className: PropTypes.object.isRequired,
+
 };
 
 export { Toolbar };
