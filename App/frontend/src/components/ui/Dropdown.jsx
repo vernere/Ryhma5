@@ -82,7 +82,7 @@ const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
     )
 }
 
-CollaborativeEditor.propTypes = {
+Dropdown.propTypes = {
     isOpen: PropTypes.object.isRequired,
     anchorEl: PropTypes.object.isRequired,
     onExport: PropTypes.object.isRequired,
