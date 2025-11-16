@@ -36,6 +36,9 @@ The project is implemented in React using Bun and supports localization using i1
 - turndown
 - v8-to-istanbul
 - i18n
+- SonarQube
+- SonarScanner
+- SonarQube cloud
 
 ## Use case diagram
 
@@ -73,7 +76,8 @@ GitHub actions pipeline automatically runs :
 - Cypress e2e tests
 - Generates code coverage reports for both
 - Merges code coverage reports
-- Publishes code coverage report to Codecov
+- Runs analysis with SonarQube
+- Uploads analysis report and code coverage report to SonarQube Cloud
 
 ## Tests
 The project includes e2e tests for the frontend layer To run the tests, use the following command:
