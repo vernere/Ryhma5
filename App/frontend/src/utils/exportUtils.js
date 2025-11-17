@@ -34,7 +34,7 @@ export const exportToPdf = (html) => {
 
 export const exportToTxt = (html) => {
     const text = html.replaceAll(/<[^>]*>/g, '') // Remove HTML tags
-        .replaceAll(/&nbsp;/g, ' ')   // Replace &nbsp; with spaces
+        .replaceAll('&nbsp', ' ')   // Replace &nbsp; with spaces
         .replaceAll(/\n\s*\n/g, '\n') // Remove extra newlines
         .trim();
     return text;
