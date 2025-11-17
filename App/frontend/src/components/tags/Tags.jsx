@@ -2,6 +2,7 @@ import { useEffect, useCallback, memo } from "react";
 import { useTagStore } from "@/hooks/useTagStore";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
 
 export const Tags = memo(({ note }) => {
   const allTags = useTagStore((state) => state.allTags);
@@ -55,3 +56,7 @@ export const Tags = memo(({ note }) => {
     </div>
   );
 });
+
+Tags.propTypes = {
+  note: PropTypes.object.isRequired
+};
