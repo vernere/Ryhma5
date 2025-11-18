@@ -32,7 +32,7 @@ export const useImagesStore = create((set, get) => ({
       const fileName = `${uuid}.${fileExt}`;
       const filePath = `${noteId}/${fileName}`;
 
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from(BUCKET_NAME)
         .upload(filePath, file, {
           cacheControl: "3600",

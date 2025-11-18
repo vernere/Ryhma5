@@ -1,4 +1,5 @@
 import { CollaboratorContextBadge } from "./CollaboratorContextBadge";
+import PropTypes from 'prop-types';
 
 export const InvitationItem = ({ invite }) => {
   const username = invite.recipient?.username || invite.username || "Unknown";
@@ -24,6 +25,17 @@ export const InvitationItem = ({ invite }) => {
       <CollaboratorContextBadge role={invite.status} />
     </div>
   );
+};
+
+InvitationItem.propTypes = {
+  invite: PropTypes.shape({
+    invitation_id: PropTypes.string.isRequired,
+    recipient: PropTypes.shape({
+      username: PropTypes.string,
+    }),
+    username: PropTypes.string,
+    status: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default InvitationItem;
