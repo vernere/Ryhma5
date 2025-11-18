@@ -1,5 +1,6 @@
 import { useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import PropTypes from 'prop-types'
 
 const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
     const dropdownRef = useRef(null);
@@ -80,5 +81,12 @@ const Dropdown = ({ isOpen, anchorEl, onExport, onClose }) => {
         </div>
     )
 }
+
+Dropdown.propTypes = {
+    isOpen: PropTypes.object.isRequired,
+    anchorEl: PropTypes.object.isRequired,
+    onExport: PropTypes.object.isRequired,
+    onClose: PropTypes.object.isRequired,
+};
 
 export default Dropdown;

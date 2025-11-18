@@ -3,9 +3,9 @@ import { UserRoundPlus, X } from "lucide-react";
 import CollaboratorForm from "./CollaboratorForm";
 import CollaboratorsList from "./CollaboratorsList";
 import { useInvitationsStore } from "@/hooks/useInvitationsStore";
-import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import PropTypes from 'prop-types';
 
 export const CollaborationPopup = ({ 
   isOpen, 
@@ -59,6 +59,12 @@ export const CollaborationPopup = ({
       </div>
     </div>
   );
+};
+
+CollaborationPopup.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool,
 };
 
 export default CollaborationPopup;
