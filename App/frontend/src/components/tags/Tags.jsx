@@ -2,6 +2,7 @@ import { useEffect, useCallback, memo } from "react";
 import { useTagStore } from "@/hooks/useTagStore";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
 
 export const Tags = memo(({ note }) => {
   const allTags = useTagStore((state) => state.allTags);
@@ -38,7 +39,7 @@ export const Tags = memo(({ note }) => {
       {allTags.map((tag) => {
         const isSelected = note.note_tags?.some((t) => t.tag_id === tag.tag_id);
           return (
-            <span
+            <button
               key={tag.tag_id}
               data-cy="noteTag"
               className={`cursor-pointer inline-block text-xs px-3 py-1 rounded-full ${
@@ -49,9 +50,13 @@ export const Tags = memo(({ note }) => {
               onClick={() => handleSelectTag(tag.tag_id)}
             >
               {t(`tags.${tag.name}`)}
-            </span>
+            </button>
           );
       })}
     </div>
   );
 });
+
+Tags.propTypes = {
+  note: PropTypes.object.isRequired
+};
