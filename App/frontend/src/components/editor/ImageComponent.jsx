@@ -1,6 +1,8 @@
 import { NodeViewWrapper } from "@tiptap/react";
 import { Trash2, Move } from "lucide-react";
 import { useRef, useState, useCallback } from "react";
+import PropTypes from 'prop-types';
+
 
 export default function ImageComponent({ node, deleteNode, updateAttributes }) {
   const containerRef = useRef(null);
@@ -10,28 +12,35 @@ export default function ImageComponent({ node, deleteNode, updateAttributes }) {
     height: node.attrs.height || 'auto'
   });
 
+  ImageComponent.propTypes = {
+    node: PropTypes.object.isRequired,
+    deleteNode: PropTypes.func.isRequired,
+    updateAttributes: PropTypes.func
+  };
+
+
   const handleMouseDown = useCallback((e) => {
     e.preventDefault();
     setIsResizing(true);
-    
+
     const startX = e.clientX;
     const startY = e.clientY;
     const startWidth = containerRef.current?.offsetWidth || 0;
     const startHeight = containerRef.current?.offsetHeight || 0;
-    
+
     const handleMouseMove = (e) => {
       const deltaX = e.clientX - startX;
       const deltaY = e.clientY - startY;
-      
+
       const newWidth = Math.max(100, startWidth + deltaX);
       const newHeight = Math.max(100, startHeight + deltaY);
-      
+
       setDimensions({
         width: newWidth,
         height: newHeight
       });
     };
-    
+
     const handleMouseUp = () => {
       setIsResizing(false);
       if (updateAttributes) {
@@ -43,7 +52,7 @@ export default function ImageComponent({ node, deleteNode, updateAttributes }) {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-    
+
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
   }, [dimensions, updateAttributes]);
@@ -70,7 +79,6 @@ export default function ImageComponent({ node, deleteNode, updateAttributes }) {
           }}
         />
 
-        {/* Delete button */}
         <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             onClick={deleteNode}
@@ -81,11 +89,9 @@ export default function ImageComponent({ node, deleteNode, updateAttributes }) {
           </button>
         </div>
 
-        {/* Resize handle */}
         <div
-          className={`absolute bottom-0 right-0 w-4 h-4 bg-blue-500 border-2 border-white rounded-tl-lg cursor-nw-resize opacity-0 group-hover:opacity-100 transition-opacity ${
-            isResizing ? 'opacity-100' : ''
-          }`}
+          className={`absolute bottom-0 right-0 w-4 h-4 bg-blue-500 border-2 border-white rounded-tl-lg cursor-nw-resize opacity-0 group-hover:opacity-100 transition-opacity ${isResizing ? 'opacity-100' : ''
+            }`}
           onMouseDown={handleMouseDown}
           title="Resize image"
         >
