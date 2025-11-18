@@ -1,6 +1,6 @@
 import { CgNotes } from "react-icons/cg";
 import { useNotesStore } from "@/hooks/useNotesStore";
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import CollaborativeEditor from "@/components/editor/CollaborativeEditor";
 import { Tags } from "@/components/tags/Tags";
 import { useAuth } from "@/hooks/useAuth";
@@ -8,7 +8,6 @@ import { CollaborationPopup } from "./collaborationPopup/CollaborationPopup";
 import { CollaboratorBalls } from "./CollaboratorBalls";
 import { UserRoundPlus } from "lucide-react";
 import { useInvitationsStore } from "@/hooks/useInvitationsStore";
-import { useMemo } from "react";
 import * as Y from "yjs";
 import { supabase } from "@/lib/supabaseClient";
 import { SupabaseProvider } from "@/lib/y-supabase";

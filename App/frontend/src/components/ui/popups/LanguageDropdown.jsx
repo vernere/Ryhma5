@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
 import { languages } from "@/i18n/config";
 import { CgGlobeAlt } from "react-icons/cg";
+import PropTypes from "prop-types";
 
 export const LanguageDropdown = ({ isOpen, onClose }) => {
     const { user } = useAuth();
@@ -68,4 +69,9 @@ export const LanguageButton = () => {
             {isOpen && <LanguageDropdown isOpen={isOpen} onClose={handleOpen} />}
         </div>
     );
+};
+
+LanguageDropdown.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
 };
