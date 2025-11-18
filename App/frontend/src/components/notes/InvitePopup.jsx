@@ -3,6 +3,7 @@ import { useInvitationsStore } from "@/hooks/useInvitationsStore";
 import { useNotesStore } from "@/hooks/useNotesStore";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
+import PropTypes from 'prop-types';
 
 export const InvitePopup = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
@@ -88,4 +89,9 @@ export const InvitePopup = ({ isOpen, onClose }) => {
             </div>
         </div>
     );
+};
+
+InvitePopup.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
 };

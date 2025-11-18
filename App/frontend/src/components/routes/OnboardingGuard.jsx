@@ -1,5 +1,6 @@
 import { useProfile } from "@/utils/ProfileContext";
 import { Navigate, useLocation } from "react-router-dom";
+import PropTypes from 'prop-types';
 
 export default function OnboardingGuard({ children }) {
   const { profile } = useProfile();
@@ -14,3 +15,7 @@ export default function OnboardingGuard({ children }) {
 
   return children;
 }
+
+OnboardingGuard.propTypes = {
+  children: PropTypes.node.isRequired,
+};

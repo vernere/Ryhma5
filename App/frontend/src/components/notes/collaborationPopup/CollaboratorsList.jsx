@@ -1,5 +1,6 @@
 import CollaboratorItem from "./CollaboratorItem";
 import InvitationItem from "./InvitationItem";
+import PropTypes from "prop-types";
 
 export const CollaboratorsList = ({ 
   collaborators = [],
@@ -39,6 +40,24 @@ export const CollaboratorsList = ({
       ))}
     </div>
   );
+};
+
+CollaboratorsList.propTypes = {
+  collaborators: PropTypes.arrayOf(
+    PropTypes.shape({
+      user_id: PropTypes.string.isRequired,
+      username: PropTypes.string,
+      role: PropTypes.string,
+    })
+  ),
+  invitations: PropTypes.arrayOf(
+    PropTypes.shape({
+      invitation_id: PropTypes.string.isRequired,
+      recipient_username: PropTypes.string,
+      status: PropTypes.string,
+    })
+  ),
+  isLoading: PropTypes.bool,
 };
 
 export default CollaboratorsList;
