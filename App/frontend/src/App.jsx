@@ -16,7 +16,6 @@ import OnboardingPage from "./pages/onboardingPage";
 import { ProfileProvider } from "./utils/ProfileContext";
 import { useTranslation } from "react-i18next";
 
-
 function App() {
     const { user, passwordRecovery, loading } = useAuth();
     const { t } = useTranslation();

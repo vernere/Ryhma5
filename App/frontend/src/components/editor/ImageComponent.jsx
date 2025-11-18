@@ -1,6 +1,7 @@
 import { NodeViewWrapper } from "@tiptap/react";
 import { Trash2, Move } from "lucide-react";
 import { useRef, useState, useCallback } from "react";
+import PropTypes from 'prop-types';
 
 export default function ImageComponent({ node, deleteNode, updateAttributes }) {
   const containerRef = useRef(null);
@@ -95,3 +96,9 @@ export default function ImageComponent({ node, deleteNode, updateAttributes }) {
     </NodeViewWrapper>
   );
 }
+
+ImageComponent.propTypes = {
+  node: PropTypes.object.isRequired,
+  deleteNode: PropTypes.func.isRequired,
+  updateAttributes: PropTypes.func.isRequired,
+};
