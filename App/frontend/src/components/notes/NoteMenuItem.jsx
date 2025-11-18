@@ -1,6 +1,7 @@
 import { memo, useCallback } from "react";
 import { CgHeart } from "react-icons/cg";
 import { Trash2 } from "lucide-react";
+import PropTypes from 'prop-types';
 
 const NoteMenuItem = memo(({
   noteId,
@@ -72,6 +73,16 @@ const NoteMenuItem = memo(({
     </div>
   );
 });
+
+NoteMenuItem.propTypes = {
+  noteId: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  isActive: PropTypes.bool.isRequired,
+  isNoteFavorite: PropTypes.bool.isRequired,
+  onSelectNote: PropTypes.func.isRequired,
+  onToggleFavorite: PropTypes.func.isRequired,
+  onDeleteNote: PropTypes.func.isRequired,
+};
 
 NoteMenuItem.displayName = "NoteMenuItem";
 
