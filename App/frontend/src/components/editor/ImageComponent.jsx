@@ -101,3 +101,9 @@ export default function ImageComponent({ node, deleteNode, updateAttributes }) {
     </NodeViewWrapper>
   );
 }
+
+ImageComponent.propTypes = {
+  node: PropTypes.object.isRequired,
+  deleteNode: PropTypes.func.isRequired,
+  updateAttributes: PropTypes.func.isRequired,
+};

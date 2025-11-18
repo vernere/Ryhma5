@@ -3,7 +3,7 @@ name: SonarQube Analysis
 on:
     push:
         branches:
-            - "**"
+            - "main"
         paths:
             - "App/frontend/**"
             - ".github/workflows/sonarqube.yaml"

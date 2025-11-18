@@ -38,13 +38,13 @@ export const CollaboratorForm = () => {
       return;
     }
 
-    if (invitations && invitations.find(invite => invite.recipient_id === recipientId)) {
+    if (invitations?.find(invite => invite.recipient_id === recipientId)) {
       console.log("Invite already sent to:", recipientId);
       setError(t("popups.collaborationPopup.errors.inviteAlreadySent", { username: trimmedUsername }));
       return;
     }
 
-    if (collaborators && collaborators.find(c => c.user_id === recipientId)) {
+    if (collaborators?.find(c => c.user_id === recipientId)) {
       console.log("Already a collaborator:", recipientId);
       setError(t("popups.collaborationPopup.errors.alreadyCollaborator", { username: trimmedUsername }));
       return;

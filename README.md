@@ -135,5 +135,16 @@ Add the following code to the .env file:
 
 ## Database setup
 
-## Evaluation
+## Non Functional Testing
+Acceptance testing was carried out based on the project requirements and user stories in the product backlog. Testing verifies that the system meets functional, performance and usability requirements. The full acceptance testing plan documentation is found in the documents folder. 
+
+Plan:
+-	Based on the project requirements and user stories
+-	Validates functional, usability and performance criteria
+  
+Execution
+-	Performed during Sprint 7 (19.11-3.12.2025)
+  
+Results
+-	Will be reported later
 

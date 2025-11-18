@@ -1,5 +1,7 @@
-const CollaboratorBall = ({user}) => {
-    const initial = user.username?.charAt(0).toUpperCase() || '?';
+import PropTypes from 'prop-types';
+
+const CollaboratorBall = ({ user }) => {
+    const initial = user.username?.charAt(0).toUpperCase() || "?";
     return (
         <span
             key={user.user_id}
@@ -8,7 +10,7 @@ const CollaboratorBall = ({user}) => {
         >
             {initial}
         </span>
-    )
+    );
 };
 
 export const CollaboratorBalls = ({ users }) => {
@@ -19,4 +21,20 @@ export const CollaboratorBalls = ({ users }) => {
             ))}
         </div>
     );
+};
+
+CollaboratorBall.propTypes = {
+    user: PropTypes.shape({
+        user_id: PropTypes.string.isRequired,
+        username: PropTypes.string,
+    }).isRequired,
+};
+
+CollaboratorBalls.propTypes = {
+    users: PropTypes.arrayOf(
+        PropTypes.shape({
+            user_id: PropTypes.string.isRequired,
+            username: PropTypes.string,
+        })
+    ).isRequired,
 };

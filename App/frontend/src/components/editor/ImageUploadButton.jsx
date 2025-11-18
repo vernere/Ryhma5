@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { Image, Loader2 } from 'lucide-react';
 import { useImagesStore } from '@/hooks/useImagesStore';
 import { useNotesStore } from '@/hooks/useNotesStore';
+import PropTypes from 'prop-types';
 
 function ImageUploadButton({ editor }) {
   const fileInputRef = useRef(null);
@@ -66,5 +67,9 @@ function ImageUploadButton({ editor }) {
     </div>
   );
 }
+
+ImageUploadButton.propTypes = {
+  editor: PropTypes.object.isRequired,
+};
 
 export { ImageUploadButton };

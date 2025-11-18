@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from "cn-func";
 import { useTranslation } from "react-i18next";
+import PropTypes from 'prop-types';
 
 const context = {
     owner:   { bg: 'bg-green-100', text: 'text-green-700' },
@@ -25,6 +26,10 @@ export const CollaboratorContextBadge = ({role}) => {
             {t(`common.roles.${role}`)}
         </div>
     );
+};
+
+CollaboratorContextBadge.propTypes = {
+    role: PropTypes.string.isRequired,
 };
 
 export default CollaboratorContextBadge;
