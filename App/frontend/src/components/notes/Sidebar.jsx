@@ -58,7 +58,7 @@ const Sidebar = () => {
       cleanupInvitesSubscription();
       cleanupCollaboratorsSubscription();
     };
-  }, [user?.id]);
+  }, [cleanupCollaboratorsSubscription, cleanupInvitesSubscription, fetchFavorites, fetchNotes, getInvites, getTags, setCurrentUser, setupInvitesSubscription, setupNoteCollaboratorSubscription, user, user.id]);
 
   const filteredNotes = notes.filter((note) => {
     const query = (searchQuery || "").toLowerCase();

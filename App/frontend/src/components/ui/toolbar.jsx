@@ -133,7 +133,7 @@ const Toolbar = ({ editor, noteTitle = "Untitled note" }) => {
                 <button
                     data-cy="exportButton"
                     ref={buttonRef}
-                    onClick={(e) => {
+                    onClick={() => {
                         setAnchorEl(buttonRef.current);
                         setIsDropdownOpen(!isDropdownOpen);
                     }}
