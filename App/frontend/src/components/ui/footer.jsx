@@ -1,25 +1,22 @@
 import { useTranslation } from "react-i18next";
 import { LanguageButton } from "@/components/ui/popups/LanguageDropdown";
-import PropTypes from 'prop-types'
-
+import PropTypes from "prop-types";
 
 export const Footer = ({ className }) => {
     const { t } = useTranslation();
 
     return (
-
-        <>
-            <div
-                className={`bg-secondary w-full text-black font-roboto-slab p-2 text-center ${className}`}
-            >
-                <p>
-                    <strong>© 2025 Notely</strong>{t("footer.trademark")}
-                </p>
-                <div className="absolute bottom-2 left-2">
-                    <LanguageButton />
-                </div>
+        <div
+            className={`bg-secondary w-full text-black font-roboto-slab p-2 text-center ${className}`}
+        >
+            <p>
+                <strong>© 2025 Notely</strong>
+                {t("footer.trademark")}
+            </p>
+            <div className="absolute bottom-2 left-2">
+                <LanguageButton />
             </div>
-        </>
+        </div>
     );
 };
 

@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import PropTypes from 'prop-types';
 
 export const InvitePopup = ({ isOpen, onClose }) => {
-    if (!isOpen) return null;
     const { user } = useAuth();
     const { inbox, setStatus, getInvites } = useInvitationsStore();
     const { fetchNotes } = useNotesStore();
@@ -23,6 +22,8 @@ export const InvitePopup = ({ isOpen, onClose }) => {
         await getInvites(user.id);
         await fetchNotes();
     };
+
+    if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 bg-black/30 bg-opacity-50 flex items-center justify-center z-60">

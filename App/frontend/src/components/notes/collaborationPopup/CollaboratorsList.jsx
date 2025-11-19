@@ -1,12 +1,14 @@
 import CollaboratorItem from "./CollaboratorItem";
 import InvitationItem from "./InvitationItem";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 export const CollaboratorsList = ({ 
   collaborators = [],
   invitations = [],
   isLoading = false 
 }) => {
+  const { t } = useTranslation();
   if (isLoading) {
     return (
       <div className="text-center py-4">

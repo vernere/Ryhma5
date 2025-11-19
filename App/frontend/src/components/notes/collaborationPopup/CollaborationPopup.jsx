@@ -3,7 +3,6 @@ import { UserRoundPlus, X } from "lucide-react";
 import CollaboratorForm from "./CollaboratorForm";
 import CollaboratorsList from "./CollaboratorsList";
 import { useInvitationsStore } from "@/hooks/useInvitationsStore";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import PropTypes from 'prop-types';
 
@@ -13,7 +12,6 @@ export const CollaborationPopup = ({
   isLoading = false 
 }) => {
   const { role } = useNotesStore();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { collaborators } = useNotesStore();
   const { invitations } = useInvitationsStore();
   const { t } = useTranslation();

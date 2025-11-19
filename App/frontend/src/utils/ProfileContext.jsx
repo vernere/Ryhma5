@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { supabase } from "../lib/supabaseClient";
 import { useTranslation } from "react-i18next";
+import PropTypes from "prop-types";
 
 export const ProfileContext = createContext();
 
@@ -65,3 +66,7 @@ export const ProfileProvider = ({ children }) => {
 };
 
 export const useProfile = () => useContext(ProfileContext);
+
+ProfileProvider.propTypes = {
+    children: PropTypes.node.isRequired,
+};
