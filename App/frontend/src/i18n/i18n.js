@@ -10,6 +10,7 @@ import se from "../locales/se.json";
 import fi from "../locales/fi.json";
 import hi from "../locales/hi.json";
 import uk from "../locales/uk.json";
+import ar from "../locales/ar.json";
 
 i18n
     .use(LanguageDetector)
@@ -25,6 +26,7 @@ i18n
             FI: { translation: fi },
             HI: { translation: hi },
             UA: { translation: uk },
+            AR: { translation: ar }
         },
         detection: {
             order: ['cookie'],
