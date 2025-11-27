@@ -13,3 +13,22 @@ globalThis.URL = window.URL;
 globalThis.MouseEvent = window.MouseEvent;
 globalThis.DOMParser = window.DOMParser;
 globalThis.Node = window.Node;
+
+// Add CSSStyleDeclaration and getComputedStyle for React DOM
+globalThis.CSSStyleDeclaration = window.CSSStyleDeclaration;
+globalThis.getComputedStyle = window.getComputedStyle.bind(window);
+
+// Ensure document.createElement returns elements with style property
+const originalCreateElement = window.document.createElement.bind(window.document);
+window.document.createElement = function(tagName, options) {
+  const element = originalCreateElement(tagName, options);
+  if (!element.style || typeof element.style !== 'object') {
+    Object.defineProperty(element, 'style', {
+      value: new window.CSSStyleDeclaration(),
+      writable: true,
+      enumerable: true,
+      configurable: true
+    });
+  }
+  return element;
+};
