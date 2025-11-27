@@ -1,6 +1,7 @@
 import { Window } from "happy-dom";
 import "@testing-library/jest-dom";
 
+// Create and configure window before any React imports
 const window = new Window({
   url: 'http://localhost:3000',
   settings: {
@@ -11,11 +12,10 @@ const window = new Window({
   }
 });
 
+// Set globals immediately
 globalThis.window = window;
 globalThis.document = window.document;
 globalThis.navigator = window.navigator;
-
-// Add DOM APIs needed by file-saver and other libraries
 globalThis.HTMLAnchorElement = window.HTMLAnchorElement;
 globalThis.Blob = window.Blob;
 globalThis.URL = window.URL;
@@ -24,30 +24,23 @@ globalThis.DOMParser = window.DOMParser;
 globalThis.Node = window.Node;
 globalThis.Element = window.Element;
 globalThis.HTMLElement = window.HTMLElement;
-
-// Add CSSStyleDeclaration and getComputedStyle for React DOM
 globalThis.CSSStyleDeclaration = window.CSSStyleDeclaration;
-globalThis.getComputedStyle = window.getComputedStyle.bind(window);
 
-// Ensure style property exists on document.documentElement
-if (window.document.documentElement) {
-  const docStyle = window.document.documentElement.style;
-  if (!docStyle || typeof docStyle !== 'object') {
-    Object.defineProperty(window.document.documentElement, 'style', {
-      value: new window.CSSStyleDeclaration(),
-      writable: true,
-      enumerable: true,
-      configurable: true
-    });
+// Critical: Ensure getComputedStyle returns proper style objects
+const originalGetComputedStyle = window.getComputedStyle.bind(window);
+globalThis.getComputedStyle = function(element) {
+  const styles = originalGetComputedStyle(element);
+  // Ensure it returns a proper object that can be used with 'in' operator
+  if (!styles || typeof styles !== 'object') {
+    return new window.CSSStyleDeclaration();
   }
-}
+  return styles;
+};
 
-// Ensure document.createElement returns elements with proper style property
-const originalCreateElement = window.document.createElement.bind(window.document);
-window.document.createElement = function(tagName, options) {
-  const element = originalCreateElement(tagName, options);
-  // Ensure style is always a proper CSSStyleDeclaration object
-  if (!element.style || typeof element.style !== 'object' || !element.style.constructor) {
+// Ensure document.documentElement has a valid style before React loads
+const ensureElementStyle = (element) => {
+  if (!element) return;
+  if (!element.style || typeof element.style !== 'object') {
     const styleDeclaration = new window.CSSStyleDeclaration();
     Object.defineProperty(element, 'style', {
       value: styleDeclaration,
@@ -56,5 +49,15 @@ window.document.createElement = function(tagName, options) {
       configurable: true
     });
   }
+};
+
+// Apply to documentElement immediately
+ensureElementStyle(window.document.documentElement);
+
+// Ensure all created elements have proper style
+const originalCreateElement = window.document.createElement.bind(window.document);
+window.document.createElement = function(tagName, options) {
+  const element = originalCreateElement(tagName, options);
+  ensureElementStyle(element);
   return element;
 };
