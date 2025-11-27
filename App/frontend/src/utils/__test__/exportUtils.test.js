@@ -6,7 +6,6 @@ import {
     exportToDocx
 } from '../exportUtils';
 import { Packer } from 'docx';
-import { Window } from 'happy-dom';
 
 const saveAsMock = mock(() => { });
 mock.module('file-saver', () => ({
@@ -17,11 +16,6 @@ describe('exportToPdf', () => {
     let mockWindow;
 
     beforeEach(() => {
-        // Ensure window object exists
-        if (!globalThis.window) {
-            globalThis.window = new Window();
-        }
-
         mockWindow = {
             document: {
                 write: mock(() => { }),
@@ -56,10 +50,6 @@ describe('downloadFile', () => {
     let clickMock;
 
     beforeEach(() => {
-        if (!globalThis.document) {
-            globalThis.document = new Window().document;
-        }
-
         clickMock = mock(() => { });
         mockLink = {
             href: '',
@@ -134,16 +124,6 @@ describe('exportToDocx', () => {
     let packTooBlobMock;
 
     beforeEach(() => {
-        if (!globalThis.document) {
-            globalThis.document = new Window().document;
-        }
-
-        if (!globalThis.DOMParser) {
-            const win = new Window();
-            globalThis.DOMParser = win.DOMParser;
-            globalThis.Node = win.Node;
-        }
-
         mockBlob = new Blob(['mock docx content']);
 
         packTooBlobMock = mock(async () => mockBlob);
