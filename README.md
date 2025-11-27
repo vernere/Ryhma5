@@ -39,6 +39,7 @@ The project is implemented in React using Bun and supports localization using i1
 - SonarQube
 - SonarScanner
 - SonarQube cloud
+- happy-dom
 
 ## Use case diagram
 
