@@ -1,5 +1,4 @@
 import { Window } from "happy-dom";
-import "@testing-library/jest-dom";
 
 const window = new Window();
 globalThis.window = window;
@@ -14,23 +13,23 @@ globalThis.MouseEvent = window.MouseEvent;
 globalThis.DOMParser = window.DOMParser;
 globalThis.Node = window.Node;
 
-// Fix for React DOM vendor prefix detection in CI
-// React DOM checks for vendor prefixes using 'prop in style' during module load
-// In some environments, happy-dom's style object may not be properly initialized
-const ensureValidStyle = (element) => {
-  if (!element || !element.style || typeof element.style !== 'object') {
-    // Create a basic object that supports the 'in' operator
-    const styleObj = window.CSSStyleDeclaration ? new window.CSSStyleDeclaration() : {};
-    Object.defineProperty(element, 'style', {
-      value: styleObj,
+// CRITICAL: Fix for React DOM vendor prefix detection in CI
+// React DOM checks document.documentElement.style during module initialization
+// In CI, happy-dom's style property may not be properly initialized
+const docElement = window.document.documentElement;
+if (docElement) {
+  const currentStyle = docElement.style;
+  // If style is not a valid object, replace it with a plain object
+  // that supports the 'in' operator which React DOM uses
+  if (!currentStyle || typeof currentStyle !== 'object') {
+    Object.defineProperty(docElement, 'style', {
+      value: {},
       writable: true,
       enumerable: true,
       configurable: true
     });
   }
-};
-
-// Ensure documentElement has a valid style before React DOM loads
-if (window.document.documentElement) {
-  ensureValidStyle(window.document.documentElement);
 }
+
+// Import jest-dom matchers AFTER fixing the style object
+import "@testing-library/jest-dom";
