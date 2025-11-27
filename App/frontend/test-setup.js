@@ -1,7 +1,16 @@
 import { Window } from "happy-dom";
 import "@testing-library/jest-dom";
 
-const window = new Window();
+const window = new Window({
+  url: 'http://localhost:3000',
+  settings: {
+    disableJavaScriptEvaluation: false,
+    disableJavaScriptFileLoading: false,
+    disableCSSFileLoading: true,
+    disableComputedStyleRendering: false,
+  }
+});
+
 globalThis.window = window;
 globalThis.document = window.document;
 globalThis.navigator = window.navigator;
@@ -13,18 +22,35 @@ globalThis.URL = window.URL;
 globalThis.MouseEvent = window.MouseEvent;
 globalThis.DOMParser = window.DOMParser;
 globalThis.Node = window.Node;
+globalThis.Element = window.Element;
+globalThis.HTMLElement = window.HTMLElement;
 
 // Add CSSStyleDeclaration and getComputedStyle for React DOM
 globalThis.CSSStyleDeclaration = window.CSSStyleDeclaration;
 globalThis.getComputedStyle = window.getComputedStyle.bind(window);
 
-// Ensure document.createElement returns elements with style property
+// Ensure style property exists on document.documentElement
+if (window.document.documentElement) {
+  const docStyle = window.document.documentElement.style;
+  if (!docStyle || typeof docStyle !== 'object') {
+    Object.defineProperty(window.document.documentElement, 'style', {
+      value: new window.CSSStyleDeclaration(),
+      writable: true,
+      enumerable: true,
+      configurable: true
+    });
+  }
+}
+
+// Ensure document.createElement returns elements with proper style property
 const originalCreateElement = window.document.createElement.bind(window.document);
 window.document.createElement = function(tagName, options) {
   const element = originalCreateElement(tagName, options);
-  if (!element.style || typeof element.style !== 'object') {
+  // Ensure style is always a proper CSSStyleDeclaration object
+  if (!element.style || typeof element.style !== 'object' || !element.style.constructor) {
+    const styleDeclaration = new window.CSSStyleDeclaration();
     Object.defineProperty(element, 'style', {
-      value: new window.CSSStyleDeclaration(),
+      value: styleDeclaration,
       writable: true,
       enumerable: true,
       configurable: true
