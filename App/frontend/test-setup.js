@@ -1,4 +1,5 @@
 import { Window } from "happy-dom";
+import "@testing-library/jest-dom";
 
 const window = new Window();
 globalThis.window = window;
