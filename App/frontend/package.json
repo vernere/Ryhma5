@@ -29,6 +29,7 @@
     "@tiptap/extension-collaboration-caret": "^3.6.5",
     "@tiptap/extension-image": "^3.4.3",
     "@tiptap/extension-list-item": "^3.4.3",
+    "@tiptap/extension-placeholder": "^3.11.1",
     "@tiptap/extension-text-align": "^3.4.3",
     "@tiptap/react": "^3.4.2",
     "@tiptap/starter-kit": "^3.4.2",

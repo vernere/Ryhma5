@@ -1,5 +1,6 @@
 import TextAlign from "@tiptap/extension-text-align";
 import StarterKit from "@tiptap/starter-kit";
+import Placeholder from "@tiptap/extension-placeholder";
 import { ImageExtension } from "./ImageExtension";
 
 export const EDITOR_EXTENSIONS = [
@@ -7,6 +8,9 @@ export const EDITOR_EXTENSIONS = [
         history: false,
     }),
     TextAlign.configure({ types: ["heading", "paragraph"] }),
+    Placeholder.configure({
+        placeholder: "Start writing your note here...",
+    }),
     ImageExtension,
 ];
 
