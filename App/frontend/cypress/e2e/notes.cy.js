@@ -230,6 +230,9 @@ describe('Delete note test ', () => {
     cy.get('[data-cy=noteSelect]').first().trigger('mouseover').find('[data-cy=deleteNote]').click()
     cy.get('[data-cy=confirmDelete]').should('exist')
     cy.get('[data-cy=cancelDelete]').click();
+    cy.get('[data-cy=noteSelect]').first().trigger('mouseover').find('[data-cy=deleteNote]').click()
+    cy.get('[data-cy=closeDeleteConfirm]').should('exist').click()
+
   });
 })
 
