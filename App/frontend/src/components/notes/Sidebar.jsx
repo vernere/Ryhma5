@@ -166,7 +166,7 @@ const Sidebar = () => {
               className="w-full focus:outline-none focus:ring-transparent py-1"
             />
           </div>
-          <button className="" onClick={handleCreateNote}>
+          <button className="" data-cy="createNote" onClick={handleCreateNote}>
             <FilePlus2 className="size-5 text-gray-400 hover:text-gray-600" />
           </button>
         </div>

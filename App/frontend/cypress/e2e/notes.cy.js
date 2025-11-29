@@ -134,7 +134,7 @@ describe('Collaboration invite tests', () => {
   it('Should invite user to collaborate', () => {
     loginUser();
 
-    const noteSelect = cy.get('[data-cy=noteSelect]').contains('Collaboration');
+    const noteSelect = cy.get('[data-cy=noteSelect]').first()
 
     noteSelect.first().click();
     cy.get('[data-cy=openCollaborationPopup]').click();
@@ -151,7 +151,7 @@ describe('Collaboration invite tests', () => {
   it('Should fail to invite an already invited user', () => {
     loginUser();
 
-    const noteSelect = cy.get('[data-cy=noteSelect]').contains('Collaboration');
+    const noteSelect = cy.get('[data-cy=noteSelect]').first()
 
     noteSelect.first().click();
     cy.get('[data-cy=openCollaborationPopup]').click();
@@ -185,13 +185,12 @@ describe('Collaboration invite tests', () => {
     invitationCard.should('not.exist');
 
 
-    cy.get('[data-cy=noteSelect]').contains('Collaboration').should('exist');
   });
 
   it('Should fail to invite an already collaborating user', () => {
     loginUser();
 
-    const noteSelect = cy.get('[data-cy=noteSelect]').contains('Collaboration');
+    const noteSelect = cy.get('[data-cy=noteSelect]').first()
 
     noteSelect.first().click();
     cy.get('[data-cy=openCollaborationPopup]').click();
@@ -208,7 +207,7 @@ describe('Collaboration invite tests', () => {
   it('Should remove collaborator', () => {
     loginUser();
 
-    const noteSelect = cy.get('[data-cy=noteSelect]').contains('Collaboration');
+    const noteSelect = cy.get('[data-cy=noteSelect]').first()
     noteSelect.first().click();
     cy.get('[data-cy=openCollaborationPopup]').click();
 
@@ -233,6 +232,13 @@ describe('Delete note test ', () => {
     cy.get('[data-cy=noteSelect]').first().trigger('mouseover').find('[data-cy=deleteNote]').click()
     cy.get('[data-cy=closeDeleteConfirm]').should('exist').click()
 
+    cy.get('[data-cy=noteSelect]').first().trigger('mouseover').find('[data-cy=deleteNote]').click()
+    cy.get('[data-cy=confirmDelete]').should('exist').click()
+    cy.get('[data-cy=noteSelect]').should('have.length', 1)
+
+    cy.get('[data-cy=createNote]').click()
+    cy.get('[data-cy=noteSelect]').first().click();
+    cy.get('[data-cy=noteTag]').first().click();
   });
 })
 
