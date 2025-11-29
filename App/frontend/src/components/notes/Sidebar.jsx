@@ -117,7 +117,7 @@ const Sidebar = () => {
 
   const cancelDelete = useCallback(() => {
     setDeleteConfirmation({ isOpen: false, noteId: null, noteTitle: "" })
-  })
+  }, [])
 
   const toggleInvitePopup = useCallback(() => {
     setIsInvitePopupOpen(!isInvitePopupOpen);
