@@ -4,6 +4,8 @@
         "error": "Đã xảy ra lỗi. Vui lòng thử lại.",
         "logout": "Đăng xuất",
         "connecting": "Đang kết nối...",
+        "cancel": "Hủy bỏ",
+        "delete": "Xóa bỏ",
         "roles": {
             "owner": "Chủ sở hữu",
             "editor": "Biên tập viên",
@@ -72,6 +74,10 @@
                 "alreadyCollaborator": "{{username}} đã là cộng tác viên trên ghi chú này",
                 "noNoteSelected": "Không có ghi chú nào được chọn. Vui lòng chọn một ghi chú."
             }
+        },
+        "deleteConfirm": {
+            "title": "Bạn có chắc chắn muốn xóa ghi chú này không?",
+            "message": "Bạn có chắc chắn muốn xóa ghi chú không: "
         },
         "invitePopup": {
             "title": "Bạn đã được mời để cộng tác",

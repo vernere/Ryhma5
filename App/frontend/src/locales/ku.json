@@ -4,6 +4,8 @@
     "error": "Halayek chebo. Je karama xo xo begra.",
     "logout": "Darkava",
     "connecting": "Tekgertin...",
+    "cancel": "Bişûndekirin",
+    "delete": "Jêbirin",
     "roles": {
       "owner": "Xodan",
       "editor": "Rastker",
@@ -72,6 +74,10 @@
         "alreadyCollaborator": "{{username}} jixwe hevalkar e li vê notê",
         "noNoteSelected": "Tu note nehat hilbijartin. Ji kerema xwe yekê hilbijêre."
       }
+    },
+    "deleteConfirm": {
+      "title": "Tu piştrast î ku dixwazî ​​vê notê jê bibî?",
+      "message": "Ma tu piştrast î ku dixwazî ​​notê jê bibî: "
     },
     "invitePopup": {
       "title": "Tu hatya daxaz keren bo birwariake",

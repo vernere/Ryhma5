@@ -4,6 +4,8 @@
     "error": "Tapahtui virhe. Yritä uudelleen.",
     "logout": "Kirjaudu ulos",
     "connecting": "Yhdistetään...",
+    "cancel": "Peruuta",
+    "delete": "Poista",
     "roles": {
       "owner": "Omistaja",
       "editor": "Muokkaaja",
@@ -72,6 +74,10 @@
         "alreadyCollaborator": "{{username}} on jo tämän muistiinpanon yhteiskäyttäjä",
         "noNoteSelected": "Ei valittuja muistiinpanoja. Valitse yksi."
       }
+    },
+    "deleteConfirm": {
+      "title": "Haluatko varmasti poistaa tämän muistiinpanon?",
+      "message": "Haluatko varmasti poistaa muistiinpanon:"
     },
     "invitePopup": {
       "title": "Olet saanut kutsun yhteistyöhön",

@@ -4,6 +4,8 @@
         "error": "Ett fel uppstod. Försök igen.",
         "logout": "Logga ut",
         "connecting": "Ansluter...",
+        "cancel": "Avbryt",
+        "delete": "Radera",
         "roles": {
             "owner": "Ägare",
             "editor": "Redaktör",
@@ -72,6 +74,10 @@
                 "alreadyCollaborator": "{{username}} är redan en samarbetspartner i den här anteckningen",
                 "noNoteSelected": "Inga anteckningar valda. Välj en."
             }
+        },
+        "deleteConfirm": {
+            "title": "Är du säker på att du vill ta bort den här anteckningen?",
+            "message": "Är du säker på att du vill ta bort anteckningen: "
         },
         "invitePopup": {
             "title": "Du har blivit inbjuden att samarbeta",
