@@ -21,7 +21,12 @@ const Navigation = () => {
                     {t("common.logout")}
                 </Button>
 
-                <LanguageButton/>
+                <LanguageButton />
+                <p className="p-1 m-1 underline text-blue-600 visited:text-purple-600">
+                    <a href="https://github.com/vernere/Ryhma5" target="_blank" rel="noopener noreferrer">
+                        Help?
+                    </a>
+                </p>
             </div>
         </>
     );
