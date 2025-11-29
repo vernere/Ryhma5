@@ -37,12 +37,14 @@ export const DeleteConfirmDialog = ({ isOpen, onClose, onConfirm, noteTitle }) =
                 )}
                 <div className="flex space-x-3 p-4 m-2">
                     <button
+                        data-cy="cancelDelete"
                         onClick={onClose}
                         className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded hover:bg-gray-300 transition"
                     >
                         {t("common.cancel")}
                     </button>
                     <button
+                        data-cy="confirmDelete"
                         onClick={onConfirm}
                         className="flex-1 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition-col"
                     >

@@ -211,7 +211,7 @@ describe('Collaboration invite tests', () => {
     const noteSelect = cy.get('[data-cy=noteSelect]').contains('Collaboration');
     noteSelect.first().click();
     cy.get('[data-cy=openCollaborationPopup]').click();
-    
+
     const collaborator = cy.get('[data-cy=collaboratorUsername]').contains('Test2').parent().parent().parent();
     collaborator.should('exist');
     collaborator.find('[data-cy=removeCollaborator]').click();
@@ -222,6 +222,16 @@ describe('Collaboration invite tests', () => {
     cy.get('[data-cy=closeCollaborationPopup]').click();
   });
 });
+
+describe('Delete note test ', () => {
+  it('Should test delete confirm dialog', () => {
+    loginUser();
+
+    cy.get('[data-cy=noteSelect]').first().trigger('mouseover').find('[data-cy=deleteNote]').click()
+    cy.get('[data-cy=confirmDelete]').should('exist')
+    cy.get('[data-cy=cancelDelete]').click();
+  });
+})
 
 describe('Language selector tests', () => {
   it('Should change localization', () => {
