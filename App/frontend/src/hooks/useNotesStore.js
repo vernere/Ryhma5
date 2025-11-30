@@ -116,7 +116,7 @@ export const useNotesStore = create((set, get) => {
       }
     },
 
-    createNote: async (title = "Untitled note") => {
+    createNote: async (title = "New note") => {
       const { currentUser } = get();
       if (!currentUser?.id) return null;
 
