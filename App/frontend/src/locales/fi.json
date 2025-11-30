@@ -6,6 +6,7 @@
     "connecting": "Yhdistetään...",
     "cancel": "Peruuta",
     "delete": "Poista",
+    "tags": "Tunnisteet",
     "roles": {
       "owner": "Omistaja",
       "editor": "Muokkaaja",

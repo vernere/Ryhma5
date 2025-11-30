@@ -6,6 +6,7 @@
         "connecting": "Ansluter...",
         "cancel": "Avbryt",
         "delete": "Radera",
+        "tags":"Taggar",
         "roles": {
             "owner": "Ägare",
             "editor": "Redaktör",

@@ -126,7 +126,11 @@ export const MainContent = () => {
                 />
                 
                 <div className="flex items-center ml-auto gap-3">
+                <div className="h-5 w-px bg-gray-300"></div>
+                <la className="text-xs text-gray-500 ">{t("common.tags")}</la>
                 <Tags note={selectedNote} />
+                <div className="h-5 w-px bg-gray-300"></div>
+                <la className="text-xs text-gray-500 ">{t("notes.mainContent.collaborators")}</la>
                   {isOwner && (
                     <button 
                     onClick={handleOpenPopup}
@@ -134,7 +138,7 @@ export const MainContent = () => {
                       <UserRoundPlus className="text-gray-400 hover:text-gray-600 size-5 cursor-pointer" />
                     </button>
                   )}
-
+                  
                   <button 
                     className="cursor-pointer"
                     data-cy="openCollaborationPopup"

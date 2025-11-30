@@ -6,6 +6,7 @@
         "connecting": "Connecting...",
         "cancel": "Cancel",
         "delete":"Delete",
+        "tags":"Tags",
         "roles": {
             "owner": "Owner",
             "editor": "Editor",

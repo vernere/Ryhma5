@@ -6,6 +6,7 @@
     "connecting": "कनेक्ट हो रहा है…",
     "cancel": "रद्द करना",
     "delete": "मिटाना",
+    "tags":"टैग",
     "roles": {
       "owner": "मालिक",
       "editor": "संपादक",
