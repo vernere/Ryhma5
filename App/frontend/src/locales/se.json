@@ -7,6 +7,7 @@
         "cancel": "Avbryt",
         "delete": "Radera",
         "tags":"Taggar",
+        "help": "Hjälp",
         "roles": {
             "owner": "Ägare",
             "editor": "Redaktör",

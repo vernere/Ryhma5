@@ -7,6 +7,7 @@
         "cancel": "Cancel",
         "delete":"Delete",
         "tags":"Tags",
+        "help": "Help",
         "roles": {
             "owner": "Owner",
             "editor": "Editor",
