@@ -37,7 +37,7 @@
     },
     "mainContent": {
       "noNoteSelected": "कोई नोट चयनित नहीं है",
-      "selectNotePrompt": "कृपया साइडबार से एक नोट चुनें या एक नया बनाएं।",
+      "selectNotePrompt": "नोट का चयन करें, या एक बनाएँ",
       "untitled": "बिना शीर्षक वाला नोट",
       "lastEdited": "अंतिम संपादन {{date}}",
       "collaborators": "सहयोगी",

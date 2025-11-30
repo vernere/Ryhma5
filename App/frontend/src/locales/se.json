@@ -37,7 +37,7 @@
         },
         "mainContent": {
             "noNoteSelected": "Ingen anteckning vald",
-            "selectNotePrompt": "Välj en anteckning från sidofältet eller skapa en ny.",
+            "selectNotePrompt": "Välj en anteckning eller skapa en ny.",
             "untitled": "Namnlös anteckning",
             "lastEdited": "Senast redigerad {{date}}",
             "collaborators": "Kollaboratörer",

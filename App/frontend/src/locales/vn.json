@@ -37,7 +37,7 @@
         },
         "mainContent": {
             "noNoteSelected": "Chưa chọn ghi chú nào",
-            "selectNotePrompt": "Vui lòng chọn một ghi chú từ thanh bên hoặc tạo ghi chú mới.",
+            "selectNotePrompt": "Chọn ghi chú hoặc tạo một ghi chú",
             "untitled": "Ghi chú chưa có tiêu đề",
             "lastEdited": "Chỉnh sửa lần cuối vào {{date}}",
             "collaborators": "Người cộng tác",

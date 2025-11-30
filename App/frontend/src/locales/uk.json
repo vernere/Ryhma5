@@ -37,7 +37,7 @@
     },
     "mainContent": {
       "noNoteSelected": "Нотатку не вибрано",
-      "selectNotePrompt": "Будь ласка, виберіть нотатку з бічної панелі або створіть нову.",
+      "selectNotePrompt": "Виберіть нотатку або створіть її",
       "untitled": "Нотатка без назви",
       "lastEdited": "Востаннє редаговано {{date}}",
       "collaborators": "Співавтори",

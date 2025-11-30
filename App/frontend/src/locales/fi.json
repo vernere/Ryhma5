@@ -37,7 +37,7 @@
     },
     "mainContent": {
       "noNoteSelected": "Ei valittua muistiota",
-      "selectNotePrompt": "Valitse sivupalkista muistio tai luo uusi.",
+      "selectNotePrompt": "Valitse muistio tai luo uusi.",
       "untitled": "Nimetön muistio",
       "lastEdited": "Viimeksi muokattu {{date}}",
       "collaborators": "Käyttäjät",

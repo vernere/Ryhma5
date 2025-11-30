@@ -37,7 +37,7 @@
         },
         "mainContent": {
             "noNoteSelected": "No note selected",
-            "selectNotePrompt": "Please select a note from the sidebar or create a new one.",
+            "selectNotePrompt": "Select note, or create one",
             "untitled": "Untitled Note",
             "lastEdited": "Last edited {{date}}",
             "collaborators": "Collaborators",
