@@ -167,7 +167,7 @@ const Sidebar = () => {
             />
           </div>
           <button className="" data-cy="createNote" onClick={handleCreateNote}>
-            <FilePlus2 className="size-5 text-gray-400 hover:text-gray-600" />
+            <FilePlus2 className="size-8 text-gray-400 hover:text-gray-600" />
           </button>
         </div>
 
