@@ -1,6 +1,5 @@
 import { memo, useCallback } from "react";
-import { CgHeart } from "react-icons/cg";
-import { Trash2 } from "lucide-react";
+import { Trash2, Heart } from "lucide-react";
 import PropTypes from 'prop-types';
 
 const NoteMenuItem = memo(({
@@ -42,10 +41,10 @@ const NoteMenuItem = memo(({
             aria-label="Toggle favorite"
             title="Favorite"
           >
-            <CgHeart
-              className={`w-4 h-4 ${
-                isNoteFavorite ? "text-red-500" : "text-gray-300"
-              }`}
+            <Heart
+              className={`w-4 h-4`}
+              fill={isNoteFavorite ? "red": "none"}
+              stroke={isNoteFavorite ? "red": "gray"}
             />
           </button>
 

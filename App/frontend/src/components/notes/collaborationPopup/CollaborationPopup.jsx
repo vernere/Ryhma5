@@ -21,7 +21,7 @@ export const CollaborationPopup = ({
 
   return (
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-60">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 max-h-96 overflow-hidden">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 max-h-100 overflow-hidden">
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
             {isOwner && (
@@ -43,7 +43,6 @@ export const CollaborationPopup = ({
             <CollaboratorForm />
           )}
 
-          <div>
             <h4 className="text-sm font-medium text-gray-700 mb-3">
               {t("popups.collaborationPopup.currentCollaborators")}
             </h4>
@@ -52,7 +51,6 @@ export const CollaborationPopup = ({
               invitations={invitations}
               isLoading={isLoading}
             />
-          </div>
         </div>
       </div>
     </div>
