@@ -23,7 +23,7 @@ const RegistrationPage = () => {
         e.preventDefault();
         setError("");
         if (!validEmail(email)) {
-            setError (t("register.errorEmail"));
+            setError(t("register.errorEmail"));
             return;
         }
         if (!validPassword(password)) {
@@ -55,7 +55,6 @@ const RegistrationPage = () => {
                     <p className="mb-4 text-lg font-semibold">
                         {t("register.welcome")}
                     </p>
-                    {error && <p style={{ color: "red" }}>{error}</p>}
                     <div className="flex flex-col">
                         <Input
                             className="mb-2 w-60"
@@ -88,6 +87,7 @@ const RegistrationPage = () => {
                             {" "}
                             {t("register.createAccountButton")}{" "}
                         </Button>
+                        {error && <p className="flex justify-center" style={{ color: "red" }}>{error}</p>}
                     </div>
                 </div>
             </div>
