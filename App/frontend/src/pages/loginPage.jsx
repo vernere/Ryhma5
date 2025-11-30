@@ -57,7 +57,7 @@ const LoginPage = () => {
                             data-cy="login-password"
                         />
                         <Button
-                            className="bg-secondary text-black shadow-md hover:text-white"
+                            className="bg-gray-300 border-gray-600 text-black shadow-md hover:bg-gray-400"
                             onClick={handleLogin}
                         >
                             {" "}
