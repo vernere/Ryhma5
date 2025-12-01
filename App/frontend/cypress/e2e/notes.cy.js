@@ -109,7 +109,7 @@ describe('Search tests', () => {
   });
 
   it('Test note search for name', () => {
-    cy.get('[data-cy=searchInput]').type('New test note')
+    cy.get('[data-cy=searchInput]').type('New note')
     cy.get('[data-cy=noteSelect]').first().should('exist')
   });
 
