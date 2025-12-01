@@ -10,6 +10,7 @@ import { InvitePopup } from "./InvitePopup";
 import NoteMenuItem from "./NoteMenuItem";
 import { useProfile } from "@/utils/ProfileContext";
 import { useTranslation } from "react-i18next";
+import { DeleteConfirmDialog } from "./DeleteConfirmDialog";
 
 const Sidebar = () => {
   const notes = useNotesStore((state) => state.notes);
@@ -42,6 +43,12 @@ const Sidebar = () => {
   const [username, setUsername] = useState("");
 
   const [isInvitePopupOpen, setIsInvitePopupOpen] = useState(false);
+
+  const [deleteConfirmation, setDeleteConfirmation] = useState({
+    isOpen: false,
+    noteId: null,
+    noteTitle: ""
+  });
 
   useEffect(() => {
     if (user?.id) {
@@ -93,13 +100,29 @@ const Sidebar = () => {
   }, [toggleFavorite]);
 
   const handleDeleteNote = useCallback((noteId) => {
-    deleteNote(noteId);
-  }, [deleteNote]);
+    const note = notes.find(n => n.note_id === noteId);
+    setDeleteConfirmation({
+      isOpen: true,
+      noteId,
+      noteTitle: note?.title || "Untitled"
+    });
+  }, [notes]);
+
+  const confirmDelete = useCallback(() => {
+    if (deleteConfirmation.noteId) {
+      deleteNote(deleteConfirmation.noteId);
+    }
+    setDeleteConfirmation({ isOpen: false, noteId: null, noteTitle: "" });
+  }, [deleteConfirmation.noteId, deleteNote])
+
+  const cancelDelete = useCallback(() => {
+    setDeleteConfirmation({ isOpen: false, noteId: null, noteTitle: "" })
+  }, [])
 
   const toggleInvitePopup = useCallback(() => {
     setIsInvitePopupOpen(!isInvitePopupOpen);
   }, [isInvitePopupOpen]);
-  
+
   const isFavorite = useCallback((noteId) => {
     return favs.has(noteId);
   }, [favs]);
@@ -143,8 +166,8 @@ const Sidebar = () => {
               className="w-full focus:outline-none focus:ring-transparent py-1"
             />
           </div>
-          <button className="" onClick={handleCreateNote}>
-            <FilePlus2 className="size-5 text-gray-400 hover:text-gray-600" />
+          <button className="" data-cy="createNote" onClick={handleCreateNote}>
+            <FilePlus2 className="size-8 text-gray-400 hover:text-gray-600" />
           </button>
         </div>
 
@@ -164,8 +187,15 @@ const Sidebar = () => {
         </div>
         <Navigation />
       </div>
-      
+
       <InvitePopup isOpen={isInvitePopupOpen} onClose={toggleInvitePopup} />
+
+      <DeleteConfirmDialog
+        isOpen={deleteConfirmation.isOpen}
+        onClose={cancelDelete}
+        onConfirm={confirmDelete}
+        noteTitle={deleteConfirmation.noteTitle}
+      />
     </>
   );
 };

@@ -4,6 +4,10 @@
     "error": "Halayek chebo. Je karama xo xo begra.",
     "logout": "Darkava",
     "connecting": "Tekgertin...",
+    "cancel": "Bişûndekirin",
+    "delete": "Jêbirin",
+    "tags":"Tags",
+    "help":"Alîkarî",
     "roles": {
       "owner": "Xodan",
       "editor": "Rastker",
@@ -34,7 +38,7 @@
     },
     "mainContent": {
       "noNoteSelected": "Birawariake helbijera",
-      "selectNotePrompt": "Je karama xo birawarijaki halbjera j tanishte janji eka ni benvesa.",
+      "selectNotePrompt": "Nîşeyê hilbijêrin, an yekê biafirînin",
       "untitled": "birawari ya be sar u shine",
       "lastEdited": "Vagera chekerna bare {{date}}",
       "collaborators": "Merov",
@@ -72,6 +76,10 @@
         "alreadyCollaborator": "{{username}} jixwe hevalkar e li vê notê",
         "noNoteSelected": "Tu note nehat hilbijartin. Ji kerema xwe yekê hilbijêre."
       }
+    },
+    "deleteConfirm": {
+      "title": "Tu piştrast î ku dixwazî ​​vê notê jê bibî?",
+      "message": "Ma tu piştrast î ku dixwazî ​​notê jê bibî: "
     },
     "invitePopup": {
       "title": "Tu hatya daxaz keren bo birwariake",

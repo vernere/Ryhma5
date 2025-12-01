@@ -4,6 +4,10 @@
         "error": "Ett fel uppstod. Försök igen.",
         "logout": "Logga ut",
         "connecting": "Ansluter...",
+        "cancel": "Avbryt",
+        "delete": "Radera",
+        "tags":"Taggar",
+        "help": "Hjälp",
         "roles": {
             "owner": "Ägare",
             "editor": "Redaktör",
@@ -34,7 +38,7 @@
         },
         "mainContent": {
             "noNoteSelected": "Ingen anteckning vald",
-            "selectNotePrompt": "Välj en anteckning från sidofältet eller skapa en ny.",
+            "selectNotePrompt": "Välj en anteckning eller skapa en ny.",
             "untitled": "Namnlös anteckning",
             "lastEdited": "Senast redigerad {{date}}",
             "collaborators": "Kollaboratörer",
@@ -72,6 +76,10 @@
                 "alreadyCollaborator": "{{username}} är redan en samarbetspartner i den här anteckningen",
                 "noNoteSelected": "Inga anteckningar valda. Välj en."
             }
+        },
+        "deleteConfirm": {
+            "title": "Är du säker på att du vill ta bort den här anteckningen?",
+            "message": "Är du säker på att du vill ta bort anteckningen: "
         },
         "invitePopup": {
             "title": "Du har blivit inbjuden att samarbeta",

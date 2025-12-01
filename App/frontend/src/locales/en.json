@@ -4,6 +4,10 @@
         "error": "An error occurred. Please try again.",
         "logout": "Logout",
         "connecting": "Connecting...",
+        "cancel": "Cancel",
+        "delete":"Delete",
+        "tags":"Tags",
+        "help": "Help",
         "roles": {
             "owner": "Owner",
             "editor": "Editor",
@@ -34,7 +38,7 @@
         },
         "mainContent": {
             "noNoteSelected": "No note selected",
-            "selectNotePrompt": "Please select a note from the sidebar or create a new one.",
+            "selectNotePrompt": "Select note, or create one",
             "untitled": "Untitled Note",
             "lastEdited": "Last edited {{date}}",
             "collaborators": "Collaborators",
@@ -72,6 +76,10 @@
                 "alreadyCollaborator": "{{username}} is already a collaborator on this note",
                 "noNoteSelected": "No notes selected. Please select one."
             }
+        },
+        "deleteConfirm":{
+            "title":"Are you sure you want to delete this note?",
+            "message":"Are you sure you want to delete note: "
         },
         "invitePopup": {
             "title": "You have been invited to collaborate",

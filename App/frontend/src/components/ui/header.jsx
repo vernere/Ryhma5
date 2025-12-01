@@ -11,7 +11,7 @@ export const Header = () => {
         <img src="/src/assets/logoV1.png" alt="Logo" className="h-12 w-auto mr-4" />
       </div>
       <nav className="text-3xl px-6 hover:text-purple-950">
-        <a href="/login">Notely</a>
+        <a href="/">Notely</a>
       </nav>
       <div className="flex-1"></div>
       <div className="h-8 w-px bg-gray-300"></div>
