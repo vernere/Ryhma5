@@ -15,34 +15,80 @@ import OnboardingGuard from "./components/routes/OnboardingGuard";
 import OnboardingPage from "./pages/onboardingPage";
 import { ProfileProvider } from "./utils/ProfileContext";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
+import i18n from "./i18n/i18n";
 
 function App() {
     const { user, passwordRecovery, loading } = useAuth();
     const { t } = useTranslation();
 
+    useEffect(() => {
+        const rtlLanguages = ["AR"];
+        const isRTL = rtlLanguages.includes(i18n.language);
+
+        document.documentElement.dir = isRTL ? "rtl" : "ltr";
+        document.documentElement.lang = i18n.language;
+    }, [i18n.language]);
+
     if (loading) return <p>{t("common.loading")}</p>;
 
     return (
-
         <Routes>
-            <Route path="/" element={<ProfileProvider><LandingPage /></ProfileProvider>} />
-            <Route path="/register" 
+            <Route
+                path="/"
                 element={
-                <ProfileProvider>
-                    { user ? <Navigate to="/notes" replace /> : <RegistrationPage /> }
-                </ProfileProvider>
-            }/>
-            <Route path="/login" 
+                    <ProfileProvider>
+                        <LandingPage />
+                    </ProfileProvider>
+                }
+            />
+            <Route
+                path="/register"
                 element={
-                <ProfileProvider>
-                    { user ? <Navigate to="/notes" replace /> : <LoginPage /> }
-                </ProfileProvider>
-            }/>
-            <Route path="/resetPassword" element={<ProfileProvider><ResetPassword /></ProfileProvider>} />
-            <Route path="/passwordChanged" element={<ProfileProvider><PasswordChanged /></ProfileProvider>} />
+                    <ProfileProvider>
+                        {user ? (
+                            <Navigate to="/notes" replace />
+                        ) : (
+                            <RegistrationPage />
+                        )}
+                    </ProfileProvider>
+                }
+            />
+            <Route
+                path="/login"
+                element={
+                    <ProfileProvider>
+                        {user ? (
+                            <Navigate to="/notes" replace />
+                        ) : (
+                            <LoginPage />
+                        )}
+                    </ProfileProvider>
+                }
+            />
+            <Route
+                path="/resetPassword"
+                element={
+                    <ProfileProvider>
+                        <ResetPassword />
+                    </ProfileProvider>
+                }
+            />
+            <Route
+                path="/passwordChanged"
+                element={
+                    <ProfileProvider>
+                        <PasswordChanged />
+                    </ProfileProvider>
+                }
+            />
             <Route
                 path="/registrationSuccess"
-                element={<ProfileProvider><RegistrationSuccess /></ProfileProvider>}
+                element={
+                    <ProfileProvider>
+                        <RegistrationSuccess />
+                    </ProfileProvider>
+                }
             />
 
             <Route
@@ -54,7 +100,6 @@ function App() {
                             <ChangePassword />{" "}
                         </PasswordRecoveryRoute>
                     </ProfileProvider>
-
                 }
             />
 
