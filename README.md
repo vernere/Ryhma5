@@ -21,6 +21,7 @@ The project is implemented in React using Bun and supports localization using i1
 - Vite
 - Supabase
 - Bun
+- ESLint
 - Cypress
 - Docker
 - Instanbul
@@ -39,14 +40,16 @@ The project is implemented in React using Bun and supports localization using i1
 - SonarQube
 - SonarScanner
 - SonarQube cloud
-- happy-dom
 
 ## Use case diagram
 
+![use case diagram](/resources/Use_case_diagram.png)
+
+
 ## DB Schema
-![supabase er graph](/resources/Er_diagram.png)
-![er graph](/resources/Er_diagram_converted.png)
-![er graph converted to realtional graph](/resources/supabase_er.jpg)
+![supabase er diagram](/resources/Er_diagram.png)
+![er diagram](/resources/Er_diagram_converted.png)
+![er graph converted to realtional diagram](/resources/supabase_er.jpg)
 
 ## Plugins
 
@@ -130,13 +133,34 @@ Add the following code to the .env file:
    ```sh
       docker pull vernere/ryhma5:latest
    ```
-## Sonarqube
 
 ## Data persistance
 
 ## Database setup
 
+## Code Quality & Static Analysis
+
+### ESLint plugin (VS Code, Microsoft)
+
+The project uses ESLint extension in VS Code to maintain coding standards
+
+See [ESLint extension documentation](https://github.com/Microsoft/vscode-eslint) for complete documentation.
+
+## SonarQube Code Analysis
+
+The project uses SonarQube for code analysis for security, reliability and maintainability.
+
+Current Quality Gate Rating:
+
+- Security: A
+- Reliability: B
+- Maintainability: A
+
+This project uses SonarQube Server locally, for instructions see [SonarQube server documentation](https://docs.sonarsource.com/sonarqube-server) and SonarQube cloud for CI/CD pipeline, see [SonarQube cloud documentation](https://docs.sonarsource.com/sonarqube-cloud)
+
 ## Non Functional Testing
+
+### User Acceptance Testing (UAT)
 Acceptance testing was carried out based on the project requirements and user stories in the product backlog. Testing verifies that the system meets functional, performance and usability requirements. The full acceptance testing plan documentation is found in the documents folder. 
 
 Plan:
@@ -148,4 +172,19 @@ Execution
   
 Results
 -	Will be reported later
+
+### Heuristic Evaluation
+During Sprint 7, a Heuristic Evaluation of Notely was done. For the detailed evaluation see [Heuristic Evaluation](/Documents/Team5_Heuristic_Evaluation.pdf).
+
+Summary of Heuristic Evaluation:
+
+1. Strengths
+Language and layout is simple and readable
+
+2. Issues
+Collaborative features do not give nessceserary feedback, components dont contrast enough, components are missing labels, missing feedback from errors and components
+
+Suggested Improvements:
+
+Iterate on collaborative features feedback, change component colors darker/lighter, add labels for confusing components, add more feedback to errors and components.
 
