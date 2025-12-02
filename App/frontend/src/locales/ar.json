@@ -4,6 +4,10 @@
         "error": "حدث خطأ. يرجى المحاولة مرة أخرى.",
         "logout": "تسجيل الخروج",
         "connecting": "جارٍ الاتصال...",
+        "cancel": " إلغاء",
+        "delete": " حذف",
+        "tags": " علامات",
+        "help": "مساعدة",
         "roles": {
             "owner": "المالك",
             "editor": "محرر",
@@ -34,7 +38,7 @@
         },
         "mainContent": {
             "noNoteSelected": "لم يتم تحديد ملاحظة",
-            "selectNotePrompt": "يرجى تحديد ملاحظة من الشريط الجانبي أو إنشاء ملاحظة جديدة.",
+            "selectNotePrompt": "حدد ملاحظة، أو أنشئ واحدة",
             "untitled": "ملاحظة بدون عنوان",
             "lastEdited": "آخر تعديل {{date}}",
             "collaborators": "المتعاونون",
@@ -72,6 +76,10 @@
                 "alreadyCollaborator": "{{username}} متعاون بالفعل في هذه الملاحظة",
                 "noNoteSelected": "لم يتم تحديد أي ملاحظة. يرجى تحديد واحدة."
             }
+        },
+        "deleteConfirm": {
+            "title": "Are you sure you want to delete this note?",
+            "message": "Are you sure you want to delete note: "
         },
         "invitePopup": {
             "title": "تمت دعوتك للتعاون",
