@@ -73,6 +73,8 @@ See [Localization plan and report](/Documents/Localization_plan.md) for complete
 - /App/frontend/.env: contains environment variables for application.
 - /App/frontend/coverage: contains coverage code reports and data
 - /App/frontend/dockerfile: Docker
+- /App/frontend/eslint.config.js: ESLint config
+- /App/frontend/sonar-project.properties: SonarQube config
 
 
 ## GitHub actions
