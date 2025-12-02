@@ -171,10 +171,14 @@ Plan:
 -	Validates functional, usability and performance criteria
   
 Execution
--	Performed during Sprint 7 (19.11-3.12.2025)
+-	Testing was carried out with two end users on 2.12.2025.
   
 Results
--	Will be reported later
+-	9 test cases passed
+-	2 test cases failed
+-	Success rate: 81 %
+
+The acceptance testing result report can be found in the documents folder.
 
 ### Heuristic Evaluation
 During Sprint 7, a Heuristic Evaluation of Notely was done. For the detailed evaluation see [Heuristic Evaluation](/Documents/Team5_Heuristic_Evaluation.pdf).
