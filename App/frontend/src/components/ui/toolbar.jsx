@@ -18,7 +18,7 @@ import { useEffect, useState, useRef } from "react";
 import { ImageUploadButton } from "../editor/ImageUploadButton";
 import PropTypes from 'prop-types'
 
-const Toolbar = ({ editor, noteTitle = "Untitled note" }) => {
+const Toolbar = ({ editor, noteTitle = "New note" }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const buttonRef = useRef(null);
