@@ -40,6 +40,7 @@ The project is implemented in React using Bun and supports localization using i1
 - SonarQube
 - SonarScanner
 - SonarQube cloud
+- Prop-types
 
 ## Use case diagram
 
