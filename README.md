@@ -52,11 +52,6 @@ The project is implemented in React using Bun and supports localization using i1
 ![er diagram](/resources/Er_diagram_converted.png)
 ![er graph converted to realtional diagram](/resources/supabase_er.jpg)
 
-## Plugins
-
-### Bun
-
-## Setup
 
 ## Localization
 
@@ -137,9 +132,6 @@ Add the following code to the .env file:
       docker pull vernere/ryhma5:latest
    ```
 
-## Data persistance
-
-## Database setup
 
 ## Code Quality & Static Analysis
 
