@@ -112,7 +112,7 @@ export const MainContent = () => {
 
   return (
     <div className="flex-1 flex flex-col">
-      <div className="bg-white border-b border-gray-200 p-5 m-5 flex items-center justify-between">
+      <div className="bg-white border-b border-gray-200 p-5 flex items-center justify-between">
         {selectedNote ? (
           <div className="flex items-center space-x-4 w-full">
             <div className="flex flex-col w-full">
@@ -130,16 +130,18 @@ export const MainContent = () => {
                 <la className="text-xs text-gray-500 ">{t("common.tags")}</la>
                 <Tags note={selectedNote} />
                 <div className="h-5 w-px bg-gray-300"></div>
-                <la className="text-xs text-gray-500 ">{t("notes.mainContent.collaborators")}</la>
+                {/* <la className="text-xs text-gray-500 ">{t("notes.mainContent.collaborators")}</la> */}
                   {isOwner && (
-                    <button 
-                    onClick={handleOpenPopup}
+                    <button
+                      type="button"
+                      onClick={handleOpenPopup}
                     >
                       <UserRoundPlus className="text-gray-400 hover:text-gray-600 size-5 cursor-pointer" />
                     </button>
                   )}
                   
                   <button 
+                    type="button"
                     className="cursor-pointer"
                     data-cy="openCollaborationPopup"
                     onClick={handleOpenPopup}>

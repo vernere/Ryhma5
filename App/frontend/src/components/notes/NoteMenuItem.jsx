@@ -36,6 +36,7 @@ const NoteMenuItem = memo(({
       <div className="flex items-center justify-between relative">
         <div className="flex items-center gap-2 min-w-0">
           <button
+            type="button"
             className="p-1 -ml-1"
             onClick={handleToggleFavorite}
             aria-label="Toggle favorite"
@@ -57,8 +58,9 @@ const NoteMenuItem = memo(({
           </div>
         </div>
 
-        <div className="opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 ease-in-out">
+        <div className="opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 ease-in-out flex items-center">
           <button
+            type="button"
             data-cy="deleteNote"
             className="cursor-pointer"
             onClick={handleDeleteNote}
