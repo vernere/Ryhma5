@@ -24,15 +24,19 @@ mock.module("react-i18next", () => ({
     }),
 }));
 
-mock.module("@/components/ui/header.jsx", () => ({
-    Header: () => <div data-testid="header">Header</div>
+mock.module("@/components/ui/popups/LanguageDropdown", () => ({
+    LanguageButton: () => <div data-testid="languageButton">Language Button</div>
 }));
 
-mock.module("@/components/ui/footer.jsx", () => ({
-    Footer: () => <div data-testid="footer">Footer</div>
+mock.module("@/utils/ProfileContext", () => ({
+    useProfile: () => ({
+        profile: {
+            language: "en"
+        }
+    })
 }));
 
-mock.module("@/components/ui/input.jsx", () => ({
+mock.module("../../components/ui/input.jsx", () => ({
     Input: ({ placeholder, type, value, onChange, className }) => (
         <input
             placeholder={placeholder}
@@ -44,7 +48,7 @@ mock.module("@/components/ui/input.jsx", () => ({
     )
 }));
 
-mock.module("@/components/ui/button.jsx", () => ({
+mock.module("../../components/ui/button.jsx", () => ({
     Button: ({ children, onClick, className }) => (
         <button onClick={onClick} className={className}>
             {children}

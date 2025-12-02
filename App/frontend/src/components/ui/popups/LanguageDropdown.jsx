@@ -59,6 +59,7 @@ export const LanguageButton = () => {
     return (
         <div className="relative">
             <button
+                data-testid="languageButton"
                 data-cy='languageButton'
                 onClick={() => handleOpen()}
                 className="ml-4 px-3 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors"
