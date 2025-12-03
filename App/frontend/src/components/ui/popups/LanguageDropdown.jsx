@@ -31,7 +31,7 @@ export const LanguageDropdown = ({ isOpen, onClose }) => {
     return (
         <div className="bg-white rounded-lg shadow-xl max-w-md w-fit mx-4 absolute left-0 bottom-8 z-50">
             <div className="p-4">
-                <ul className="mt-2" data-cy="languageList">
+                <ul className="mt-2" data-cy="languageList" data-testid="languageList">
                     {languages &&
                         Object.entries(languages).map(([code, name]) => (
                             <li
