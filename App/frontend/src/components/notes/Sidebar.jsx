@@ -141,6 +141,7 @@ const Sidebar = () => {
             {username}
           </p>
           <button
+            type="button"
             onClick={toggleInvitePopup}
             data-cy="inboxButton"
             className="relative p-1 rounded-md hover:bg-gray-100 transition-colors cursor-pointer"
@@ -166,7 +167,7 @@ const Sidebar = () => {
               className="w-full focus:outline-none focus:ring-transparent py-1"
             />
           </div>
-          <button className="" data-cy="createNote" onClick={handleCreateNote}>
+          <button data-cy="createNote" onClick={handleCreateNote} type="button">
             <FilePlus2 className="size-6 text-gray-400 hover:text-gray-600" />
           </button>
         </div>

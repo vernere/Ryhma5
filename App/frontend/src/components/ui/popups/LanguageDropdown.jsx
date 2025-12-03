@@ -13,7 +13,6 @@ export const LanguageDropdown = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 
     const handleSelectLanguage = async (code) => {
-        console.log("Selected language code:", code);
         if (user?.id) {
             const { error } = await supabase
                 .from("users")

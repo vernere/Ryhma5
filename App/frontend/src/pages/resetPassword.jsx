@@ -22,7 +22,6 @@ const ResetPassword = () => {
             setMessage(t("password.reset.setMessage"));
         } catch (err) {
             setError(err);
-            setError(t("password.reset.error"));
         }
     };
 

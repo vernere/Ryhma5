@@ -108,7 +108,7 @@ export const MainContent = () => {
         ydoc.destroy();
       }
     };
-  }, [selectedNoteId]);
+  }, [provider, ydoc]);
 
   return (
     <div className="flex-1 flex flex-col">

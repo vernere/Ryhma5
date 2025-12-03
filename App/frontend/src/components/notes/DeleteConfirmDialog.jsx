@@ -15,6 +15,7 @@ export const DeleteConfirmDialog = ({ isOpen, onClose, onConfirm, noteTitle }) =
                         {t("popups.deleteConfirm.title")}
                     </h3>
                     <button
+                        type="button"
                         onClick={onClose}
                         data-cy="closeDeleteConfirm"
                         className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -37,6 +38,7 @@ export const DeleteConfirmDialog = ({ isOpen, onClose, onConfirm, noteTitle }) =
                 )}
                 <div className="flex space-x-3 p-4 m-2">
                     <button
+                        type="button"
                         data-cy="cancelDelete"
                         onClick={onClose}
                         className="flex-1 bg-gray-200 text-gray-700 py-2 px-4 rounded hover:bg-gray-300 transition"
@@ -44,6 +46,7 @@ export const DeleteConfirmDialog = ({ isOpen, onClose, onConfirm, noteTitle }) =
                         {t("common.cancel")}
                     </button>
                     <button
+                        type="button"
                         data-cy="confirmDelete"
                         onClick={onConfirm}
                         className="flex-1 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition-col"
