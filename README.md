@@ -166,9 +166,9 @@ Execution
 -	Testing was carried out with two end users on 2.12.2025.
   
 Results
--	9 test cases passed
--	2 test cases failed
--	Success rate: 81 %
+-	10 test cases passed
+-	1 test cases failed
+-	Success rate: 90 %
 
 The acceptance testing result report can be found in the documents folder.
 
