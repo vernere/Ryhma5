@@ -8,9 +8,9 @@ export const EDITOR_EXTENSIONS = [
         history: false,
     }),
     TextAlign.configure({ types: ["heading", "paragraph"] }),
-    Placeholder.configure({
-        placeholder: "Start writing your note here...",
-    }),
+    // Placeholder.configure({
+    //     placeholder: "Start writing your note here...",
+    // }),
     ImageExtension,
 ];
 
