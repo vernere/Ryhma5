@@ -165,7 +165,7 @@ class SupabaseProvider extends EventEmitter {
 
       const col = this.config.columnName || 'content';
 
-      if (data && data[col]) {
+      if (data?.[col]) {
         this.logger('applying update to yjs');
         try {
           let update;

@@ -15,7 +15,7 @@ export const ProfileProvider = ({ children }) => {
     useEffect(() => {
         if (user) {
             setLoading(true);
-
+            
             supabase
                 .from("users")
                 .select("username, is_onboarded, language")
@@ -56,7 +56,7 @@ export const ProfileProvider = ({ children }) => {
             setProfile(null);
             setLoading(false);
         }
-    }, [user]);
+    }, [user, i18n]);
 
     return (
         <ProfileContext.Provider value={{ profile, loading }}>
