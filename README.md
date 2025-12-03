@@ -168,7 +168,7 @@ Execution
 Results
 -	10 test cases passed
 -	1 test cases failed
--	Success rate: 90 %
+-	Success rate ≈ 0,91 %
 
 The acceptance testing result report can be found in the documents folder.
 
